@@ -11,20 +11,32 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Faq from "./pages/Faq";
 import Discover from './pages/Discover';
+import Notfound from './pages/Notfound';
+import Domain from './pages/Domain';
+
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
  
+const client = new ApolloClient({
+  uri: process.env.REACT_APP_GRAPH_API_URL,
+  cache: new InMemoryCache()
+});
+
 export default function App () {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route path="/discover" element={<Discover />} />
-          <Route path="/discover/:tab" element={<Discover />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/discover" element={<Discover />} />
+            <Route path="/:domain.eth" element={<Domain />} />
+            <Route element={Notfound} /> 
+          </Route> 
+        </Routes>
+      </BrowserRouter>
+    </ApolloProvider>
   );
 }
