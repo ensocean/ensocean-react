@@ -13,7 +13,7 @@ const Carousel = () => {
                 <div className="carousel-inner"> 
                     <div className="carousel-item active pt-5 pb-5 mt-4 mb-4">
                         <div className="jumbotron text-white text-center">
-                        <h2 className="display-4">Catch Dropped ENS Domains</h2>
+                        <h2 className="display-4">Catch Expired ENS Domains</h2>
                         <p className="lead">EnsOcean makes it easier to find, filter, buy dropped ENS domains. Catch exclusive domains before anyone else.</p>
                         <p className="lead">
                             <Link className="btn btn-primary btn-lg btn-warning" to="/discover?tab=expired" title="Catch Just Dropped Domains" role="button">Catch Now</Link>

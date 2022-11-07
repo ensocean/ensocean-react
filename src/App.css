@@ -17,3 +17,23 @@ li.active a {
   white-space: nowrap; 
   width: 1%;
 }
+
+.img-container {
+  width: 500px;
+  height: 500px;
+  background-image: linear-gradient(rgb(96, 165, 250), rgb(96, 165, 250));
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.nav-tabs {
+  overflow-x: auto;
+  overflow-y:hidden;
+  flex-wrap: nowrap;
+}
+
+.nav-tabs .nav-link {
+  white-space: nowrap;
+}
