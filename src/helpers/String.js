@@ -21,6 +21,14 @@ export const getTokenId = (label) => {
     return tokenId;
 }
 
+
+export const getLength = (label) => { 
+    return Array.from(label).length;
+}
+
+export const getSegmentLength = (label) => { 
+    return label.length;
+}
  
  
  

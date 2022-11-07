@@ -8,8 +8,12 @@ const Home = () => {
         <Carousel />
         <div className="container">
           <div className="row">
+            <div className="col-lg-6">
             <RecentExpired />
+            </div>
+            <div className="col-lg-6">
             <RecentRegistered />
+            </div>
           </div>
         </div>
       </>

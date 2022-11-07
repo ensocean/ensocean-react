@@ -38,7 +38,6 @@ const RecentExpired = () => {
     const { data, loading, error } = useQuery(RECENTLY_EXPIRED);
     return (
       <>
-      <div className="col-6">
         <div className="card">
           <div className="card-header d-flex justify-content-between">
               <h5 className='fs-4'>Just Dropped</h5>
@@ -50,7 +49,6 @@ const RecentExpired = () => {
               <Link className="btn btn-success" to="/discover?tab=expired" title="View all expired ENS domains">View More</Link>
           </div>
         </div>
-      </div>
       </>
     )
 }
@@ -61,9 +59,9 @@ const GetExpired = ({ data, loading, error }) => {
         return ( 
             <>
                 {[...Array(10)].map((x, i) =>
-                <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex">
-                    <span class="placeholder col-4"></span>
-                    <span class="placeholder col-2"></span>
+                <li key={i} className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex">
+                    <span className="placeholder col-4"></span>
+                    <span className="placeholder col-2"></span>
                 </li>
                 )}
             </>     

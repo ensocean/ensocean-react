@@ -20,6 +20,8 @@ import Account from "./pages/Account";
   
 import TimeAgo from "javascript-time-ago";  
 import en from 'javascript-time-ago/locale/en'
+import Find from "./pages/Find";
+import NotFound from "./pages/Notfound";
  
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
@@ -38,9 +40,10 @@ export default function App () {
             <Route path="/terms" element={<Terms />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/discover" element={<Discover />} />
+            <Route path="/find/:label" element={<Find />} />
             <Route path="/account/:address" element={<Account />} />
             <Route path="/:label.eth" element={<Domain />} />
-            <Route element={Notfound} /> 
+            <Route path="*" element={<NotFound />} />
           </Route> 
         </Routes>
       </BrowserRouter>

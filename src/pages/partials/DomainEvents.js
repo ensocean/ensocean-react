@@ -11,6 +11,7 @@ const ETHERSCAN_ADDR = process.env.REACT_APP_ETHERSCAN_ADDR;
 const DOMAIN_EVENTS = gql`
     query DomainsEvents( $id: String! ) {
         domainEvents(
+            first: 25
             orderBy: blockNumber 
             orderDirection: desc 
             where: {
@@ -38,21 +39,22 @@ const DomainEvents = ({ id }) => {
 
     if (loading) return "Loading...";
     if (error) return <pre>{error.message}</pre>
- 
+    if (data.domainEvents.length < 1) return <span>No result</span>
+    
     return (
         <>
-            <div class="accordion" id="events">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button bg-light fw-bold fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#logs" aria-expanded="true">
+            <div className="accordion" id="events">
+                <div className="accordion-item">
+                    <h2 className="accordion-header">
+                        <button className="accordion-button bg-light fw-bold fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#logs" aria-expanded="true">
                             Activity
                         </button>
                     </h2>
-                    <div id="logs" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#events">
-                        <div class="accordion-body p-0 ">
+                    <div id="logs" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#events">
+                        <div className="accordion-body p-0 ">
                             <div className="tab-responsive">
                                 <table className='table table-hover m-0'>
-                                    <thead class="table-light fw-bold fs-6">
+                                    <thead className="table-light fw-bold fs-6">
                                         <tr>
                                             <th className="p-3">Event</th>
                                             <th className="p-3">Cost</th>
@@ -67,8 +69,8 @@ const DomainEvents = ({ id }) => {
                                         <tr key={event.id}>
                                             <td className="p-3">{event.name}</td>
                                             <td className="p-3">{event.cost}</td>
-                                            <td className="p-3"><Link to={"/account/"+ event.from}>{obscureAddress(event.from)}</Link></td>
-                                            <td className="p-3"><Link to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link></td>
+                                            <td className="p-3">{event.from != null && <Link to={"/account/"+ event.from}>{obscureAddress(event.from)}</Link>}</td>
+                                            <td className="p-3">{event.to != null && <Link to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link>}</td>
                                             <td className="p-3"><a target="_blank" href={ETHERSCAN_ADDR + "/tx/"+ event.transactionID} bs-data-toogle="tooltip" title="View on etherscan" bs-data-title="View on etherscan">{obscureAddress(event.transactionID)}</a></td>
                                             <td className="p-3">{timeAgo.format(moment.unix(event.blockTimestamp).toDate())}</td>
                                         </tr>
