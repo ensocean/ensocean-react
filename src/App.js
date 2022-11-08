@@ -40,7 +40,7 @@ export default function App () {
             <Route path="/terms" element={<Terms />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/discover" element={<Discover />} />
-            <Route path="/find/:label" element={<Find />} />
+            <Route path="/find" element={<Find />} />
             <Route path="/account/:address" element={<Account />} />
             <Route path="/:label.eth" element={<Domain />} />
             <Route path="*" element={<NotFound />} />
