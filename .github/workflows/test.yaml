@@ -1,0 +1,27 @@
+name: Build & Deploy
+on:
+  push:
+    branches: 
+      - test
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy NodeJS App
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host: ${{ secrets.SSH_TEST_HOST }} 
+          key: ${{ secrets.SSH_KEY }}  
+          username: ${{ secrets.SSH_USERNAME }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+     
+          script: |
+            mkdir -p ensocean-react 
+            cd ensocean-react 
+            git init
+            git remove add https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
+            git pull origin test
+            npm install
+            npm run build
+            npm run serve 
+            echo 'Deployment successful' 
