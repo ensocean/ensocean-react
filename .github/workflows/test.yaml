@@ -18,7 +18,8 @@ jobs:
             git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
             cd ensocean-react/
             git pull origin test
+            npm install pm2@latest -g
             npm install -g serve
             npm run build
-            npm run serve
+            pm2 start npm -- serve
             echo 'Deployment successful.' 
