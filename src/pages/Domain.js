@@ -45,8 +45,6 @@ const DOMAIN_DETAILS = gql`
         }
     }
 `;
-
-
  
 const Domain = () => {
     let available;
