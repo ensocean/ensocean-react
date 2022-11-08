@@ -67,10 +67,13 @@ const GetExpired = ({ data, loading, error }) => {
             </>     
         )
     } else if (error) {
-        return <span className='text-danger'>{error.message}</span>
+      return <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-danger">{error.message}</li>
     } else {
         return (
             <>
+                {data.domains.length < 1 &&
+                  <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-danger">No Result</li>
+                }
                 {data.domains.map((domain) => (
                 <li key={domain.id} className="list-group-item p-3 fs-5">
                       <Link
