@@ -19,7 +19,7 @@ jobs:
             mkdir -p ensocean-react 
             cd ensocean-react 
             git init
-            git remove add https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
+            git add https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
             git pull origin test
             npm install
             npm run build
