@@ -30,7 +30,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "serve": "serve -s build -l 80",
+    "serve": "serve -s build -l 3000",
     "start": "react-scripts start",
     "build": "BUILD_PATH='./build_temp' react-scripts build && rm -rf ./build && mv ./build_temp ./build",
     "test": "react-scripts test",
