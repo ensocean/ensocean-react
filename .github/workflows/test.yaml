@@ -21,4 +21,4 @@ jobs:
             npm install
             npm run build
             npm run serve 
-            echo 'Deployment successful' 
+            echo 'Deployment successful.' 
