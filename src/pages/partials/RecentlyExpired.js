@@ -9,9 +9,7 @@ const timeAgo = new TimeAgo('en-US')
 
 const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
 const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
-console.log(GRACE_PERIOD)
-console.log(PREMIUM_PERIOD)
-
+ 
 const RECENTLY_EXPIRED = gql`
 {
   domains (first: 10, orderBy: expires, orderDirection: desc, where: {  
@@ -67,10 +65,13 @@ const GetExpired = ({ data, loading, error }) => {
             </>     
         )
     } else if (error) {
-        return <span className='text-danger'>{error.message}</span>
+      return <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
     } else {
         return (
             <>
+                {data.domains.length < 1 &&
+                  <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-warning'>No Result</span></li>
+                }
                 {data.domains.map((domain) => (
                 <li key={domain.id} className="list-group-item p-3 fs-5">
                       <Link
