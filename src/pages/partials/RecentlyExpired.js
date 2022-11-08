@@ -67,7 +67,7 @@ const GetExpired = ({ data, loading, error }) => {
             </>     
         )
     } else if (error) {
-      return <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-danger">{error.message}</li>
+      return <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='alert-danger'>{error.message}</span></li>
     } else {
         return (
             <>
