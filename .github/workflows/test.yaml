@@ -16,9 +16,7 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
      
           script: |
-            mkdir -p ensocean-react 
-            cd ensocean-react 
-            git remove add https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
+            git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
             git pull origin test
             npm install
             npm run build
