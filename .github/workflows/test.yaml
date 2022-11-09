@@ -18,6 +18,7 @@ jobs:
             git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
             cd ensocean-react/
             git pull origin test
+            npm install
             npm run build
             echo 'Deployment successful..' 
  
