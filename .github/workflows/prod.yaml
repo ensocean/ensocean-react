@@ -15,9 +15,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
+            git config --global user.email "ramazan.dnmz@gmail.com"
+            git config --global user.name "rdonmez"
+            git config --global credential.helper store
             git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
-            cd ensocean-react/
-            rm yarn.lock
+            cd ensocean-react/ 
             git pull origin master 
             npm install
             npm run build
