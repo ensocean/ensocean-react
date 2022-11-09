@@ -1,4 +1,4 @@
-import React from "react"
+import  {useEffect} from "react"
 import { useLocation } from "react-router-dom"
 import ReactGA from "react-ga4"
  
@@ -8,11 +8,11 @@ const NODE_ENV = process.env.REACT_APP_NODE_ENV
 export default function useGoogleAnalytics() {
   const location = useLocation();
 
-  React.useEffect(() => { 
+  useEffect(() => { 
     ReactGA.initialize(TRACKING_ID, { debug: (NODE_ENV === "development") })
   }, [])
 
-  React.useEffect(() => { 
+  useEffect(() => { 
     ReactGA.send("pageview");
   }, [location])
 }

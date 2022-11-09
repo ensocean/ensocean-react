@@ -13,8 +13,7 @@ import { ToastContainer } from 'react-toastify';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
-import NotFound from "./pages/Notfound"; 
-import useGoogleAnalytics from "./pages/partials/GoogleAnalytics";
+import NotFound from "./pages/Notfound";  
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
@@ -22,7 +21,6 @@ const client = new ApolloClient({
 });
  
 export default function App () {  
-  useGoogleAnalytics();
   return ( 
     <ApolloProvider client={client}> 
       <BrowserRouter forceRefresh={true}>
