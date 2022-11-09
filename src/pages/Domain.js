@@ -30,6 +30,7 @@ const DOMAIN_DETAILS = gql`
             owner
             registrant,
             length
+            extension
             segmentLength
             tags
         }

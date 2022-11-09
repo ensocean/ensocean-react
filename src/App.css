@@ -21,7 +21,8 @@ li.active a {
 .img-container {
   width: 500px;
   height: 500px;
-  background-image: linear-gradient(rgb(96, 165, 250), rgb(96, 165, 250));
+  background-color: #0c6efd;
+  background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
 }
 
 .cursor-pointer {
