@@ -1,37 +1,28 @@
 
 import "bootstrap/dist/css/bootstrap.min.css";  
-import './App.css';
-import Reac, { useEffect } from 'react';
+import './App.css'; 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Faq from "./pages/Faq";
-import Discover from './pages/Discover';
-import Notfound from './pages/Notfound';
+import Discover from './pages/Discover'; 
 import Domain from './pages/Domain';
 import { ToastContainer } from 'react-toastify'; 
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
 import NotFound from "./pages/Notfound"; 
-import ReactGA from "react-ga4"
+import useGoogleAnalytics from "./pages/partials/GoogleAnalytics";
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
   cache: new InMemoryCache()
 });
-
-const TRACKING_ID = process.env.REACT_APP_TRACKING_ID;
-ReactGA.initialize(TRACKING_ID, {debug: true });
-
-export default function App () { 
-  
-  useEffect(() => {
-    ReactGA.send("pageview");
-  }, [])
-
+ 
+export default function App () {  
+  useGoogleAnalytics();
   return ( 
     <ApolloProvider client={client}> 
       <BrowserRouter forceRefresh={true}>

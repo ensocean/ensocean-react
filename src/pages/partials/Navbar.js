@@ -1,6 +1,5 @@
 import logo from "../../assets/icon.png";
-import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import NavbarSearchFrom from "../../components/NavbarSearchForm";
 import {useNavigate} from 'react-router-dom';
 

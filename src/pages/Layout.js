@@ -1,8 +1,7 @@
-import React, {useEffect } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./partials/Footer";
-import Navbar from "./partials/Navbar";
-import ReactGA from "react-ga4"
+import Navbar from "./partials/Navbar"; 
 
 const Layout = () => { 
   return (
