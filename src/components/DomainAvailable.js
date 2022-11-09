@@ -1,7 +1,7 @@
 import React  from "react";
 import EnsControllerAbi from '../abis/EthRegistrarController.json'
 import { ethers } from 'ethers'
-import { getLength, getSegmentLength, getTokenId, obscureString } from "../helpers/String";
+import { getLength, getSegmentLength, getTokenId, obscureLabel } from "../helpers/String";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard'; 
@@ -36,7 +36,7 @@ class DomainAvailable extends React.Component {
                         <div className="container p-3 text-white">
                             <div className='d-flex justify-content-between align-items-center'> 
                                 <div className='d-flex justify-content-start align-items-center gap-3'>
-                                    <h1 className='m-auto'>{this.props.label}.eth</h1>
+                                    <h1 className='m-auto'>{obscureLabel(this.props.label, 20)}.eth</h1>
                                 </div> 
                                 <div className='d-flex align-items-center gap-3'> 
                                     <CopyToClipboard text={window.location.href}
@@ -63,7 +63,7 @@ class DomainAvailable extends React.Component {
                                     <div className="col-lg-5">
                                         <div className='img-container img-fluid p-0 m-0 img-thumbnail border-1 shadow-sm border-warning d-inline-flex align-items-center img-responsive'>
                                             <div className='text-center m-auto'>
-                                                <h2 className='text-white fs-1'>{obscureString(this.props.label, 20)}.eth</h2>
+                                                <h2 className='text-white fs-1'>{obscureLabel(this.props.label, 25)}.eth</h2>
                                             </div> 
                                         </div> 
                                     </div>
@@ -92,7 +92,7 @@ class DomainAvailable extends React.Component {
                                                         <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
                                                     </svg>
                                                 </CopyToClipboard> 
-                                                <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end'>{obscureString(getTokenId(this.props.label), 25)}</span>
+                                                <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end'>{obscureLabel(getTokenId(this.props.label), 25)}</span>
                                                 </li>
                                                 <li className='list-group-item border-0 p-0 pb-3'>
                                                     <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{getLength(this.props.label)}</span>

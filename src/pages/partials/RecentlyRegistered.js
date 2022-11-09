@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom"; 
-import { obscureString } from '../../helpers/String';
+import { obscureLabel } from '../../helpers/String';
 import TimeAgo from "javascript-time-ago"; 
 import en from 'javascript-time-ago/locale/en'
 TimeAgo.addDefaultLocale(en)
@@ -75,7 +75,7 @@ const GetRegistered = ({data, loading, error }) => {
                         data-bs-title={"View "+ domain.name +" on EnsOcean"}
                         title={"View "+ domain.name +" on EnsOcean"}
                         to={domain.name}>
-                            {obscureString(domain.name, 20)}
+                            {obscureLabel(domain.name, 20)}
                         </Link>
                         <small className="float-end text-default">
                         {timeAgo.format(moment.unix(domain.registered).toDate())}
