@@ -1,10 +1,8 @@
 
-import "bootstrap/dist/css/bootstrap.min.css"; 
-import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"; 
+import "bootstrap/dist/css/bootstrap.min.css";  
 import './App.css';
-
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Terms from "./pages/Terms";
@@ -22,6 +20,11 @@ import TimeAgo from "javascript-time-ago";
 import en from 'javascript-time-ago/locale/en'
 import Find from "./pages/Find";
 import NotFound from "./pages/Notfound";
+
+import ReactGA from 'react-ga';
+
+const TRACKING_ID = process.env.REACT_APP_TRACKING_ID;
+ReactGA.initialize(TRACKING_ID);
  
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
@@ -29,7 +32,11 @@ const client = new ApolloClient({
 });
 
 export default function App () {
-  TimeAgo.addDefaultLocale(en)
+  
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+  
   return (
     <ApolloProvider client={client}>
       <BrowserRouter forceRefresh={true}>
