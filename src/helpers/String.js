@@ -1,8 +1,5 @@
- import { utils, BigNumber } from 'ethers'; 
-
-
-
-
+import { utils, BigNumber } from 'ethers'; 
+ 
 export const obscureAddress = (address) => {
     return address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length);
 }

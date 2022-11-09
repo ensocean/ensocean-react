@@ -1,5 +1,4 @@
-import React from 'react'
-import {useNavigate} from 'react-router-dom';
+import React from 'react' 
 
 class NavbarSearchFrom extends React.Component {
      
@@ -17,9 +16,10 @@ class NavbarSearchFrom extends React.Component {
     handleSubmit = (e) => {  
         if(this.state.value.lastIndexOf(".eth") != -1)
             this.props.navigate("/"+ this.state.value)
-        else {
+        else if( this.state.value.lastIndexOf(".eth") == -1) {
             this.props.navigate("/find?label="+ this.state.value)
-        }
+        } 
+        e.preventDefault();
         return false;
     };
 

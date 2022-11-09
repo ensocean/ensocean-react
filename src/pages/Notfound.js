@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const NotFound = () => {
     return (
         <>  
@@ -7,11 +9,9 @@ const NotFound = () => {
             </div> 
         </div>
         <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-                
-             </div>
-          </div>
+          <p className="text-center m-5">
+            <Link to="/" title="Go to home">Go to home page</Link>
+          </p>
         </div>
       </>
     );

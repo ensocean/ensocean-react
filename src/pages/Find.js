@@ -1,4 +1,10 @@
-const Find = () => {
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+
+const Find = () => { 
+    const query = new URLSearchParams(useLocation().search);
+    const label = query.get("label");
+
     return (
         <>  
         <div className="container-fluid bg-primary">
@@ -9,7 +15,7 @@ const Find = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
-                 
+                 {label}
              </div>
           </div>
         </div>

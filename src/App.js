@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"; 
 import './App.css';
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
@@ -41,9 +41,10 @@ export default function App () {
             <Route path="/faq" element={<Faq />} />
             <Route path="/discover" element={<Discover />} />
             <Route path="/find" element={<Find />} />
+            <Route path="/404" element={<NotFound />} />
             <Route path="/account/:address" element={<Account />} />
             <Route path="/:label.eth" element={<Domain />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/404" />} />
           </Route> 
         </Routes>
       </BrowserRouter>
