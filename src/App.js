@@ -32,7 +32,7 @@ export default function App () {
   TimeAgo.addDefaultLocale(en)
   return (
     <ApolloProvider client={client}>
-      <BrowserRouter>
+      <BrowserRouter forceRefresh={true}>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -44,7 +44,7 @@ export default function App () {
             <Route path="/404" element={<NotFound />} />
             <Route path="/account/:address" element={<Account />} />
             <Route path="/:label.eth" element={<Domain />} />
-            <Route path="*" element={<Navigate to="/404" />} />
+            <Route path="*" element={<Navigate to="/404"></Navigate>} />
           </Route> 
         </Routes>
       </BrowserRouter>
