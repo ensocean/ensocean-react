@@ -71,7 +71,7 @@ const DomainEvents = ({ id }) => {
                                             <td className="p-3">{event.cost}</td>
                                             <td className="p-3">{event.from != null && <Link to={"/account/"+ event.from}>{obscureAddress(event.from)}</Link>}</td>
                                             <td className="p-3">{event.to != null && <Link to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link>}</td>
-                                            <td className="p-3"><a target="_blank" href={ETHERSCAN_ADDR + "/tx/"+ event.transactionID} bs-data-toogle="tooltip" title="View on etherscan" bs-data-title="View on etherscan">{obscureAddress(event.transactionID)}</a></td>
+                                            <td className="p-3"><a target="_blank" rel="noreferrer" href={ETHERSCAN_ADDR + "/tx/"+ event.transactionID} bs-data-toogle="tooltip" title="View on etherscan" bs-data-title="View on etherscan">{obscureAddress(event.transactionID)}</a></td>
                                             <td className="p-3">{timeAgo.format(moment.unix(event.blockTimestamp).toDate())}</td>
                                         </tr>
                                     ))} 

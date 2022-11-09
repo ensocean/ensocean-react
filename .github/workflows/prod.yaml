@@ -17,6 +17,7 @@ jobs:
           script: |
             git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
             cd ensocean-react/
+            git checkout HEAD^ yarn.lock
             git pull origin master 
             npm install
             npm run build

@@ -14,9 +14,9 @@ class NavbarSearchFrom extends React.Component {
     };
  
     handleSubmit = (e) => {  
-        if(this.state.value.lastIndexOf(".eth") != -1)
+        if(this.state.value.lastIndexOf(".eth") !== -1)
             this.props.navigate("/"+ this.state.value)
-        else if( this.state.value.lastIndexOf(".eth") == -1) {
+        else if( this.state.value.lastIndexOf(".eth") === -1) {
             this.props.navigate("/find?label="+ this.state.value)
         } 
         e.preventDefault();

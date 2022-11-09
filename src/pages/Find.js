@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React  from "react";
+import {   useLocation } from "react-router-dom";
 
 const Find = () => { 
     const query = new URLSearchParams(useLocation().search);

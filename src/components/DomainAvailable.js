@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React  from "react";
 import EnsControllerAbi from '../abis/EthRegistrarController.json'
 import { ethers } from 'ethers'
 import { getLength, getSegmentLength, getTokenId, obscureString } from "../helpers/String";
@@ -7,11 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard'; 
 import DomainLoading from "./DomainLoading";
 
-const ETHEREUM_RPC_URL = process.env.REACT_APP_ETHEREUM_RPC_URL;
-const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS;
-const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS;
-const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
-const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
+const ETHEREUM_RPC_URL = process.env.REACT_APP_ETHEREUM_RPC_URL; 
+const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS; 
 
 class DomainAvailable extends React.Component {
     constructor(props) {
@@ -72,10 +69,10 @@ class DomainAvailable extends React.Component {
                                     </div>
                                     <div className='col-lg-7'>
                                         <div className="card-body">  
-                                            {this.state.available == true && 
+                                            {this.state.available === true && 
                                                 <div className="alert alert-success">Name available for registration!</div>
                                             }
-                                            {this.state.available == false && 
+                                            {this.state.available === false && 
                                                 <div className="alert alert-danger">Name is not available for registration!</div>
                                             }  
                                             <h5 className="card-title fs-4">Details</h5>
