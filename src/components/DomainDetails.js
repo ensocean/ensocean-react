@@ -61,7 +61,7 @@ class DomainDetails extends React.Component {
                             <div className="row g-0"> 
                                 <div className="col-lg-4">
                                     <div className='d-flex align-items-center'>
-                                        <div className='text-center m-auto img-container img-thumbnail'>
+                                        <div className='text-center m-auto img-thumbnail'>
                                             <LazyLoadImage
                                                 alt={this.props.domain.name} 
                                                 className="img-fluid img-responsive"
