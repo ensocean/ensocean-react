@@ -7,7 +7,7 @@ const Home = () => {
       <> 
         <Carousel />
         <div className="container">
-          <div className="row">
+          <div className="row gap-3 gap-lg-0 gap-md-3 gap-sm-3">
             <div className="col-lg-6">
             <RecentExpired />
             </div>

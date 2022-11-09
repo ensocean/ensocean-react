@@ -17,14 +17,7 @@ li.active a {
   white-space: nowrap; 
   width: 1%;
 }
-
-.img-container {
-  width: 500px;
-  height: 500px;
-  background-color: #0c6efd;
-  background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
-}
-
+ 
 .cursor-pointer {
   cursor: pointer;
 }
@@ -37,4 +30,46 @@ li.active a {
 
 .nav-tabs .nav-link {
   white-space: nowrap;
+}
+
+
+@media (min-width: 776px) {  
+  .img-container {
+    width: 500px;
+    height: auto;
+    background-color: #0c6efd;
+    background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
+  }
+
+  .img-responsive {
+    width: 500px;
+  }
+}
+  
+@media (min-width: 576px) {  
+  .img-container {
+    width: 500px;
+    height: auto;
+    background-color: #0c6efd;
+    background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
+  }
+
+  .img-responsive {
+    width: 500px;
+  }
+}
+
+
+@media (min-width: 200px) {  
+
+  .img-container {
+    width: 450px;
+    height: auto;
+    background-color: #0c6efd;
+    background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
+  }
+
+  .img-responsive {
+    width: 450px;
+  }
 }

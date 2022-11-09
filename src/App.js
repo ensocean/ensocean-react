@@ -1,5 +1,6 @@
 
 import "bootstrap/dist/css/bootstrap.min.css";  
+import  "bootstrap/dist/js/bootstrap.esm.min.js"; 
 import './App.css'; 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./pages/Layout";

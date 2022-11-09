@@ -52,7 +52,7 @@ const DomainEvents = ({ id }) => {
                     </h2>
                     <div id="logs" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#events">
                         <div className="accordion-body p-0 ">
-                            <div className="tab-responsive">
+                            <div className="table-responsive">
                                 <table className='table table-hover m-0'>
                                     <thead className="table-light fw-bold fs-6">
                                         <tr>
