@@ -20,12 +20,12 @@ const Navbar = () => {
             <div className="collapse navbar-collapse" id="navbarContent">
                 <NavbarSearchFrom navigate={useNavigate()} />
                 <ul className="navbar-nav w-100">
-                <li className="nav-item">
-                    <Link className="nav-link active" to="/">Home</Link>
-                </li> 
-                <li className="nav-item">
-                    <Link className="nav-link active" to="/discover">Discover</Link>
-                </li>
+                    <li className="nav-item">
+                        <Link className="nav-link active" to="/">Home</Link>
+                    </li> 
+                    <li className="nav-item">
+                        <Link className="nav-link active" to="/discover">Discover</Link>
+                    </li>
                 </ul>
             </div>  
             </div>

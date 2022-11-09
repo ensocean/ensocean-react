@@ -1,16 +1,6 @@
 import React, { Component } from "react";
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";
-import {  getTokenId, obscureAddress, obscureString } from '../helpers/String'
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import moment from 'moment'; 
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import spinner from '../assets/spinner2.svg'
-import DomainEvents from './partials/DomainEvents'; 
-import EnsControllerAbi from '../abis/EthRegistrarController.json'
-import { ethers } from 'ethers'
 import DomainAvailable from "../components/DomainAvailable";
 import DomainLoading from "../components/DomainLoading";
 import DomainDetails from "../components/DomainDetails";

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import spinner from '../assets/spinner2.svg'
+import spinner from '../assets/spinner.svg'
 import { Link } from "react-router-dom";
 import moment from "moment";
 import DomainEvents from "../pages/partials/DomainEvents";
@@ -69,13 +69,13 @@ class DomainDetails extends React.Component {
                                             <LazyLoadImage
                                                 alt={this.props.domain.name} 
                                                 width="496" 
-                                                height="496" 
+                                                height="496"
                                                 onError={(e)=> { e.target.style.display = "none" }}
                                                 placeholderSrc={spinner}
                                                 visibleByDefault={false}
                                                 src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(this.props.domain.label)) }
                                                 /> 
-                                            <h2 className='text-white fs-1'>{obscureString(this.props.domain.label, 20)}.eth</h2>
+                                            <h2 className='text-white fs-1'>{obscureString(this.props.domain.label, 20)}.{this.props.domain.extension}</h2>
                                         </div> 
                                     </div> 
                                 </div>
@@ -98,7 +98,7 @@ class DomainDetails extends React.Component {
                                                     <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
                                                 </svg>
                                             </CopyToClipboard> 
-                                            <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end'>{obscureAddress(getTokenId(this.props.domain.label), 25)}</span>
+                                            <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureAddress(getTokenId(this.props.domain.label), 25)}</span>
                                             </li>
                                             <li className='list-group-item border-0 p-0 pb-3'>
                                                 <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{this.props.domain.length}</span>

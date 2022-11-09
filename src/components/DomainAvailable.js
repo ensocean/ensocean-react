@@ -4,9 +4,7 @@ import { ethers } from 'ethers'
 import { getLength, getSegmentLength, getTokenId, obscureString } from "../helpers/String";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import spinner from '../assets/spinner2.svg'
+import {CopyToClipboard} from 'react-copy-to-clipboard'; 
 import DomainLoading from "./DomainLoading";
 
 const ETHEREUM_RPC_URL = process.env.REACT_APP_ETHEREUM_RPC_URL;
