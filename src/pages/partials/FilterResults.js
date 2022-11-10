@@ -105,8 +105,8 @@ const FilterResults = ({tab}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className='span-3'>
-                            <td className='p-3'><span className='text-danger'>{error.message}</span></td>
+                        <tr>
+                            <td colspan="6" className='p-3'><span className='text-danger'>{error.message}</span></td>
                         </tr>
                     </tbody>
                 </table>
