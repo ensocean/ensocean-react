@@ -3,7 +3,7 @@ import {Link } from "react-router-dom";
 const FilterTabs = ({tab}) => {
     return (
         <> 
-            <ul className="nav nav-tabs card-header-tabs d-inline-flex">
+            <ul className="nav nav-tabs card-header-tabs">
                 <li className="nav-item">
                     <Link className={"nav-link fs-5 p-3 "+ (tab === "all" ? "active": "") } to="/discover?tab=all">All</Link>
                 </li>

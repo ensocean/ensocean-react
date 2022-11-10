@@ -3,17 +3,17 @@ import FilterResults from "./FilterResults";
   
 const Filter = ({tab}) => {
   
-    const handleFilterClick = () => {
+    const handleFilterClick = (e) => {
         const elem = document.getElementById("filters");
         console.log(elem.classList )
 
-        if(!elem.classList.contains("d-block")) {
+        if(elem.classList.contains("d-none")) {
             elem.classList.remove("d-none") 
-            elem.classList.add("d-block")
+            elem.classList.add("d-block")  
         } else {
             elem.classList.add("d-none") 
-            elem.classList.remove("d-block")
-        }
+            elem.classList.remove("d-block")  
+        }   
     } 
 
     return (
@@ -53,8 +53,8 @@ const Filter = ({tab}) => {
                     </button>
                 </div>
             </div> 
-            <div className="d-flex">
-                <div className="card sticky-top h-50 overflow-auto mt-1 t-60 d-none d-xl-block" id="filters">
+            <div className="d-flex justify-content-between flex-column flex-lg-row">
+                <div className="card sticky-top h-50 overflow-auto mt-1 t-60 d-none flex-shrink-0" id="filters">
                     <div className="card-header d-flex flex-row justify-content-between">
                         <button className="btn fs-5 p-0 m-0">Filter</button> 
                         <button className="btn border-0" type="button" onClick={handleFilterClick}>
@@ -100,8 +100,8 @@ const Filter = ({tab}) => {
                             </div>
                         </div>
                     </div> 
-                </div>
-                <div className="flex-fill">
+                </div> 
+                <div className="flex-lg-fill w-100 flex-shrink-0"> 
                     <div className="d-flex justify-content-between">
                         <div className="csv-download">
                             <button type="button" className="btn btn-default" data-bs-toogle="tooltip" data-bs-title="Download CSV">
@@ -129,9 +129,9 @@ const Filter = ({tab}) => {
                         </div> 
                     </div>
                     <div className="results">
-                      <FilterResults />
-                    </div>
-                </div>
+                    <FilterResults />
+                    </div> 
+                </div> 
             </div>  
         </>
     )
