@@ -36,7 +36,7 @@ export default function App () {
             <Route path="/404" element={<NotFound />} />
             <Route path="/account/:address" element={<Account />} />
             <Route path="/:label.eth" element={<Domain />} />
-            <Route path="*" element={<Navigate to="/404"></Navigate>} />
+            <Route path="*" element={<Navigate href="/404"></Navigate>} />
           </Route> 
         </Routes>
       </BrowserRouter>
