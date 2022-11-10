@@ -100,7 +100,7 @@ const FilterResults = ({tab}) => {
     } else {
         return (
             <>
-             <div className="table-responsive ">
+             <div className="table-responsive p-lg-3">
                 <table className='table table-hover m-0'>
                     <thead className="table-light fw-bold fs-6">
                         <tr>
