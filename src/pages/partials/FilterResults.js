@@ -61,7 +61,7 @@ const FilterResults = ({tab}) => {
     if(loading) {
         return ( 
             <>
-            <div className='table-responsive p-3 placeholder-glow'>
+            <div className='table-responsive p-lg-3 placeholder-glow'>
                 <table className='table table-hover m-0'>
                     <thead className="table-light fw-bold fs-6">
                         <tr>
@@ -92,15 +92,31 @@ const FilterResults = ({tab}) => {
     } else if (error) {
         return (
             <>
-                <ol className="list-group list-group-flush">
-                    <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
-                </ol>
+            <div className="table-responsive p-lg-3">
+                <table className='table table-hover m-0'>
+                    <thead className="table-light fw-bold fs-6">
+                        <tr>
+                            <th className="p-3">Name</th>
+                            <th className="p-3">Owner</th>
+                            <th className="p-3">Expires</th>
+                            <th className="p-3">Created</th>
+                            <th className="p-3">Registered</th>
+                            <th className="p-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr className='span-3'>
+                            <td className='p-3'><span className='text-danger'>{error.message}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> 
             </>
         );
     } else {
         return (
             <>
-             <div className="table-responsive p-lg-3">
+            <div className="table-responsive p-lg-3">
                 <table className='table table-hover m-0'>
                     <thead className="table-light fw-bold fs-6">
                         <tr>
@@ -114,7 +130,9 @@ const FilterResults = ({tab}) => {
                     </thead>
                     <tbody>
                         {data.domains.length < 1 &&
-                        <tr className='span-3'>No Result</tr>
+                            <tr className='span-3'>
+                                <td className='p-3'><span className='text-warning'>No Result</span></td>
+                            </tr>
                         } 
                         {data.domains.map((domain) => (
                         <tr key={domain.id}>

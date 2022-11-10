@@ -25,7 +25,7 @@ li.active a {
 .nav-tabs {
   overflow-x: auto;
   overflow-y:hidden;
-  flex-wrap: nowrap;
+  flex-wrap: nowrap; 
 }
 
 .nav-tabs .nav-link {
@@ -98,4 +98,9 @@ li.active a {
   top:5px;
 }
 
- 
+
+.table-responsive {
+  overflow: auto !important;  
+  -webkit-overflow-scrolling: touch !important;
+   
+}

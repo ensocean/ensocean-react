@@ -3,58 +3,68 @@ import FilterResults from "./FilterResults";
   
 const Filter = ({tab}) => {
   
-    const handleFilterClick = () => {
+    const handleFilterClick = (e) => {
         const elem = document.getElementById("filters");
         console.log(elem.classList )
 
-        if(!elem.classList.contains("d-block")) {
+        if(elem.classList.contains("d-none")) {
             elem.classList.remove("d-none") 
-            elem.classList.add("d-block")
+            elem.classList.add("d-block")  
         } else {
             elem.classList.add("d-none") 
-            elem.classList.remove("d-block")
-        }
+            elem.classList.remove("d-block")  
+        }   
     } 
 
     return (
         <>
-            <div className="d-flex sticky-top mb-3 t-20"> 
-                <div className="input-group input-group-lg gap-2">
-                    <button className="btn btn-outline-secondary rounded-0" type="button" onClick={handleFilterClick}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-funnel-fill" viewBox="0 0 16 16">
-                            <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
-                        </svg>
-                    </button>
-                    <button className="btn btn-outline-secondary rounded-0" type="button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-repeat" viewBox="0 0 16 16">
-                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
-                        <path fillRule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
-                    </svg>
-                    </button>
-                    <div className="input-group input-group-lg w-75">
-                        <span className="input-group-text bg-light border-end-0 rounded-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                            </svg>
-                        </span>
-                        <input type="text" className="form-control  border-start-0 rounded-0" placeholder="Search Name"  />
+            <div className="sticky-top mb-3 t-20">  
+                <div className="d-flex flex-lg-row flex-column justify-content-between gap-2"> 
+                    <div className="flex-fill"> 
+                        <div className="flex-grow-1"> 
+                             <div className="d-flex flex-row gap-2">
+                                <button className="btn btn-outline-secondary rounded-0" type="button" onClick={handleFilterClick}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-funnel-fill" viewBox="0 0 16 16">
+                                        <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+                                    </svg>
+                                </button>
+                                <button className="btn btn-outline-secondary rounded-0" type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                                        <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                                        <path fillRule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                                    </svg>
+                                </button>
+                                <div className="input-group input-group-lg">
+                                    <span className="input-group-text bg-light border-end-0 rounded-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                        </svg>
+                                    </span>
+                                    <input type="text" className="form-control border-start-0 rounded-0"   placeholder="Search Name"  /> 
+                                </div> 
+                             </div> 
+                        </div>
                     </div> 
-                    <select className="form-select" defaultValue="expires">
-                        <option value="expires">Expiration</option>
-                        <option value="registered">Registration</option>
-                        <option value="created">Creation</option>
-                        <option value="name">Name</option>
-                        <option value="length">Length</option>
-                    </select>
-                    <button className="btn btn-outline-secondary rounded-0" type="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-down" viewBox="0 0 16 16">
-                            <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
-                        </svg>
-                    </button>
+                    <div className="">
+                        <div className="input-group input-group-lg gap-2">
+                            <select className="form-select rounded-0" defaultValue="expires">
+                                <option value="expires">Expiration</option>
+                                <option value="registered">Registration</option>
+                                <option value="created">Creation</option>
+                                <option value="name">Name</option>
+                                <option value="length">Length</option>
+                            </select>
+                            <button className="btn btn-outline-secondary rounded-0" type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-down" viewBox="0 0 16 16">
+                                    <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+                                </svg>
+                            </button> 
+                        </div>
+                    </div> 
                 </div>
             </div> 
-            <div className="d-flex">
-                <div className="card sticky-top h-50 overflow-auto mt-1 t-60 d-none d-xl-block" id="filters">
+            <div className="d-flex justify-content-between flex-column flex-lg-row">
+                <div className="card sticky-top h-50 overflow-auto mt-1 t-60 d-none flex-shrink-0" id="filters">
                     <div className="card-header d-flex flex-row justify-content-between">
                         <button className="btn fs-5 p-0 m-0">Filter</button> 
                         <button className="btn border-0" type="button" onClick={handleFilterClick}>
@@ -100,8 +110,8 @@ const Filter = ({tab}) => {
                             </div>
                         </div>
                     </div> 
-                </div>
-                <div className="flex-fill">
+                </div> 
+                <div className="flex-lg-fill w-100 flex-shrink-0"> 
                     <div className="d-flex justify-content-between">
                         <div className="csv-download">
                             <button type="button" className="btn btn-default" data-bs-toogle="tooltip" data-bs-title="Download CSV">
@@ -129,9 +139,9 @@ const Filter = ({tab}) => {
                         </div> 
                     </div>
                     <div className="results">
-                      <FilterResults />
-                    </div>
-                </div>
+                    <FilterResults />
+                    </div> 
+                </div> 
             </div>  
         </>
     )
