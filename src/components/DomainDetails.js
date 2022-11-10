@@ -59,22 +59,20 @@ class DomainDetails extends React.Component {
                     <div className='container'>
                         <div className="card mb-3 border-light border-0">
                             <div className="row g-0"> 
-                                <div className="col-lg-4">
-                                    <div className='d-flex align-items-center'>
-                                        <div className='text-center m-auto img-thumbnail'>
+                                <div className="col-lg-4"> 
+                                        <div className='img-thumbnail border border-3 d-flex justify-content-center align-items-center'>
                                             <LazyLoadImage
                                                 alt={this.props.domain.name} 
-                                                className="img-fluid img-responsive"
+                                                className="img-responsive"
                                                 onError={(e)=> { e.target.style.display = "none" }}
                                                 placeholderSrc={spinner}
                                                 visibleByDefault={false}
                                                 src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(this.props.domain.label)) }
                                                 />
-                                        </div> 
-                                    </div> 
+                                        </div>  
                                 </div>
                                 <div className='col-lg-8'>
-                                    <div className="card-body"> 
+                                    <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
                                         <h5 className="card-title fs-4">Details</h5>
                                         <hr />
                                         <ul className='list-group list-group-flush'>
