@@ -105,8 +105,8 @@ const FilterResults = ({tab}) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className='span-3'>
-                            <td className='p-3'><span className='text-danger'>{error.message}</span></td>
+                        <tr>
+                            <td colspan="6" className='p-3'><span className='text-danger'>{error.message}</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -142,7 +142,7 @@ const FilterResults = ({tab}) => {
                                 data-bs-toggle="tooltip" 
                                 data-bs-title={"View "+ domain.name +" on EnsOcean"}
                                 title={"View "+ domain.name +" on EnsOcean"}
-                                to={domain.name}>{obscureLabel(domain.name, 20)}</Link> 
+                                to={"/"+ domain.name }>{obscureLabel(domain.name, 20)}</Link> 
                             </td> 
                             <td className="p-3">{obscureAddress(domain.owner || "", 20)} </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.expires).toDate())} </td>
