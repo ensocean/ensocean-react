@@ -8,6 +8,9 @@ class NavbarSearchFrom extends React.Component {
             value: ""
         }
     }
+    
+    componentDidMount() { 
+    } 
 
     handleChange = (e) => {
         this.setState({value: e.target.value});
