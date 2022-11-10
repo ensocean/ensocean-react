@@ -4,7 +4,8 @@ import { useQuery, gql } from "@apollo/client";
 import DomainAvailable from "../components/DomainAvailable";
 import DomainLoading from "../components/DomainLoading";
 import DomainDetails from "../components/DomainDetails";
-  
+import {Helmet} from "react-helmet";
+
 const DOMAIN_DETAILS = gql`
     query Domains( $label: String! ) {
         domains ( 
@@ -30,6 +31,8 @@ const DOMAIN_DETAILS = gql`
     }
 `;
  
+
+
 const Domain = () => { 
     const { label } = useParams();  
     const { data, loading, error } = useQuery(DOMAIN_DETAILS, {
@@ -58,6 +61,10 @@ const Domain = () => {
         const domain = data.domains[0]; 
         return (
         <> 
+            <Helmet> 
+              <title>{domain.name} - EnsOcean</title>
+              <meta name="description" content="{domain.name}" />
+            </Helmet> 
             <DomainDetails domain={domain} />
         </>
     );
