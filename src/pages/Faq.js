@@ -1,6 +1,12 @@
+import {Helmet} from "react-helmet";
+
 const Faq = () => {
     return (
         <>  
+        <Helmet> 
+              <title>Frequently Asked Questions - EnsOcean</title>
+              <meta name="description" content="Frequently Asked Questions " />
+        </Helmet>
         <div className="container-fluid bg-primary">
             <div className="container text-center p-3 text-white">
                 <h1>Frequently Asked Questions</h1>

@@ -1,6 +1,12 @@
+import {Helmet} from "react-helmet";
+
 const Account = () => {
     return (
         <>  
+        <Helmet> 
+              <title>{"AccountAddress"} - EnsOcean</title>
+              <meta name="description" content="" />
+        </Helmet>
         <div className="container-fluid bg-primary">
             <div className="container text-center p-3 text-white">
                 <h1>Account</h1>

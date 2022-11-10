@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom"; 
+import {Helmet} from "react-helmet";
 
 const Discover = () => { 
     const query = new URLSearchParams(useLocation().search);
@@ -54,6 +55,10 @@ const Page = (pageTitle, tab) => {
     } 
     return (
         <>
+        <Helmet> 
+              <title>Browse Ethereum Name Service (ENS) Domains - EnsOcean</title>
+              <meta name="description" content="Browse Ethereum Name Service (ENS) domains easily. Find your web3 domain name idea. " />
+        </Helmet>
         <div className="container-fluid bg-primary">
             <div className="container text-center p-3 text-white">
                 <h1>{pageTitle}</h1>

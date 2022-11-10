@@ -17,14 +17,7 @@ li.active a {
   white-space: nowrap; 
   width: 1%;
 }
-
-.img-container {
-  width: 500px;
-  height: 500px;
-  background-color: #0c6efd;
-  background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
-}
-
+ 
 .cursor-pointer {
   cursor: pointer;
 }
@@ -37,4 +30,62 @@ li.active a {
 
 .nav-tabs .nav-link {
   white-space: nowrap;
+}
+
+ 
+.img-thumbnail  {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #0c6efd;
+  background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
+ 
+  min-height: 400px;
+}
+
+.img-responsive {
+  margin: 0;
+  padding: 0;
+  min-width: 400px;
+  min-height: 400px;
+  max-width: 100%;
+  height: auto;
+
+}
+
+
+@media (min-width: 776px) {  
+  .img-responsive {
+    width: 500px; 
+  }
+
+  .img-thumbnail {
+    width: 500px;   
+  }
+  
+}
+  
+@media (min-width: 576px) {  
+  .img-responsive {
+    width: 500px; 
+  }
+
+  .img-thumbnail {
+    width: 500px; 
+  } 
+}
+
+
+@media (min-width: 200px) {  
+  
+  .img-responsive {
+    width: 450px;
+    height: auto; 
+  }
+
+  .img-thumbnail {
+    width: 450px; 
+    background-color: #0c6efd;
+    background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
+  }
+  
 }
