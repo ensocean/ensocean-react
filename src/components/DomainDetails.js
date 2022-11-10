@@ -69,6 +69,7 @@ class DomainDetails extends React.Component {
                                                 visibleByDefault={false}
                                                 src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(this.props.domain.label)) }
                                                 />
+                                             { /* <h2 className="display-8 text-white">{obscureLabel(this.props.domain.label, 20)}.{this.props.domain.extension}</h2>*/ }
                                         </div>  
                                 </div>
                                 <div className='col-lg-8'>
