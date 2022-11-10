@@ -8,6 +8,10 @@ class DomainLoading extends React.Component {
           available: null 
         };
     }
+    
+    componentDidMount() { 
+    }
+
     render() {
         return (
             <>

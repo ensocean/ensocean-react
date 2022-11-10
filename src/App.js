@@ -2,6 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";  
 import  "bootstrap/dist/js/bootstrap.esm.min.js"; 
 import './App.css'; 
+import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Home from "./pages/Home";
@@ -24,6 +25,7 @@ const client = new ApolloClient({
 export default function App () {  
   return ( 
     <ApolloProvider client={client}> 
+    <React.StrictMode>
       <BrowserRouter forceRefresh={true}>
         <Routes>  
           <Route path="/" element={<Layout />}>
@@ -41,6 +43,7 @@ export default function App () {
         </Routes>
       </BrowserRouter>
       <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
+      </React.StrictMode>
     </ApolloProvider>
   );
 }
