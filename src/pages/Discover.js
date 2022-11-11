@@ -31,8 +31,7 @@ const Discover = () => {
 
     let location = useLocation(); 
     let navigate = useNavigate(); 
-    
-
+     
     const [search, setSearch] = useState(location.search);
     const [tab, setTab] = useState(DEFAULT_TAB);
     const [filter, setFilter] = useState(DEFAULT_FILTER);
@@ -43,10 +42,17 @@ const Discover = () => {
     const [pageTitle, setPageTitle] = useState("Discover ENS Domains")
     const [refresh, setRefresh] = useState(false);
      
+    let _search = location.search;
+    let _query = new URLSearchParams(_search);  
+    let _tab = _query.get("tab"); 
+
+   
+     
+
     const [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery(filter)), {
         variables: { skip, first, orderBy, orderDirection }
     });
- 
+     
     useEffect(() => {  
             
         let _search = location.search;
@@ -54,8 +60,7 @@ const Discover = () => {
         let _skip = Number(_query.get("skip") || "0");
         let _first = Number(_query.get("first") || "50");
         let _orderBy = _query.get("orderBy") || "expires";
-        let _orderDirection = _query.get("orderDirection") || "desc";
-        let _tab = _query.get("tab"); 
+        let _orderDirection = _query.get("orderDirection") || "desc"; 
         let _filter = _query.get("filter") || DEFAULT_FILTER;  
   
         setSearch(_search);
@@ -64,10 +69,41 @@ const Discover = () => {
         setOrderDirection(_orderDirection);
         setFirst(_first);
         setSkip(_skip);
-        setFilter(_filter); 
+         
+        if(_tab === "all") {   
+            let _filter = getFilterObj(filter); 
+            setFilter(json5.stringify(_filter));
+        }
+        else if(_tab === "expired") { 
+            let _filter = getFilterObj(DEFAULT_FILTER); 
+            _filter.expires_lte = moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix(); 
+            setFilter(json5.stringify(_filter));
+        
+        } else if(_tab === "expiring") {  
+            let _filter = getFilterObj(DEFAULT_FILTER); 
+            _filter.expires_lte = moment().utc().unix();
+            _filter.expires_gte = moment().add(-PREMIUM_PERIOD, "days").utc().unix();
+            setFilter(json5.stringify(_filter));
+        }
+        else if(_tab === "premium") { 
+            let _filter = getFilterObj(DEFAULT_FILTER); 
+            _filter.expires_lte = moment().add(-GRACE_PERIOD, "days").utc().unix();
+            _filter.expires_gte = moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix();
+            setFilter(json5.stringify(_filter));
+        }
+        else if(_tab === "registered") { 
+            let _filter = getFilterObj(DEFAULT_FILTER); 
+            _filter.registered_not = null;
+            setFilter(json5.stringify(_filter));
+        } else { 
+            let _filter = getFilterObj(DEFAULT_FILTER); 
+            setFilter(json5.stringify(_filter));
+        }
+
+        console.log(filter)
         getDomains();
  
-    }, [location]);
+    }, [location, _tab]);
 
      
     const handleFilterClick = (e) => {
