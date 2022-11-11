@@ -16,10 +16,12 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
 import NotFound from "./pages/Notfound";  
+import { typeDefs } from "./typeDefs";
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  typeDefs
 });
  
 export default function App () {  
@@ -33,7 +35,7 @@ export default function App () {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/faq" element={<Faq />} />
-            <Route path="/discover" element={<Discover />} />
+            <Route path="/discover" forceRefresh={true} element={<Discover />} />
             <Route path="/find" element={<Find />} />
             <Route path="/404" element={<NotFound />} />
             <Route path="/account/:address" element={<Account />} />
