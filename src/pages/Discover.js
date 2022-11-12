@@ -35,8 +35,7 @@ const Discover = () => {
 
     let location = useLocation(); 
     let navigate = useNavigate(); 
-
-     
+ 
     const [search, setSearch] = useState(location.search);
     const [tab, setTab] = useState(DEFAULT_TAB);
     const [filter, setFilter] = useState(DEFAULT_FILTER);
@@ -51,7 +50,8 @@ const Discover = () => {
     let _tab = _query.get("tab"); 
  
     const [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery(filter)), {
-        variables: { skip, first, orderBy, orderDirection }
+        variables: { skip, first, orderBy, orderDirection },
+        notifyOnNetworkStatusChange: true
     });
  
     useEffect(() => {  
@@ -64,15 +64,14 @@ const Discover = () => {
         let _orderDirection = _query.get("orderDirection") || "desc"; 
         let _filter = _query.get("filter") || DEFAULT_FILTER;  
      
+        setTab(_tab); 
+        setSearch(_search); 
         setOrderBy(_orderBy);
-        setOrderDirection(_orderDirection);
-        setSearch(_search);
-        setTab(_tab);  
-        setFilter(_filter);
- 
+        setOrderDirection(_orderDirection); 
+        setFilter(_filter); 
         getDomains();
  
-    }, [location, _tab]);
+    }, [location, _tab, getDomains, refetch]);
 
      
     const handleFilterClick = (e) => {
@@ -89,10 +88,9 @@ const Discover = () => {
     } 
 
     const handleRefreshClick = (e) => {  
-       refetch();
-       getDomains();
-       navigate(location.pathname + location.search)
-       e.preventDefault();
+        
+       refetch( );
+ 
     };
 
     const handleOrderBy = (e) => { 
@@ -107,76 +105,108 @@ const Discover = () => {
         navigate(location.pathname + "?"+ _query.toString())
     }
 
-    const handleStartWith = (e) => {
+    const handleSearchText = (e) => {
         let _query = new URLSearchParams(search) 
         let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        if(e.target.value == "") { 
+            delete _filter.label_contains;
+        }  else {
+            _filter.label_contains = e.target.value; 
+            
+        }
+        setFilter(getFilterObjStr(_filter));
+        _query.set("filter",  getFilterObjStr(_filter));
+        navigate(location.pathname + "?"+ _query.toString())
+    }
+
+    const handleStartWith = (e) => {
+        let _query = new URLSearchParams(search) 
+        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER); 
+        
         if(e.target.value !== "")
-            _filter.label_starts_with = e.target.value;
+            _filter.label_starts_with = e.target.value; 
         else 
             delete _filter.label_starts_with;
-        _query.set("filter",  getFilterObjStr(_filter));
+
+        let filterStr = getFilterObjStr(_filter);
+        setFilter(filterStr);
+        _query.set("filter",  filterStr);
         navigate(location.pathname + "?"+ _query.toString())
     }
 
     const handleEndWith = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER); 
         if(e.target.value !== "")
-         _filter.label_ends_with = e.target.value;
-        else
+            _filter.label_ends_with = e.target.value;
+        else 
             delete _filter.label_ends_with;
-        _query.set("filter",  getFilterObjStr(_filter));
+        let filterStr = getFilterObjStr(_filter);
+        setFilter(filterStr);
+        _query.set("filter",  filterStr);
         navigate(location.pathname + "?"+ _query.toString())
     }
 
     const handleMinLength = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);  
         if(e.target.value !== "")
-            _filter.length_gte = Number(e.target.value);
-        else
-            delete _filter.length_gte;
-        _query.set("filter",  getFilterObjStr(_filter));
+            _filter.length_gte = Number(e.target.value); 
+        else 
+           delete _filter.length_gte;
+        let filterStr = getFilterObjStr(_filter);
+        setFilter(filterStr);
+        _query.set("filter",  filterStr);
         navigate(location.pathname + "?"+ _query.toString())
     }
 
     const handleMaxLength = (e) => {
         let _query = new URLSearchParams(search) 
         let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        
         if(e.target.value !== "")
-            _filter.length_lte = Number(e.target.value);
+         _filter.length_lte = Number(e.target.value);
         else 
-            delete _filter.length_lte; 
-        _query.set("filter",  getFilterObjStr(_filter));
+            delete _filter.length_lte;
+        let filterStr = getFilterObjStr(_filter);
+        setFilter(filterStr);
+        _query.set("filter",  filterStr);
         navigate(location.pathname + "?"+ _query.toString())
     }
 
-    const handleSegmentMinLength = (e) => {
+    const handleMinSegmentLength = (e) => {
         let _query = new URLSearchParams(search) 
         let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        
         if(e.target.value !== "")
-            _filter.segmentLength_gte = Number(e.target.value);
-        else
-            delete _filter.segmentLength_gte; 
-        _query.set("filter",  getFilterObjStr(_filter));
+            _filter.segmentLength_gte = Number(e.target.value); 
+        else 
+            delete _filter.segmentLength_gte;
+        let filterStr = getFilterObjStr(_filter);
+        setFilter(filterStr);
+        _query.set("filter",  filterStr);
         navigate(location.pathname + "?"+ _query.toString())
     }
 
-    const handleSegmentMaxLength = (e) => {
+    const handleMaxSegmentLength = (e) => {
         let _query = new URLSearchParams(search) 
         let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
         if(e.target.value !== "")
-            _filter.segmentLength_lte = Number(e.target.value);
-        else
-            delete _filter.segmentLength_gte; 
-        _query.set("filter",  getFilterObjStr(_filter));
+            _filter.segmentLength_lte = Number(e.target.value); 
+        else 
+            delete _filter.segmentLength_lte;
+        let filterStr = getFilterObjStr(_filter);
+        setFilter(filterStr);
+        _query.set("filter",  filterStr);
         navigate(location.pathname + "?"+ _query.toString())
     }
 
     const handleResetFilter = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj( DEFAULT_FILTER);
-        _query.set("filter",  getFilterObjStr(_filter));
+        let _filter = getFilterObj( DEFAULT_FILTER); 
+        let filterStr = getFilterObjStr(_filter);
+        setFilter(filterStr);
+        _query.set("filter",  filterStr);
         emptyFilters();
         navigate(location.pathname + "?"+ _query.toString())
     }
@@ -188,6 +218,7 @@ const Discover = () => {
         document.getElementsByName("maxSegmentLength")[0].value = "";
         document.getElementsByName("startWith")[0].value = "";
         document.getElementsByName("endWith")[0].value = "";
+        document.getElementsByName("searchText")[0].value = "";
     }
  
     return (
@@ -206,19 +237,19 @@ const Discover = () => {
                 <div className="card-header border-0">
                     <ul className="nav nav-tabs card-header-tabs">
                         <li className="nav-item">
-                            <Link className={"nav-link fs-5 p-3 "+ (tab === "all" ? "active": "") } to="/discover?tab=all&orderBy=created&orderDirection=desc">All</Link>
+                            <Link className={"nav-link fs-5 p-3 "+ (tab === "all" ? "active": "") } to="/discover?tab=all">All</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={"nav-link fs-5 p-3 "+ (tab === "expired" ? "active": "")} to="/discover?tab=expired&orderBy=expires&orderDirection=desc">Expired</Link>
+                            <Link className={"nav-link fs-5 p-3 "+ (tab === "expired" ? "active": "")} to="/discover?tab=expired">Expired</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={"nav-link fs-5 p-3 "+ (tab === "expiring" ? "active": "")} to="/discover?tab=expiring&orderBy=expires&orderDirection=desc">Expiring</Link>
+                            <Link className={"nav-link fs-5 p-3 "+ (tab === "expiring" ? "active": "")} to="/discover?tab=expiring">Expiring</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={" nav-link fs-5 p-3 "+ (tab === "premium" ? "active": "")} to="/discover?tab=premium&orderBy=expires&orderDirection=desc">Premium</Link>
+                            <Link className={" nav-link fs-5 p-3 "+ (tab === "premium" ? "active": "")} to="/discover?tab=premium">Premium</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className={"nav-link fs-5  p-3 "+ (tab === "registered" ? "active": "")} to="/discover?tab=registered&orderBy=registered&orderDirection=desc">Recently Registered</Link>
+                            <Link className={"nav-link fs-5  p-3 "+ (tab === "registered" ? "active": "")} to="/discover?tab=registered">Recently Registered</Link>
                         </li> 
                     </ul> 
                 </div>
@@ -245,7 +276,7 @@ const Discover = () => {
                                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                                                 </svg>
                                             </span>
-                                            <input type="text" className="form-control border-start-0 rounded-0"   placeholder="Search Name"  /> 
+                                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={handleSearchText} value={getFilterObj(filter).label_contains} placeholder="Search Name"  /> 
                                         </div> 
                                     </div> 
                                 </div>
@@ -295,8 +326,8 @@ const Discover = () => {
                                         </button> 
                                         <div id="startsWith" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="text" name="startWith" onChange={handleStartWith} className="form-control" placeholder="Start with" />
-                                                <input type="text" name="endWith" onChange={handleEndWith} className="form-control" placeholder="End with" />
+                                                <input type="text" name="startWith" onChange={handleStartWith} value={getFilterObj(filter).label_starts_with} className="form-control" placeholder="Start with" />
+                                                <input type="text" name="endWith" onChange={handleEndWith} value={getFilterObj(filter).label_ends_with} className="form-control" placeholder="End with" />
                                             </div>
                                         </div>
                                     </div>
@@ -306,8 +337,8 @@ const Discover = () => {
                                         </button> 
                                         <div id="length" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="number" name="minLength" onChange={handleMinLength} className="form-control" placeholder="Min Length" />
-                                                <input type="number" name="maxLength" onChange={handleMaxLength} className="form-control" placeholder="Max Length  " />
+                                                <input type="number" name="minLength" onChange={handleMinLength} value={getFilterObj(filter).length_gte} className="form-control" placeholder="Min Length" />
+                                                <input type="number" name="maxLength" onChange={handleMaxLength} value={getFilterObj(filter).length_lte} className="form-control" placeholder="Max Length  " />
                                             </div>
                                         </div>
                                     </div>
@@ -317,12 +348,12 @@ const Discover = () => {
                                         </button> 
                                         <div id="segmentLength" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="number" name="minSegmentLength" onChange={handleSegmentMinLength} className="form-control" placeholder="Min Segment Length" />
-                                                <input type="number" name="maxSegmentLength" onChange={handleSegmentMaxLength} className="form-control" placeholder="Max Segment Length  " />
+                                                <input type="number" name="minSegmentLength" onChange={handleMinSegmentLength} value={getFilterObj(filter).segmentLength_gte} className="form-control" placeholder="Min Segment Length" />
+                                                <input type="number" name="maxSegmentLength" onChange={handleMaxSegmentLength} value={getFilterObj(filter).segmentLength_lte} className="form-control" placeholder="Max Segment Length  " />
                                             </div>
                                         </div>
                                     </div>
-                                    <button className="btn btn-outline-primary" type="button" onClick={handleResetFilter} >
+                                    <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
                                         Reset Filters
                                     </button> 
                                 </div>
