@@ -15,13 +15,11 @@ import { ToastContainer } from 'react-toastify';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
-import NotFound from "./pages/Notfound";  
-import { typeDefs } from "./typeDefs";
+import NotFound from "./pages/Notfound";   
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
-  cache: new InMemoryCache(),
-  typeDefs
+  cache: new InMemoryCache() 
 });
  
 export default function App () {  
