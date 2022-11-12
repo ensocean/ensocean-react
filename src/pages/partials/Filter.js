@@ -36,7 +36,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
     const [orderBy, setOrderBy] = useState(OrderBy);
     const [orderDirection, setOrderDirection] = useState(OrderDirection);
     const [filter, setFilter] = useState(Filter);
-    const [refresh, setRefresh] = useState(0);
+    //const [refresh, setRefresh] = useState(0);
 
     const [getDomains, { called, loading, error, data } ] = useLazyQuery( gql(getQuery(filter)), {
         variables: { skip, first, orderBy, orderDirection },
@@ -61,11 +61,11 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
         setOrderBy(_orderBy); 
         setOrderDirection(_orderDirection);  
         setFilter(_filter);
-        setRefresh(0)  
+        //setRefresh(0)  
 
         getDomains();
  
-    }, [location]);
+    }, [location, getDomains, PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter]);
 
      
     const handleFilterClick = (e) => {
@@ -83,7 +83,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
 
     const handleRefreshClick = (e) => {   
         let _query = new URLSearchParams(search) 
-        setRefresh(Math.floor(Math.random() * (99999 - 1 + 1)) + 1);
+        //setRefresh(Math.floor(Math.random() * (99999 - 1 + 1)) + 1);
         navigate(location.pathname + "?"+ _query.toString())
     };
 
@@ -290,8 +290,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                                     {orderDirection === "desc" &&
                                         <button className="btn btn-outline-secondary rounded-0" type="button"  onClick={handleOrderDirection} >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16">
-  <path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
-</svg>
+                                                <path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+                                            </svg>
                                         </button>
                                     }
                                     {orderDirection === "asc" &&
@@ -306,9 +306,9 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                         </div>
                     </div> 
                     <div className="d-flex justify-content-between flex-column flex-lg-row">
-                        <div className="card sticky-top h-50 overflow-auto mt-1 t-60 d-none flex-shrink-0" id="filters">
-                            <div className="card-header d-flex flex-row justify-content-between">
-                                <button className="btn fs-5 p-0 m-0">Filter</button> 
+                        <div className="card overflow-auto d-none flex-shrink-0 h-sm-100 fixed-top sticky-sm-top t-60 rounded-0" id="filters">
+                            <div className="card-header d-flex flex-row justify-content-between ">
+                                <button className="btn fs-5 p-0 m-0 ">Filter</button> 
                                 <button className="btn border-0" type="button" onClick={handleFilterClick}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-left-short" viewBox="0 0 16 16">
                                         <path fillRule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
@@ -317,8 +317,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                             </div>
                             <div className="card-body p-0">
                                 <div className="accordion">
-                                    <div className="accordion-item border-0">
-                                        <button className="accordion-button fw-bold fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                    <div className="accordion-item border-0 rounded-0">
+                                        <button className="accordion-button fw-bold fs-4 rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
                                             <h6 className="accordion-header">Starts/Ends With</h6>
                                         </button> 
                                         <div id="startsWith" className="accordion-collapse collapse show">
@@ -508,13 +508,35 @@ const FilterResults = ( { called, loading, error, data }) => {
                         <tr key={domain.id}>
                             <td className="p-3">
                                 <Link
-                                className="text-decoration-none" 
+                                className="text-decoration-none link-dark fs-5 fw-bold" 
                                 data-bs-toggle="tooltip" 
                                 data-bs-title={"View "+ domain.name +" on EnsOcean"}
                                 title={"View "+ domain.name +" on EnsOcean"}
-                                to={"/"+ domain.name }>{obscureLabel(domain.name, 20)}</Link> 
+                                to={"/"+ domain.name }>{obscureLabel(domain.name, 20)}
+                                </Link> 
+                                &nbsp;
+                                { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle text-warning" viewBox="0 0 16 16">
+                                        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                                        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                                    </svg>
+                                }
                             </td> 
-                            <td className="p-3">{timeAgo.format(moment.unix(domain.expires).add(GRACE_PERIOD, "days").add(PREMIUM_PERIOD, "days").toDate())} </td>
+                            <td className="p-3">
+                                 
+                            {(function() {
+                                if (isPremium(domain.expires) ) {
+                                return (<span className="text-success fw-bold">{ moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } (Available Premium)</span>)
+                                } else if(isExpiring(domain.expires)) {
+                                return (<span className="text-warning fw-bold">{  moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } (Grace)</span>)
+                                } else if(isExpired(domain.expires)) {
+                                return (<span className="text-success fw-bold">{  moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } (Avaliable) </span>)
+                                } else {
+                                    return (<span className="text-default fw-bold">{  moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } </span>)
+                                }
+                            })()}
+  
+                            </td>
                             <td className="p-3">{obscureAddress(domain.owner || "", 20)} </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.created).toDate())} </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.registered).toDate())}</td>
@@ -528,5 +550,20 @@ const FilterResults = ( { called, loading, error, data }) => {
         )
     }  
 }
+
+function isExpired(expires) {
+    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").unix() <= moment().utc().unix()
+}
+
+function isExpiring(expires) { 
+    return moment.unix(expires).add(GRACE_PERIOD, "days").unix() >= moment().utc().unix();
+}
+
+function isPremium(expires) {
+    return moment.unix(expires).unix() <= moment().add(-GRACE_PERIOD, "days").utc().unix()
+            && moment.unix(expires).unix() >= moment().add(-(GRACE_PERIOD + PREMIUM_PERIOD), "days").utc().unix();
+}
+ 
+
 
 export default Filter;

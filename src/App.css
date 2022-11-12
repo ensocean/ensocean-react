@@ -72,6 +72,10 @@ li.active a {
   .img-thumbnail {
     width: 500px; 
   } 
+
+  .t-60 {
+    top:60px;
+  }
 }
 
 
@@ -87,12 +91,14 @@ li.active a {
     background-color: #0c6efd;
     background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
   }
+
+  .h-sm-100 {
+    height: 100% !important;
+  }
   
 }
 
-.t-60 {
-  top:60px;
-}
+
 
 .t-20 {
   top:5px;
@@ -107,3 +113,4 @@ td {
   -webkit-overflow-scrolling: touch !important;
    
 }
+ 
