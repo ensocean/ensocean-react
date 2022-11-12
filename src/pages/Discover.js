@@ -18,32 +18,32 @@ const Discover = () => {
         filter.expires_lte = moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix(); 
         const filterStr = getFilterObjStr(filter);
         return (
-            <Filter pageTitle={"Dropped Domains"}  currentTab={tab} currentOrderBy={"expires"} currentOrderDirection={"desc"} currentFilter={filterStr} />
+            <Filter PageTitle={"Dropped Domains"} First={50} Skip={0} Tab={tab} OrderBy={"expires"} OrderDirection={"desc"} Filter={filterStr} />
         )
     } else if(tab === "expiring") { 
         filter.expires_lte = moment().utc().unix();
         filter.expires_gte = moment().add(-PREMIUM_PERIOD, "days").utc().unix();
         const filterStr = getFilterObjStr(filter);
         return ( 
-            <Filter pageTitle={"Expiring Soon"}  currentTab={tab} currentOrderBy={"expires"} currentOrderDirection={"asc"} currentFilter={filterStr} />
+            <Filter PageTitle={"Expiring Soon"} First={50} Skip={0} Tab={tab} OrderBy={"expires"} OrderDirection={"asc"} Filter={filterStr} />
         )
     } else if(tab === "premium") { 
         filter.expires_lte = moment().add(-GRACE_PERIOD, "days").utc().unix();
         filter.expires_gte = moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix();
         const filterStr = getFilterObjStr(filter);
         return ( 
-            <Filter pageTitle={"Premium Right Now"}  currentTab={tab} currentOrderBy={"expires"} currentOrderDirection={"asc"} currentFilter={filterStr} />
+            <Filter PageTitle={"Premium Right Now"} First={50} Skip={0} Tab={tab} OrderBy={"expires"} OrderDirection={"asc"} Filter={filterStr} />
         )
     } else if(tab === "registered") {
         filter.registered_not = null;
         const filterStr = getFilterObjStr(filter);
         return (
-            <Filter pageTitle={"Recently Registered"}  currentTab={tab} currentOrderBy={"registered"} currentOrderDirection={"desc"} currentFilter={filterStr} />
+            <Filter PageTitle={"Recently Registered"} First={50} Skip={0} Tab={tab} OrderBy={"registered"} OrderDirection={"desc"} Filter={filterStr} />
         )
     } else {
         const filterStr = getFilterObjStr(filter);
         return (
-            <Filter pageTitle={"Browse ENS Domains"} currentTab={tab} currentOrderBy={"created"} currentOrderDirection={"desc"} currentFilter={filterStr} />
+            <Filter PageTitle={"Browse ENS Domains"} First={50} Skip={0} Tab={tab} OrderBy={"created"} OrderDirection={"desc"} Filter={filterStr} />
         )
     } 
 };

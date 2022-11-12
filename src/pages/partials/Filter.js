@@ -6,7 +6,7 @@ import TimeAgo from "javascript-time-ago";
 import en from 'javascript-time-ago/locale/en'
 import { obscureAddress, obscureLabel } from '../../helpers/String';
 import json5 from "json5";
-import { useLazyQuery, useQuery, gql } from '@apollo/client';
+import { useLazyQuery, gql } from '@apollo/client';
  
 TimeAgo.addDefaultLocale(en)
 const timeAgo = new TimeAgo();
@@ -25,49 +25,47 @@ function getFilterObjStr(filter) {
     return json5.stringify(filter, { quote: '"'})
 }
 
-const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, currentFilter}) => { 
+const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) => { 
       
-    const DEFAULT_SKIP = 0;
-    const DEFAULT_FIRST = 50; 
-    const DEFAULT_FILTER = "{ label_not: null }";
-
     let location = useLocation(); 
     let navigate = useNavigate(); 
- 
-    const [tab, setTab] = useState(currentTab);
     const [search, setSearch] = useState(location.search);
-    const [skip, setSkip] = useState(DEFAULT_SKIP);
-    const [first, setFirst] = useState(DEFAULT_FIRST);
-    const [orderBy, setOrderBy] = useState(currentOrderBy);
-    const [orderDirection, setOrderDirection] = useState(currentOrderDirection);
-    const [filter, setFilter] = useState(currentFilter);
-   
-    const [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery(filter)), {
+    const [tab, setTab] = useState(Tab);
+    const [first, setFirst] = useState(First);
+    const [skip, setSkip] = useState(Skip);
+    const [orderBy, setOrderBy] = useState(OrderBy);
+    const [orderDirection, setOrderDirection] = useState(OrderDirection);
+    const [filter, setFilter] = useState(Filter);
+    const [refresh, setRefresh] = useState(0);
+
+    const [getDomains, { called, loading, error, data } ] = useLazyQuery( gql(getQuery(filter)), {
         variables: { skip, first, orderBy, orderDirection },
         notifyOnNetworkStatusChange: true
-    });
- 
+    }); 
+  
     useEffect(() => {  
              
         const _search = location.search;
-        const _query = new URLSearchParams(_search);  
-        const _skip = _query.get("skip") || DEFAULT_SKIP;
-        const _first = _query.get("first") || DEFAULT_FIRST;
-        const _orderBy = _query.get("orderBy") || currentOrderBy;
-        const _orderDirection = _query.get("orderDirection") || currentOrderDirection; 
-        const _filter = _query.get("filter") || currentFilter;
-        const _tab = _query.get("tab") || currentTab;
-  
+        const _query = new URLSearchParams(_search);   
+        const _tab = _query.get("tab") || Tab;
+        const _first = _query.get("first") || First;
+        const _skip = _query.get("skip") || Skip;
+        const _orderBy = _query.get("orderBy") || OrderBy;
+        const _orderDirection = _query.get("orderDirection") || OrderDirection; 
+        const _filter = _query.get("filter") || Filter;
+         
         setSearch(_search)
-        setTab(_tab); 
-        setSkip(Number(_skip)); 
+        setTab(_tab);  
         setFirst(Number(_first));  
+        setSkip(Number(_skip)); 
         setOrderBy(_orderBy); 
         setOrderDirection(_orderDirection);  
-        setFilter(_filter);  
+        setFilter(_filter);
+        setRefresh(0)  
+
         getDomains();
  
-    }, [location, getDomains, refetch]);
+    }, [location]);
 
      
     const handleFilterClick = (e) => {
@@ -84,7 +82,9 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
     } 
 
     const handleRefreshClick = (e) => {   
-       refetch( ); 
+        let _query = new URLSearchParams(search) 
+        setRefresh(Math.floor(Math.random() * (99999 - 1 + 1)) + 1);
+        navigate(location.pathname + "?"+ _query.toString())
     };
 
     const handleOrderBy = (e) => { 
@@ -104,8 +104,8 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleSearchText = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
-        if(e.target.value == "") { 
+        let _filter = getFilterObj(_query.get("filter") || Filter);
+        if(e.target.value === "") { 
             delete _filter.label_contains_nocase;
         }  else {
             _filter.label_contains_nocase = e.target.value; 
@@ -118,7 +118,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleStartWith = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER); 
+        let _filter = getFilterObj(_query.get("filter") || Filter); 
         
         if(e.target.value !== "")
             _filter.label_starts_with_nocase = e.target.value; 
@@ -133,7 +133,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleEndWith = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER); 
+        let _filter = getFilterObj(_query.get("filter") || Filter); 
         if(e.target.value !== "")
             _filter.label_ends_with_nocase = e.target.value;
         else 
@@ -146,7 +146,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleMinLength = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);  
+        let _filter = getFilterObj(_query.get("filter") || Filter);  
         if(e.target.value !== "")
             _filter.length_gte = Number(e.target.value); 
         else 
@@ -159,7 +159,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleMaxLength = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        let _filter = getFilterObj(_query.get("filter") || Filter);
         
         if(e.target.value !== "")
          _filter.length_lte = Number(e.target.value);
@@ -173,7 +173,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleMinSegmentLength = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        let _filter = getFilterObj(_query.get("filter") || Filter);
         
         if(e.target.value !== "")
             _filter.segmentLength_gte = Number(e.target.value); 
@@ -187,7 +187,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleMaxSegmentLength = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || DEFAULT_FILTER);
+        let _filter = getFilterObj(_query.get("filter") || Filter);
         if(e.target.value !== "")
             _filter.segmentLength_lte = Number(e.target.value); 
         else 
@@ -200,7 +200,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
 
     const handleResetFilter = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj( DEFAULT_FILTER); 
+        let _filter = getFilterObj( Filter); 
         let filterStr = getFilterObjStr(_filter);
         setFilter(filterStr);
         _query.set("filter",  filterStr);
@@ -226,7 +226,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
         </Helmet>
         <div className="container-fluid bg-primary">
             <div className="container text-center p-3 text-white">
-                <h1>{pageTitle}</h1>
+                <h1>{PageTitle}</h1>
             </div> 
         </div>
         <div className="container-fluid p-0 m-0">
@@ -251,7 +251,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
                     </ul> 
                 </div>
                 <div className="card-body">
-                    <div className="sticky-top mb-3 t-20">  
+                    <div className="sticky-top mb-3 t-20 bg-white">  
                         <div className="d-flex flex-lg-row flex-column justify-content-between gap-2"> 
                             <div className="flex-fill"> 
                                 <div className="flex-grow-1"> 
@@ -289,7 +289,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
                                     </select>
                                     {orderDirection === "desc" &&
                                         <button className="btn btn-outline-secondary rounded-0" type="button"  onClick={handleOrderDirection} >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-up" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-sort-up" viewBox="0 0 16 16">
   <path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.498.498 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707V12.5zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
 </svg>
                                         </button>
@@ -384,7 +384,7 @@ const Filter = ({pageTitle, currentTab, currentOrderBy, currentOrderDirection, c
                                 </div> 
                             </div>
                             <div className="results">
-                                <FilterResults called={called} loading={loading} error={error} data={data} refetch={refetch}  />
+                                <FilterResults called={called} loading={loading} error={error} data={data} />
                             </div> 
                         </div> 
                     </div>  
