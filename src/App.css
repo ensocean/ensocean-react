@@ -98,6 +98,9 @@ li.active a {
   top:5px;
 }
 
+td {
+  min-width: 200px;
+}
 
 .table-responsive {
   overflow: auto !important;  

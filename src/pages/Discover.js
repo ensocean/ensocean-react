@@ -438,9 +438,9 @@ const FilterResults = ( { called, loading, error, data }) => {
                 <table className='table table-hover m-0'>
                     <thead className="table-light fw-bold fs-6">
                         <tr>
-                            <th className="p-3">Name</th>
-                            <th className="p-3">Owner</th>
+                            <th className="p-3">Name</th> 
                             <th className="p-3">Expires</th>
+                            <th className="p-3">Owner</th>
                             <th className="p-3">Created</th>
                             <th className="p-3">Registered</th>
                             <th className="p-3">Actions</th>
@@ -470,8 +470,8 @@ const FilterResults = ( { called, loading, error, data }) => {
                     <thead className="table-light fw-bold fs-6">
                         <tr>
                             <th className="p-3">Name</th>
+                            <th className="p-3">Expires</th> 
                             <th className="p-3">Owner</th>
-                            <th className="p-3">Expires</th>
                             <th className="p-3">Created</th>
                             <th className="p-3">Registered</th>
                             <th className="p-3">Actions</th>
@@ -494,8 +494,8 @@ const FilterResults = ( { called, loading, error, data }) => {
                     <thead className="table-light fw-bold fs-6">
                         <tr>
                             <th className="p-3">Name</th>
+                            <th className="p-3">Expires</th> 
                             <th className="p-3">Owner</th>
-                            <th className="p-3">Expires</th>
                             <th className="p-3">Created</th>
                             <th className="p-3">Registered</th>
                             <th className="p-3">Actions</th>
@@ -517,8 +517,8 @@ const FilterResults = ( { called, loading, error, data }) => {
                                 title={"View "+ domain.name +" on EnsOcean"}
                                 to={"/"+ domain.name }>{obscureLabel(domain.name, 20)}</Link> 
                             </td> 
-                            <td className="p-3">{obscureAddress(domain.owner || "", 20)} </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.expires).add(GRACE_PERIOD, "days").add(PREMIUM_PERIOD, "days").toDate())} </td>
+                            <td className="p-3">{obscureAddress(domain.owner || "", 20)} </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.created).toDate())} </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.registered).toDate())}</td>
                             <td className="p-3"> </td>
