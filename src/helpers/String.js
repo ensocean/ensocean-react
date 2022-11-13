@@ -1,5 +1,10 @@
 import { utils, BigNumber } from 'ethers'; 
+import moment from 'moment';
  
+const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
+const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
+  
+
 export const obscureAddress = (address) => {
     return address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length);
 }
@@ -26,6 +31,25 @@ export const getLength = (label) => {
 export const getSegmentLength = (label) => { 
     return label.length;
 }
+
+
+export function getExpires(expires) {
+    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow()
+}
+
+export function isExpired(expires) {
+    console.log(moment())
+    return moment.unix(expires).utc().diff(moment().utc(), "days") <= -(GRACE_PERIOD + PREMIUM_PERIOD);
+}
+
+export function isExpiring(expires) {  
+    return moment.unix(expires).utc().diff(moment().utc(), "days") <= 0 && moment.unix(expires).diff(moment(), "days") >= -GRACE_PERIOD;
+}
+
+export function isPremium(expires) { 
+    return moment.unix(expires).utc().diff(moment(), "days") <= -GRACE_PERIOD && moment.unix(expires).diff(moment(), "days") >= -(GRACE_PERIOD + PREMIUM_PERIOD)  ;
+}
+ 
  
  
  
