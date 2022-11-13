@@ -1,6 +1,8 @@
 import { utils, BigNumber } from 'ethers'; 
 import moment from 'moment';
- 
+import namehash from "@ensdomains/eth-ens-namehash";
+import {validate} from "@ensdomains/ens-validation"           
+
 const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
 const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
   
@@ -49,6 +51,14 @@ export function isExpiring(expires) {
 export function isPremium(expires) { 
     return moment.unix(expires).utc().diff(moment(), "seconds") <= -(GRACE_PERIOD * 24 * 60 * 60) && moment.unix(expires).diff(moment(), "seconds") >= -((GRACE_PERIOD + PREMIUM_PERIOD) * 24 * 60 * 60)  ;
 }
+
+export function isValidName(name) {
+    try {
+      return name === namehash.normalize(name);
+    } catch {
+      return false;
+    }
+  }
  
  
  
