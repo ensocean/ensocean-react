@@ -20,9 +20,9 @@ jobs:
             git config --global credential.helper store
             git clone https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_PASSWORD }}@github.com/ensocean/ensocean-react.git 
             cd ensocean-react/ 
-            git pull origin master 
+            git pull origin master
             corepack enable
             yarn install
-            yarn build 
+            yarn build
             echo 'Deployment successful...' 
  
