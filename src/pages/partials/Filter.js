@@ -508,7 +508,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                         <tr key={domain.id}>
                             <td className="p-3">
                                 <Link
-                                className="text-decoration-none link-dark fs-5 fw-bold" 
+                                className="text-decoration-none link-dark fs-4 fw-bold" 
                                 data-bs-toggle="tooltip" 
                                 data-bs-title={"View "+ domain.name +" on EnsOcean"}
                                 title={"View "+ domain.name +" on EnsOcean"}
@@ -526,18 +526,26 @@ const FilterResults = ( { called, loading, error, data }) => {
                                  
                             {(function() {
                                 if (isPremium(domain.expires) ) {
-                                return (<span className="text-success fw-bold">{ moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } (Available Premium)</span>)
+                                return (<span className="text-success fw-bold">{ getExpires(domain.expires)  } <br />(Available for Premium)</span>)
                                 } else if(isExpiring(domain.expires)) {
-                                return (<span className="text-warning fw-bold">{  moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } (Grace)</span>)
+                                return (<span className="text-warning fw-bold">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
                                 } else if(isExpired(domain.expires)) {
-                                return (<span className="text-success fw-bold">{  moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } (Avaliable) </span>)
+                                return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Avaliable) </span>)
                                 } else {
-                                    return (<span className="text-default fw-bold">{  moment.unix(domain.expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow() } </span>)
+                                    return (<span className="text-default fw-bold">{  getExpires(domain.expires) } </span>)
                                 }
                             })()}
   
                             </td>
-                            <td className="p-3">{obscureAddress(domain.owner || "", 20)} </td>
+                            <td className="p-3"> 
+                                <Link
+                                className="text-decoration-none link-dark fs-5 fw-bold btn btn-outline-info" 
+                                data-bs-toggle="tooltip" 
+                                data-bs-title={"Domains of "+ domain.name +""}
+                                title={"Domains of "+ domain.owner +""}
+                                to={"/account/"+ domain.owner }>{obscureAddress(domain.owner || "", 20)} 
+                                </Link> 
+                            </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.created).toDate())} </td>
                             <td className="p-3">{timeAgo.format(moment.unix(domain.registered).toDate())}</td>
                             <td className="p-3"> </td>
@@ -551,17 +559,22 @@ const FilterResults = ( { called, loading, error, data }) => {
     }  
 }
 
-function isExpired(expires) {
-    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").unix() <= moment().utc().unix()
+function getExpires(expires) {
+    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow()
 }
 
-function isExpiring(expires) { 
-    return moment.unix(expires).add(GRACE_PERIOD, "days").unix() >= moment().utc().unix();
+function isExpired(expires) {
+    
+    return moment.unix(expires).diff(moment(), "days") <= -(GRACE_PERIOD + PREMIUM_PERIOD);
+}
+
+function isExpiring(expires) {  
+    return moment.unix(expires).diff(moment(), "days") <= 0 && moment.unix(expires).diff(moment(), "days") >= -GRACE_PERIOD;
 }
 
 function isPremium(expires) {
-    return moment.unix(expires).unix() <= moment().add(-GRACE_PERIOD, "days").utc().unix()
-            && moment.unix(expires).unix() >= moment().add(-(GRACE_PERIOD + PREMIUM_PERIOD), "days").utc().unix();
+    console.log( moment.unix(expires).diff(moment(), "days") )
+    return moment.unix(expires).diff(moment(), "days") <= -GRACE_PERIOD && moment.unix(expires).diff(moment(), "days") >= -(GRACE_PERIOD + PREMIUM_PERIOD)  ;
 }
  
 
