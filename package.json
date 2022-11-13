@@ -36,6 +36,9 @@
     "wagmi": "^0.7.10",
     "web-vitals": "^2.1.4"
   },
+  "resolutions": {
+    "ethereumjs-abi": "https://registry.npmjs.org/ethereumjs-abi/-/ethereumjs-abi-0.6.8.tgz"
+  },
   "scripts": {
     "serve": "serve -s build -l 3000",
     "start": "react-scripts start",
