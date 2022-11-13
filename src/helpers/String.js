@@ -37,17 +37,16 @@ export function getExpires(expires) {
     return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow()
 }
 
-export function isExpired(expires) {
-    console.log(moment())
-    return moment.unix(expires).utc().diff(moment().utc(), "days") <= -(GRACE_PERIOD + PREMIUM_PERIOD);
+export function isExpired(expires) { 
+    return moment.unix(expires).utc().diff(moment().utc(), "days") < -(GRACE_PERIOD + PREMIUM_PERIOD);
 }
 
 export function isExpiring(expires) {  
-    return moment.unix(expires).utc().diff(moment().utc(), "days") <= 0 && moment.unix(expires).diff(moment(), "days") >= -GRACE_PERIOD;
+    return moment.unix(expires).utc().diff(moment().utc(), "days") < 0 && moment.unix(expires).diff(moment(), "days") > -GRACE_PERIOD;
 }
 
 export function isPremium(expires) { 
-    return moment.unix(expires).utc().diff(moment(), "days") <= -GRACE_PERIOD && moment.unix(expires).diff(moment(), "days") >= -(GRACE_PERIOD + PREMIUM_PERIOD)  ;
+    return moment.unix(expires).utc().diff(moment(), "days") < -GRACE_PERIOD && moment.unix(expires).diff(moment(), "days") > -(GRACE_PERIOD + PREMIUM_PERIOD)  ;
 }
  
  
