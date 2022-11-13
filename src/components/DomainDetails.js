@@ -1,5 +1,5 @@
 import React from "react"; 
-import {  getTokenId, obscureAddress, obscureLabel } from "../helpers/String";
+import {  getTokenId, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
@@ -83,6 +83,9 @@ class DomainDetails extends React.Component {
                                 </div>
                                 <div className='col-lg-8'>
                                     <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
+                                        {
+                                            !isValidName(this.props.domain.name) && <div className="alert alert-danger">Name is malformed!</div>
+                                        }
                                         <h5 className="card-title fs-4">Details</h5>
                                         <hr />
                                         <ul className='list-group list-group-flush'>
