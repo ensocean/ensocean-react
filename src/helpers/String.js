@@ -54,11 +54,11 @@ export function isPremium(expires) {
 
 export function isValidName(name) {
     try {
-      return name === namehash.normalize(name);
+      return validate(name) === true && name === namehash.normalize(name);
     } catch {
       return false;
     }
-  }
+}
  
  
  
