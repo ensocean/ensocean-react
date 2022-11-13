@@ -1,7 +1,7 @@
 import React  from "react";
 import EnsControllerAbi from '../abis/EthRegistrarController.json'
 import { ethers } from 'ethers'
-import { getLength, getSegmentLength, getTokenId, obscureLabel } from "../helpers/String";
+import { getLength, getSegmentLength, getTokenId, isValidName, obscureLabel } from "../helpers/String";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {CopyToClipboard} from 'react-copy-to-clipboard'; 
@@ -14,16 +14,17 @@ class DomainAvailable extends React.Component {
     constructor(props) {
       super(props);
       this.state = { 
-        available: null 
+        available: false 
       };
     }
 
     componentDidMount() { 
         const provider = new ethers.providers.JsonRpcProvider(ETHEREUM_RPC_URL);
         const contract = new ethers.Contract(ENS_CONTROLLER_ADDRESS, EnsControllerAbi, provider);
-        contract.available(this.props.label).then((res) => {
-            this.setState({ available: res });
-        });  
+       // contract.available(this.props.label).then((res) => {
+         //   this.setState({ available: res });
+        //});  
+  
     } 
 
     render() { 
@@ -75,6 +76,9 @@ class DomainAvailable extends React.Component {
                                             {this.state.available === false && 
                                                 <div className="alert alert-danger">Name is not available for registration!</div>
                                             }  
+                                            { isValidName(this.props.label) === false &&
+                                                <div className="alert alert-danger">Malformed!</div>
+                                            }
                                             <h5 className="card-title fs-4">Details</h5>
                                             <hr />
                                             <ul className='list-group list-group-flush'>
