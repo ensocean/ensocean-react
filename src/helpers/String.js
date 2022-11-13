@@ -47,7 +47,7 @@ export function isExpiring(expires) {
 }
 
 export function isPremium(expires) { 
-    return moment.unix(expires).utc().diff(moment(), "seconds") <= -GRACE_PERIOD && moment.unix(expires).diff(moment(), "seconds") >= -((GRACE_PERIOD + PREMIUM_PERIOD) * 24 * 60 * 60)  ;
+    return moment.unix(expires).utc().diff(moment(), "seconds") <= -(GRACE_PERIOD * 24 * 60 * 60) && moment.unix(expires).diff(moment(), "seconds") >= -((GRACE_PERIOD + PREMIUM_PERIOD) * 24 * 60 * 60)  ;
 }
  
  
