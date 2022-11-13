@@ -506,7 +506,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                         <tr key={domain.id}>
                             <td className="p-3">
                                 <Link
-                                className="text-decoration-none link-dark fs-4 fw-bold" 
+                                className="text-decoration-none link-dark fs-5 fw-bold" 
                                 data-bs-toggle="tooltip" 
                                 data-bs-title={"View "+ domain.name +" on EnsOcean"}
                                 title={"View "+ domain.name +" on EnsOcean"}
@@ -526,7 +526,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                                 if (isPremium(domain.expires) ) {
                                 return (<span className="text-success fw-bold">{ getExpires(domain.expires)  } <br />(Available for Premium)</span>)
                                 } else if(isExpiring(domain.expires)) {
-                                return (<span className="text-warning fw-bold">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
+                                return (<span className="text-warning fw-bol">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
                                 } else if(isExpired(domain.expires)) {
                                 return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Avaliable) </span>)
                                 } else {
@@ -537,7 +537,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                             </td>
                             <td className="p-3"> 
                                 <Link
-                                className="text-decoration-none link-dark fs-5 fw-bold btn btn-outline-info" 
+                                className="text-decoration-none link-dark fs-6 fw-bold btn btn-outline-secondary" 
                                 data-bs-toggle="tooltip" 
                                 data-bs-title={"Domains of "+ domain.name +""}
                                 title={"Domains of "+ domain.owner +""}
