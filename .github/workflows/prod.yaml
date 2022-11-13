@@ -23,6 +23,6 @@ jobs:
             git pull origin master 
             corepack enable
             yarn install
-            yarn build
+            yarn build 
             echo 'Deployment successful...' 
  
