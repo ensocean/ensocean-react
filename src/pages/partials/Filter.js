@@ -4,7 +4,7 @@ import {Helmet} from "react-helmet";
 import moment from 'moment'; 
 import TimeAgo from "javascript-time-ago"; 
 import en from 'javascript-time-ago/locale/en'
-import { getExpires, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from '../../helpers/String';
+import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from '../../helpers/String';
 import json5 from "json5";
 import { useLazyQuery, gql } from '@apollo/client';
  
@@ -510,7 +510,8 @@ const FilterResults = ( { called, loading, error, data }) => {
                                 data-bs-toggle="tooltip" 
                                 data-bs-title={"View "+ domain.name +" on EnsOcean"}
                                 title={"View "+ domain.name +" on EnsOcean"}
-                                to={"/"+ domain.name }>{obscureLabel(domain.name, 20)}
+                                to={"/"+ domain.name }>
+                                    {obscureLabel(domain.label, 20)}.{domain.extension}
                                 </Link> 
                                 &nbsp;
                                 { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
@@ -520,32 +521,30 @@ const FilterResults = ( { called, loading, error, data }) => {
                                     </svg>
                                 }
                             </td> 
-                            <td className="p-3">
-                                 
-                            {(function() {
-                                if (isPremium(domain.expires) ) {
-                                return (<span className="text-success fw-bold">{ getExpires(domain.expires)  } <br />(Available for Premium)</span>)
-                                } else if(isExpiring(domain.expires)) {
-                                return (<span className="text-warning fw-bol">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
-                                } else if(isExpired(domain.expires)) {
-                                return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Avaliable) </span>)
-                                } else {
-                                    return (<span className="text-default fw-bold">{  getExpires(domain.expires) } </span>)
-                                }
-                            })()}
-  
+                            <td className="p-3"> 
+                                {(function() {
+                                    if (isPremium(domain.expires) ) {
+                                    return (<span className="text-success fw-bold">{ getExpires(domain.expires)  } <br />(Available for Premium)</span>)
+                                    } else if(isExpiring(domain.expires)) {
+                                    return (<span className="text-warning fw-bol">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
+                                    } else if(isExpired(domain.expires)) {
+                                    return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Avaliable) </span>)
+                                    } else {
+                                        return (<span className="text-muted fw-bold">{  getExpires(domain.expires) } </span>)
+                                    }
+                                })()} 
                             </td>
                             <td className="p-3"> 
                                 <Link
-                                className="text-decoration-none link-dark fs-6 fw-bold btn btn-outline-secondary" 
+                                className="text-decoration-none link-dark btn btn-outline-warning" 
                                 data-bs-toggle="tooltip" 
                                 data-bs-title={"Domains of "+ domain.name +""}
                                 title={"Domains of "+ domain.owner +""}
                                 to={"/account/"+ domain.owner }>{obscureAddress(domain.owner || "", 20)} 
                                 </Link> 
                             </td>
-                            <td className="p-3">{timeAgo.format(moment.unix(domain.created).toDate())} </td>
-                            <td className="p-3">{timeAgo.format(moment.unix(domain.registered).toDate())}</td>
+                            <td className="p-3">{getTimeAgo(domain.created)} </td>
+                            <td className="p-3">{getTimeAgo(domain.registered)}</td>
                             <td className="p-3"> </td>
                         </tr>
                         ))}  

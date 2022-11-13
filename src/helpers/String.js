@@ -35,8 +35,16 @@ export const getSegmentLength = (label) => {
 }
 
 
+export function getTimeAgo(timestamp) {
+    return  moment.unix(timestamp).fromNow()
+}
+
 export function getExpires(expires) {
     return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow()
+}
+
+export function getExpireCondition() {
+    return moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()
 }
 
 export function isExpired(expires) { 

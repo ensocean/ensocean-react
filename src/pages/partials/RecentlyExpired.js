@@ -1,20 +1,12 @@
-import moment from 'moment';
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { obscureLabel } from "../../helpers/String";
-import TimeAgo from "javascript-time-ago";  
-import en from 'javascript-time-ago/locale/en'
-TimeAgo.addDefaultLocale(en)
-const timeAgo = new TimeAgo('en-US')
-
-const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
-const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
+import { getExpireCondition, getExpires, obscureLabel } from "../../helpers/String";
  
 const RECENTLY_EXPIRED = gql`
 {
   domains (first: 10, orderBy: expires, orderDirection: desc, where: {  
     label_not: null,
-    expires_lte: ${moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()}
+    expires_lte: ${getExpireCondition()}
   } ) {
     id
     label
@@ -52,7 +44,6 @@ const RecentExpired = () => {
 }
 
 const GetExpired = ({ data, loading, error }) => {
-
     if(loading) {
         return ( 
             <>
@@ -80,7 +71,7 @@ const GetExpired = ({ data, loading, error }) => {
                       data-bs-title={"View "+ domain.name +" on EnsOcean"}
                       title={"View "+ domain.name +" on EnsOcean"}
                       to={domain.name}>
-                        {obscureLabel(domain.name, 20)}
+                       {obscureLabel(domain.label, 20)}.{domain.extension}
                     </Link>
                     &nbsp;
                     { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
@@ -89,9 +80,9 @@ const GetExpired = ({ data, loading, error }) => {
                             <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
                         </svg>
                     }
-                    <span className="float-end">
-                    {timeAgo.format(moment.unix(domain.expires).add(GRACE_PERIOD, "days").add(PREMIUM_PERIOD, "days").toDate())}
-                    </span>
+                    <small className="float-end text-muted">
+                    {getExpires(domain.expires)}
+                    </small>
                 </li>
               ))}
             </>
