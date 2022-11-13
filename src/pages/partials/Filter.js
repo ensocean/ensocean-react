@@ -4,16 +4,14 @@ import {Helmet} from "react-helmet";
 import moment from 'moment'; 
 import TimeAgo from "javascript-time-ago"; 
 import en from 'javascript-time-ago/locale/en'
-import { obscureAddress, obscureLabel } from '../../helpers/String';
+import { getExpires, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from '../../helpers/String';
 import json5 from "json5";
 import { useLazyQuery, gql } from '@apollo/client';
  
 TimeAgo.addDefaultLocale(en)
 const timeAgo = new TimeAgo();
  
-const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
-const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
-  
+
 function getFilterObj(filter) {
     let _filter = json5.parse(filter, {quote: '"'});
     if(!_filter.label_not)
@@ -559,24 +557,5 @@ const FilterResults = ( { called, loading, error, data }) => {
     }  
 }
 
-function getExpires(expires) {
-    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow()
-}
-
-function isExpired(expires) {
-    
-    return moment.unix(expires).diff(moment(), "days") <= -(GRACE_PERIOD + PREMIUM_PERIOD);
-}
-
-function isExpiring(expires) {  
-    return moment.unix(expires).diff(moment(), "days") <= 0 && moment.unix(expires).diff(moment(), "days") >= -GRACE_PERIOD;
-}
-
-function isPremium(expires) {
-    console.log( moment.unix(expires).diff(moment(), "days") )
-    return moment.unix(expires).diff(moment(), "days") <= -GRACE_PERIOD && moment.unix(expires).diff(moment(), "days") >= -(GRACE_PERIOD + PREMIUM_PERIOD)  ;
-}
  
-
-
 export default Filter;
