@@ -1,11 +1,7 @@
-import moment from 'moment';
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom"; 
-import { obscureLabel } from '../../helpers/String';
-import TimeAgo from "javascript-time-ago"; 
-import en from 'javascript-time-ago/locale/en'
-TimeAgo.addDefaultLocale(en)
-const timeAgo = new TimeAgo();
+import { getTimeAgo, obscureLabel } from '../../helpers/String';
+  
  
 const RECENTLY_REGISTERED = gql`
 {
@@ -68,14 +64,14 @@ const GetRegistered = ({data, loading, error }) => {
                   <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-warning">No Result</li>
                 }
                 {data.domains.map((domain) => (
-                    <li key={domain.id} className="list-group-item list-group-item-action p-3 fs-5">
+                    <li key={domain.id} className="list-group-item list-group-item-action p-3">
                         <Link
                         className="text-decoration-none link-dark fs-5 fw-bold" 
                         data-bs-toggle="tooltip" 
                         data-bs-title={"View "+ domain.name +" on EnsOcean"}
                         title={"View "+ domain.name +" on EnsOcean"}
                         to={domain.name}>
-                            {obscureLabel(domain.name, 20)}
+                            {obscureLabel(domain.label, 20)}.{domain.extension}
                         </Link>
                         &nbsp;
                         { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
@@ -84,8 +80,8 @@ const GetRegistered = ({data, loading, error }) => {
                                 <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
                             </svg>
                         }
-                        <small className="float-end text-default">
-                        {timeAgo.format(moment.unix(domain.registered).toDate())}
+                        <small className="float-end text-muted">
+                        {getTimeAgo(domain.registered)}
                         </small>
                     </li>
                 ))} 

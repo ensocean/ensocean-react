@@ -83,7 +83,7 @@ class DomainDetails extends React.Component {
                                 </div>
                                 <div className='col-lg-8'>
                                     <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
-                                        { isValidName(this.props.label) === false &&
+                                        { isValidName(this.props.domain.label) === false &&
                                                 <div className="alert alert-danger">Malformed!</div>
                                         }
                                         <h5 className="card-title fs-4">Details</h5>
