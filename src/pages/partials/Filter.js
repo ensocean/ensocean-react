@@ -1,43 +1,47 @@
 import React, {useState, useEffect} from "react"; 
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import {Helmet} from "react-helmet"; 
-import moment from 'moment'; 
-import TimeAgo from "javascript-time-ago"; 
-import en from 'javascript-time-ago/locale/en'
-import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from '../../helpers/String';
-import json5 from "json5";
+import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, isValidName, jsonParse, jsonStringify, obscureAddress, obscureLabel, getTokenId } from '../../helpers/String';
 import { useLazyQuery, gql } from '@apollo/client';
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import spinner from '../../assets/spinner.svg'
+import { CSVLink } from "react-csv";
+
+const DEBOUNCE_INTERVAL = 500;
+const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
+const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
+const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
  
-TimeAgo.addDefaultLocale(en)
-const timeAgo = new TimeAgo();
+let csvHeaders = [
+    { label: "Label", key: "label" },
+    { label: "Extension", key: "extension" },
+    { label: "Token ID", key: "tokenId" },
+    { label: "Hash", key: "hash" },
+    { label: "Created", key: "created" },
+    { label: "Registered", key: "registered" },
+    { label: "Expires", key: "expires" },
+    { label: "Owner", key: "owner" },
+    { label: "Length", key: "length" },
+    { label: "Segment Length", key: "segmentLength" },
+    { label: "Tags", key: "tags" }
+  ];
  
-
-function getFilterObj(filter) {
-    let _filter = json5.parse(filter, {quote: '"'});
-    if(!_filter.label_not)
-        _filter.label_not = null;
-    return _filter;
-}
-
-function getFilterObjStr(filter) {
-    return json5.stringify(filter, { quote: '"'})
-}
-
-const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) => { 
+const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) => { 
       
     let location = useLocation(); 
     let navigate = useNavigate(); 
+
     const [search, setSearch] = useState(location.search);
     const [tab, setTab] = useState(Tab);
     const [first, setFirst] = useState(First);
     const [skip, setSkip] = useState(Skip);
     const [orderBy, setOrderBy] = useState(OrderBy);
     const [orderDirection, setOrderDirection] = useState(OrderDirection);
-    const [filter, setFilter] = useState(Filter);
-    //const [refresh, setRefresh] = useState(0);
-
-    const [getDomains, { called, loading, error, data } ] = useLazyQuery( gql(getQuery(filter)), {
-        variables: { skip, first, orderBy, orderDirection },
+    const [where, setWhere] = useState(Where); 
+    const [csvData, setCsvData] = useState([]); 
+     
+    const [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery()), {
+        variables: { skip, first, orderBy, orderDirection, where },
         notifyOnNetworkStatusChange: true
     }); 
   
@@ -50,7 +54,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
         const _skip = _query.get("skip") || Skip;
         const _orderBy = _query.get("orderBy") || OrderBy;
         const _orderDirection = _query.get("orderDirection") || OrderDirection; 
-        const _filter = _query.get("filter") || Filter;
+        const _where = jsonParse(_query.get("filter")) || Where;
          
         setSearch(_search)
         setTab(_tab);  
@@ -58,17 +62,17 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
         setSkip(Number(_skip)); 
         setOrderBy(_orderBy); 
         setOrderDirection(_orderDirection);  
-        setFilter(_filter);
-        //setRefresh(0)  
-
+        setWhere(_where); 
         getDomains();
  
-    }, [location, getDomains, PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter]);
+        if(data && data.domains)
+            setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
+ 
+    }, [location, getDomains, PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where, data]);
 
      
     const handleFilterClick = (e) => {
         const elem = document.getElementById("filters");
-        console.log(elem.classList )
 
         if(elem.classList.contains("d-none")) {
             elem.classList.remove("d-none") 
@@ -80,9 +84,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
     } 
 
     const handleRefreshClick = (e) => {   
-        let _query = new URLSearchParams(search) 
-        //setRefresh(Math.floor(Math.random() * (99999 - 1 + 1)) + 1);
-        navigate(location.pathname + "?"+ _query.toString())
+        refetch();
     };
 
     const handleOrderBy = (e) => { 
@@ -98,110 +100,128 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
         _query.set("orderDirection", direction);
         setOrderDirection(direction)
         navigate(location.pathname + "?"+ _query.toString())
-    }
-
+    } 
+    
+    let timeout;
     const handleSearchText = (e) => {
-        let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || Filter);
-        if(e.target.value === "") { 
-            delete _filter.label_contains_nocase;
-        }  else {
-            _filter.label_contains_nocase = e.target.value; 
-            
-        }
-        setFilter(getFilterObjStr(_filter));
-        _query.set("filter",  getFilterObjStr(_filter));
-        navigate(location.pathname + "?"+ _query.toString())
+        if(timeout) clearTimeout(timeout);
+        timeout = setTimeout(()=> {
+            let _query = new URLSearchParams(search) 
+            let _where = jsonParse(_query.get("filter")) || Where;
+            console.log(_where)
+            if(e.target.value === "") { 
+                delete _where.label_contains_nocase;
+            }  else {
+                _where.label_contains_nocase = e.target.value; 
+            }
+            setWhere(_where);
+            _query.set("filter",  jsonStringify(_where));
+            navigate(location.pathname + "?"+ _query.toString())
+        }, DEBOUNCE_INTERVAL); 
     }
 
     const handleStartWith = (e) => {
-        let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || Filter); 
-        
-        if(e.target.value !== "")
-            _filter.label_starts_with_nocase = e.target.value; 
-        else 
-            delete _filter.label_starts_with_nocase;
+        if(timeout) clearTimeout(timeout);
 
-        let filterStr = getFilterObjStr(_filter);
-        setFilter(filterStr);
-        _query.set("filter",  filterStr);
-        navigate(location.pathname + "?"+ _query.toString())
+        timeout = setTimeout(()=> {
+            let _query = new URLSearchParams(search) 
+            let _where = jsonParse(_query.get("filter")) || Where; 
+            
+            if(e.target.value !== "")
+                _where.label_starts_with_nocase = e.target.value; 
+            else 
+                delete _where.label_starts_with_nocase;
+
+            setWhere(_where);
+            _query.set("filter",  jsonStringify(_where));
+            navigate(location.pathname + "?"+ _query.toString())
+        }, DEBOUNCE_INTERVAL);
     }
 
     const handleEndWith = (e) => {
-        let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || Filter); 
-        if(e.target.value !== "")
-            _filter.label_ends_with_nocase = e.target.value;
-        else 
-            delete _filter.label_ends_with_nocase;
-        let filterStr = getFilterObjStr(_filter);
-        setFilter(filterStr);
-        _query.set("filter",  filterStr);
-        navigate(location.pathname + "?"+ _query.toString())
+        if(timeout) clearTimeout(timeout);
+
+        timeout = setTimeout(()=> {
+            let _query = new URLSearchParams(search) 
+            let _where = jsonParse(_query.get("filter")) || Where;  
+            if(e.target.value !== "")
+                _where.label_ends_with_nocase = e.target.value;
+            else 
+                delete _where.label_ends_with_nocase;
+            setWhere(_where);
+            _query.set("filter",  jsonStringify(_where));
+            navigate(location.pathname + "?"+ _query.toString())
+        }, DEBOUNCE_INTERVAL);
     }
 
     const handleMinLength = (e) => {
-        let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || Filter);  
-        if(e.target.value !== "")
-            _filter.length_gte = Number(e.target.value); 
-        else 
-           delete _filter.length_gte;
-        let filterStr = getFilterObjStr(_filter);
-        setFilter(filterStr);
-        _query.set("filter",  filterStr);
-        navigate(location.pathname + "?"+ _query.toString())
+        if(timeout) clearTimeout(timeout);
+
+        timeout = setTimeout(()=> {
+            let _query = new URLSearchParams(search) 
+            let _where = jsonParse(_query.get("filter")) || Where;  
+            if(e.target.value !== "")
+                _where.length_gte = Number(e.target.value); 
+            else 
+            delete _where.length_gte;
+            setWhere(_where);
+            _query.set("filter",  jsonStringify(_where));
+            navigate(location.pathname + "?"+ _query.toString())
+        }, DEBOUNCE_INTERVAL);
     }
 
     const handleMaxLength = (e) => {
-        let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || Filter);
-        
-        if(e.target.value !== "")
-         _filter.length_lte = Number(e.target.value);
-        else 
-            delete _filter.length_lte;
-        let filterStr = getFilterObjStr(_filter);
-        setFilter(filterStr);
-        _query.set("filter",  filterStr);
-        navigate(location.pathname + "?"+ _query.toString())
+        if(timeout) clearTimeout(timeout);
+
+        timeout = setTimeout(()=> {
+            let _query = new URLSearchParams(search) 
+            let _where = jsonParse(_query.get("filter")) || Where;
+            if(e.target.value !== "")
+                _where.length_lte = Number(e.target.value);
+            else 
+                delete _where.length_lte;
+            setWhere(_where);
+            _query.set("filter",  jsonStringify(_where));
+            navigate(location.pathname + "?"+ _query.toString())
+        }, DEBOUNCE_INTERVAL);
     }
 
     const handleMinSegmentLength = (e) => {
-        let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || Filter);
-        
-        if(e.target.value !== "")
-            _filter.segmentLength_gte = Number(e.target.value); 
-        else 
-            delete _filter.segmentLength_gte;
-        let filterStr = getFilterObjStr(_filter);
-        setFilter(filterStr);
-        _query.set("filter",  filterStr);
-        navigate(location.pathname + "?"+ _query.toString())
+        if(timeout) clearTimeout(timeout);
+
+        timeout = setTimeout(()=> {
+            let _query = new URLSearchParams(search) 
+            let _where = jsonParse(_query.get("filter")) || Where;
+            if(e.target.value !== "")
+                _where.segmentLength_gte = Number(e.target.value); 
+            else 
+                delete _where.segmentLength_gte;
+            setWhere(_where);
+            _query.set("filter",  jsonStringify(_where));
+            navigate(location.pathname + "?"+ _query.toString())
+        }, DEBOUNCE_INTERVAL);
     }
 
     const handleMaxSegmentLength = (e) => {
-        let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj(_query.get("filter") || Filter);
-        if(e.target.value !== "")
-            _filter.segmentLength_lte = Number(e.target.value); 
-        else 
-            delete _filter.segmentLength_lte;
-        let filterStr = getFilterObjStr(_filter);
-        setFilter(filterStr);
-        _query.set("filter",  filterStr);
-        navigate(location.pathname + "?"+ _query.toString())
+        if(timeout) clearTimeout(timeout);
+
+        timeout = setTimeout(()=> {
+            let _query = new URLSearchParams(search) 
+            let _where = jsonParse(_query.get("filter")) || Where;
+            if(e.target.value !== "")
+                _where.segmentLength_lte = Number(e.target.value); 
+            else 
+                delete _where.segmentLength_lte;
+            setWhere(_where);
+            _query.set("filter",  jsonStringify(_where));
+            navigate(location.pathname + "?"+ _query.toString())
+        }, DEBOUNCE_INTERVAL);
     }
 
     const handleResetFilter = (e) => {
         let _query = new URLSearchParams(search) 
-        let _filter = getFilterObj( Filter); 
-        let filterStr = getFilterObjStr(_filter);
-        setFilter(filterStr);
-        _query.set("filter",  filterStr);
+        setWhere(Where);
+        _query.set("filter",  jsonStringify(Where));
         emptyFilters();
         navigate(location.pathname + "?"+ _query.toString())
     }
@@ -271,7 +291,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                                                 </svg>
                                             </span>
-                                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={handleSearchText} value={getFilterObj(filter).label_contains_nocase} placeholder="Search Name"  /> 
+                                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={handleSearchText} defaultValue={where.label_contains_nocase} placeholder="Search Name"  /> 
                                         </div> 
                                     </div> 
                                 </div>
@@ -321,8 +341,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                                         </button> 
                                         <div id="startsWith" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="text" name="startWith" onChange={handleStartWith} value={getFilterObj(filter).label_starts_with_nocase} className="form-control" placeholder="Start with" />
-                                                <input type="text" name="endWith" onChange={handleEndWith} value={getFilterObj(filter).label_ends_with_nocase} className="form-control" placeholder="End with" />
+                                                <input type="text" name="startWith" onChange={handleStartWith} defaultValue={where.label_starts_with_nocase} className="form-control" placeholder="Start with" />
+                                                <input type="text" name="endWith" onChange={handleEndWith} defaultValue={where.label_ends_with_nocase} className="form-control" placeholder="End with" />
                                             </div>
                                         </div>
                                     </div>
@@ -332,8 +352,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                                         </button> 
                                         <div id="length" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="number" name="minLength" onChange={handleMinLength} value={getFilterObj(filter).length_gte} className="form-control" placeholder="Min Length" />
-                                                <input type="number" name="maxLength" onChange={handleMaxLength} value={getFilterObj(filter).length_lte} className="form-control" placeholder="Max Length  " />
+                                                <input type="number" name="minLength" onChange={handleMinLength} defaultValue={where.length_gte} className="form-control" placeholder="Min Length" />
+                                                <input type="number" name="maxLength" onChange={handleMaxLength} defaultValue={where.length_lte} className="form-control" placeholder="Max Length  " />
                                             </div>
                                         </div>
                                     </div>
@@ -343,8 +363,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                                         </button> 
                                         <div id="segmentLength" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="number" name="minSegmentLength" onChange={handleMinSegmentLength} value={getFilterObj(filter).segmentLength_gte} className="form-control" placeholder="Min Segment Length" />
-                                                <input type="number" name="maxSegmentLength" onChange={handleMaxSegmentLength} value={getFilterObj(filter).segmentLength_lte} className="form-control" placeholder="Max Segment Length  " />
+                                                <input type="number" name="minSegmentLength" onChange={handleMinSegmentLength} defaultValue={where.segmentLength_gte} className="form-control" placeholder="Min Segment Length" />
+                                                <input type="number" name="maxSegmentLength" onChange={handleMaxSegmentLength} defaultValue={where.segmentLength_lte} className="form-control" placeholder="Max Segment Length  " />
                                             </div>
                                         </div>
                                     </div>
@@ -357,11 +377,11 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                         <div className="flex-lg-fill w-100 flex-shrink-0"> 
                             <div className="d-flex justify-content-between">
                                 <div className="csv-download">
-                                    <button type="button" className="btn btn-default" data-bs-toogle="tooltip" data-bs-title="Download CSV">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-filetype-csv" viewBox="0 0 16 16">
-                                        <path fillRule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM3.517 14.841a1.13 1.13 0 0 0 .401.823c.13.108.289.192.478.252.19.061.411.091.665.091.338 0 .624-.053.859-.158.236-.105.416-.252.539-.44.125-.189.187-.408.187-.656 0-.224-.045-.41-.134-.56a1.001 1.001 0 0 0-.375-.357 2.027 2.027 0 0 0-.566-.21l-.621-.144a.97.97 0 0 1-.404-.176.37.37 0 0 1-.144-.299c0-.156.062-.284.185-.384.125-.101.296-.152.512-.152.143 0 .266.023.37.068a.624.624 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.092 1.092 0 0 0-.2-.566 1.21 1.21 0 0 0-.5-.41 1.813 1.813 0 0 0-.78-.152c-.293 0-.551.05-.776.15-.225.099-.4.24-.527.421-.127.182-.19.395-.19.639 0 .201.04.376.122.524.082.149.2.27.352.367.152.095.332.167.539.213l.618.144c.207.049.361.113.463.193a.387.387 0 0 1 .152.326.505.505 0 0 1-.085.29.559.559 0 0 1-.255.193c-.111.047-.249.07-.413.07-.117 0-.223-.013-.32-.04a.838.838 0 0 1-.248-.115.578.578 0 0 1-.255-.384h-.765ZM.806 13.693c0-.248.034-.46.102-.633a.868.868 0 0 1 .302-.399.814.814 0 0 1 .475-.137c.15 0 .283.032.398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.441 1.441 0 0 0-.489-.272 1.838 1.838 0 0 0-.606-.097c-.356 0-.66.074-.911.223-.25.148-.44.359-.572.632-.13.274-.196.6-.196.979v.498c0 .379.064.704.193.976.131.271.322.48.572.626.25.145.554.217.914.217.293 0 .554-.055.785-.164.23-.11.414-.26.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.799.799 0 0 1-.118.363.7.7 0 0 1-.272.25.874.874 0 0 1-.401.087.845.845 0 0 1-.478-.132.833.833 0 0 1-.299-.392 1.699 1.699 0 0 1-.102-.627v-.495Zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879l-1.327 4Z"/>
-                                    </svg>
-                                    </button>
+                                    <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" className="bi bi-filetype-csv" viewBox="0 0 16 16">
+                                            <path fillRule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5L14 4.5ZM3.517 14.841a1.13 1.13 0 0 0 .401.823c.13.108.289.192.478.252.19.061.411.091.665.091.338 0 .624-.053.859-.158.236-.105.416-.252.539-.44.125-.189.187-.408.187-.656 0-.224-.045-.41-.134-.56a1.001 1.001 0 0 0-.375-.357 2.027 2.027 0 0 0-.566-.21l-.621-.144a.97.97 0 0 1-.404-.176.37.37 0 0 1-.144-.299c0-.156.062-.284.185-.384.125-.101.296-.152.512-.152.143 0 .266.023.37.068a.624.624 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.092 1.092 0 0 0-.2-.566 1.21 1.21 0 0 0-.5-.41 1.813 1.813 0 0 0-.78-.152c-.293 0-.551.05-.776.15-.225.099-.4.24-.527.421-.127.182-.19.395-.19.639 0 .201.04.376.122.524.082.149.2.27.352.367.152.095.332.167.539.213l.618.144c.207.049.361.113.463.193a.387.387 0 0 1 .152.326.505.505 0 0 1-.085.29.559.559 0 0 1-.255.193c-.111.047-.249.07-.413.07-.117 0-.223-.013-.32-.04a.838.838 0 0 1-.248-.115.578.578 0 0 1-.255-.384h-.765ZM.806 13.693c0-.248.034-.46.102-.633a.868.868 0 0 1 .302-.399.814.814 0 0 1 .475-.137c.15 0 .283.032.398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.441 1.441 0 0 0-.489-.272 1.838 1.838 0 0 0-.606-.097c-.356 0-.66.074-.911.223-.25.148-.44.359-.572.632-.13.274-.196.6-.196.979v.498c0 .379.064.704.193.976.131.271.322.48.572.626.25.145.554.217.914.217.293 0 .554-.055.785-.164.23-.11.414-.26.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.799.799 0 0 1-.118.363.7.7 0 0 1-.272.25.874.874 0 0 1-.401.087.845.845 0 0 1-.478-.132.833.833 0 0 1-.299-.392 1.699 1.699 0 0 1-.102-.627v-.495Zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879l-1.327 4Z"/>
+                                        </svg>
+                                    </CSVLink> 
                                 </div>
                                 <div className="view-types">
                                     <button type="button" className="btn btn-default">
@@ -381,7 +401,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
                                     </button>
                                 </div> 
                             </div>
-                            <div className="results">
+                            <div id="#results">
                                 <FilterResults called={called} loading={loading} error={error} data={data} />
                             </div> 
                         </div> 
@@ -394,14 +414,14 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Filter}) 
 };
  
   
-function getQuery(filters) {
-    return `query Domains( $skip: Int!, $first: Int!, $orderBy: String!, $orderDirection: String! ) {
+function getQuery() {
+    return `query Domains( $skip: Int!, $first: Int!, $orderBy: String!, $orderDirection: String!, $where: Domain_filter ) {
         domains ( 
             orderBy: $orderBy
             orderDirection: $orderDirection
             skip: $skip
             first: $first
-            where: ${filters}
+            where: $where
         )
         {  
             id
@@ -423,9 +443,8 @@ function getQuery(filters) {
  
  
 const FilterResults = ( { called, loading, error, data }) => {
-     
     if(!called) return;
-
+ 
     if ( loading)  {
         return ( 
             <>
@@ -481,12 +500,12 @@ const FilterResults = ( { called, loading, error, data }) => {
             </div> 
             </>
         );
-    } else {  
+    } else {   
         return (
             <>
             <div className="table-responsive p-lg-3">
                 <table className='table table-hover m-0'>
-                    <thead className="table-light fw-bold fs-6">
+                    <thead className="table-light fw-bold fs-6 text-left">
                         <tr>
                             <th className="p-3">Name</th>
                             <th className="p-3">Expires</th> 
@@ -505,21 +524,48 @@ const FilterResults = ( { called, loading, error, data }) => {
                         {data.domains.map((domain) => (
                         <tr key={domain.id}>
                             <td className="p-3">
-                                <Link
-                                className="text-decoration-none link-dark fs-5 fw-bold" 
-                                data-bs-toggle="tooltip" 
-                                data-bs-title={"View "+ domain.name +" on EnsOcean"}
-                                title={"View "+ domain.name +" on EnsOcean"}
-                                to={"/"+ domain.name }>
-                                    {obscureLabel(domain.label, 20)}.{domain.extension}
-                                </Link> 
-                                &nbsp;
-                                { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle text-warning" viewBox="0 0 16 16">
-                                        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
-                                        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
-                                    </svg>
-                                }
+                                <div className="d-flex ">
+                                    <div className="flex-shrink-0">
+                                        <div className='bg-thumb' style={{width: "46px", height: "46px"}}>
+                                            <LazyLoadImage
+                                                alt={domain.name} 
+                                                className="img-fluid h-100 w-100 border border-2"
+                                                width={"46px"}
+                                                height={"46px"}
+                                                onError={(e)=> { e.target.style.display = "none"; e.target.parentNode.style.display = "none"; }}
+                                                placeholderSrc={spinner}
+                                                visibleByDefault={false}
+                                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                                />
+                                        </div>
+                                    </div>
+                                    <div className="flex-grow-1 ms-3 d-flex align-items-start">
+                                        <Link
+                                        className="text-decoration-none link-dark fs-5 fw-bold" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-title={"View "+ domain.name +" on EnsOcean"}
+                                        title={"View "+ domain.name +" on EnsOcean"}
+                                        to={"/"+ domain.name }>
+                                            {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
+                                        </Link> 
+                                        &nbsp;
+                                        { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
+                                            <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-exclamation-triangle-fill text-warning" viewBox="0 0 16 16">
+                                                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                </svg>
+                                            </span>
+                                        }
+                                        &nbsp;
+                                        { !isValidName(domain.label) && 
+                                            <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-dash-circle-fill text-danger" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"/>
+                                                </svg>
+                                            </span>
+                                        }
+                                    </div>
+                                </div> 
                             </td> 
                             <td className="p-3"> 
                                 {(function() {
@@ -528,7 +574,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                                     } else if(isExpiring(domain.expires)) {
                                     return (<span className="text-warning fw-bol">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
                                     } else if(isExpired(domain.expires)) {
-                                    return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Avaliable) </span>)
+                                    return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Available) </span>)
                                     } else {
                                         return (<span className="text-muted fw-bold">{  getExpires(domain.expires) } </span>)
                                     }
@@ -543,7 +589,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                                 to={"/account/"+ domain.owner }>{obscureAddress(domain.owner || "", 20)} 
                                 </Link> 
                             </td>
-                            <td className="p-3">{getTimeAgo(domain.created)} </td>
+                            <td className="p-3">{getTimeAgo(domain.created)}</td>
                             <td className="p-3">{getTimeAgo(domain.registered)}</td>
                             <td className="p-3"> </td>
                         </tr>

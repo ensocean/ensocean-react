@@ -2,6 +2,7 @@ import { utils, BigNumber } from 'ethers';
 import moment from 'moment';
 import namehash from "@ensdomains/eth-ens-namehash";
 import {validate} from "@ensdomains/ens-validation"           
+import json5 from "json5";
 
 const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
 const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
@@ -39,8 +40,8 @@ export function getTimeAgo(timestamp) {
     return  moment.unix(timestamp).fromNow()
 }
 
-export function getExpires(expires) {
-    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow()
+export function getExpires(expires, suffix = false) {
+    return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow(suffix)
 }
 
 export function getExpireCondition() {
@@ -48,7 +49,6 @@ export function getExpireCondition() {
 }
 
 export function isExpired(expires) { 
-    console.log(( (GRACE_PERIOD + PREMIUM_PERIOD) * 24 * 60 * 60))
     return moment.unix(expires).utc().diff(moment().utc(), "seconds") <= -( (GRACE_PERIOD + PREMIUM_PERIOD) * 24 * 60 * 60)  ;
 }
 
@@ -60,6 +60,10 @@ export function isPremium(expires) {
     return moment.unix(expires).utc().diff(moment(), "seconds") <= -(GRACE_PERIOD * 24 * 60 * 60) && moment.unix(expires).diff(moment(), "seconds") >= -((GRACE_PERIOD + PREMIUM_PERIOD) * 24 * 60 * 60)  ;
 }
 
+export function getDateString(timestamp) {
+    return moment.unix(timestamp).toDate().toDateString();
+} 
+
 export function isValidName(name) {
     try {
       return validate(name) === true && name === namehash.normalize(name);
@@ -67,7 +71,14 @@ export function isValidName(name) {
       return false;
     }
 }
- 
+  
+export function jsonParse(filter) {
+    return json5.parse(filter, {quote: '"'});;
+}
+
+export function jsonStringify(filter) {
+    return json5.stringify(filter, { quote: '"'})
+}
  
  
  
