@@ -93,7 +93,7 @@ const GetExpired = ({ data, loading, error }) => {
                             data-bs-toggle="tooltip" 
                             data-bs-title={"View "+ domain.name +" on EnsOcean"}
                             title={"View "+ domain.name +" on EnsOcean"}
-                            to={domain.name}>
+                            to={encodeURIComponent(domain.name)}>
                             {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
                           </Link> 
                           { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 

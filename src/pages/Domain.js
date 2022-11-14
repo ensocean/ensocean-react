@@ -274,7 +274,7 @@ const Domain = () => {
                                     <hr />
                                     <ul className='list-group list-group-flush'>
                                         <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'><Link to={"/account/"+ domain.owner }>{obscureAddress(domain.owner)}</Link> </span>
+                                            <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'><Link to={"/account/"+ encodeURIComponent( domain.owner ) }>{obscureAddress(domain.owner)}</Link> </span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
                                             <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>{domain.tags.join(", ")}</span>
