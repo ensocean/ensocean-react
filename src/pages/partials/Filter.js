@@ -56,6 +56,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
         const _orderDirection = _query.get("orderDirection") || OrderDirection; 
         const _where = jsonParse(_query.get("filter")) || Where;
          
+      
         setSearch(_search)
         setTab(_tab);  
         setFirst(Number(_first));  
@@ -63,12 +64,13 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
         setOrderBy(_orderBy); 
         setOrderDirection(_orderDirection);  
         setWhere(_where); 
-        getDomains();
+        refetch();
  
-        if(data && data.domains)
-            setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
- 
-    }, [location, getDomains, PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where, data]);
+    }, [location, PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where]);
+
+    useEffect(()=> {
+        if(data && data.domains) setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
+    }, [data])
 
      
     const handleFilterClick = (e) => {
@@ -103,9 +105,11 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
     } 
     
     let timeout;
-    const handleSearchText = (e) => {
-        if(timeout) clearTimeout(timeout);
-        timeout = setTimeout(()=> {
+    const handleSearchText = (e) => { 
+        if(timeout) {  
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(()=> { 
             let _query = new URLSearchParams(search) 
             let _where = jsonParse(_query.get("filter")) || Where;
             if(e.target.value === "") { 
@@ -113,7 +117,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
             }  else {
                 _where.label_contains_nocase = e.target.value; 
             }
-            setWhere(_where);
+            setWhere(_where); 
             _query.set("filter",  jsonStringify(_where));
             navigate(location.pathname + "?"+ _query.toString())
         }, DEBOUNCE_INTERVAL); 
