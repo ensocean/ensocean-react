@@ -10,8 +10,8 @@ import { CSVLink } from "react-csv";
 const DEBOUNCE_INTERVAL = 500;
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
-const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
- 
+
+let timeout;
 let csvHeaders = [
     { label: "Label", key: "label" },
     { label: "Extension", key: "extension" },
@@ -31,46 +31,46 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
     let location = useLocation(); 
     let navigate = useNavigate(); 
 
-    const [search, setSearch] = useState(location.search);
-    const [tab, setTab] = useState(Tab);
-    const [first, setFirst] = useState(First);
-    const [skip, setSkip] = useState(Skip);
-    const [orderBy, setOrderBy] = useState(OrderBy);
-    const [orderDirection, setOrderDirection] = useState(OrderDirection);
-    const [where, setWhere] = useState(Where); 
+    const _query = new URLSearchParams(location.search);   
+    const _tab = _query.get("tab") || Tab;
+    const _first = _query.get("first") || First;
+    const _skip = _query.get("skip") || Skip;
+    const _orderBy = _query.get("orderBy") || OrderBy;
+    const _orderDirection = _query.get("orderDirection") || OrderDirection; 
+    const _where = jsonParse(_query.get("filter")) || Where;
+     
+    const [tab, setTab] = useState(_tab);
+    const [first, setFirst] = useState(_first);
+    const [skip, setSkip] = useState(_skip);
+    const [orderBy, setOrderBy] = useState(_orderBy);
+    const [orderDirection, setOrderDirection] = useState(_orderDirection);
+    const [where, setWhere] = useState(_where); 
     const [csvData, setCsvData] = useState([]); 
      
     const [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery()), {
         variables: { skip, first, orderBy, orderDirection, where },
         notifyOnNetworkStatusChange: true
     }); 
-  
+    
+    if(!called) getDomains();
+ 
     useEffect(() => {  
-             
-        const _search = location.search;
-        const _query = new URLSearchParams(_search);   
-        const _tab = _query.get("tab") || Tab;
-        const _first = _query.get("first") || First;
-        const _skip = _query.get("skip") || Skip;
-        const _orderBy = _query.get("orderBy") || OrderBy;
-        const _orderDirection = _query.get("orderDirection") || OrderDirection; 
-        const _where = jsonParse(_query.get("filter")) || Where;
-         
-        setSearch(_search)
-        setTab(_tab);  
-        setFirst(Number(_first));  
-        setSkip(Number(_skip)); 
-        setOrderBy(_orderBy); 
-        setOrderDirection(_orderDirection);  
-        setWhere(_where); 
-        getDomains();
- 
-        if(data && data.domains)
-            setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
- 
-    }, [location, getDomains, PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where, data]);
+   
+        setTab(_tab);
+        setFirst(_first);
+        setSkip(_skip);
+        setWhere(_where);
+        setOrderBy(_orderBy);
+        setOrderDirection(_orderDirection);
 
-     
+        getDomains( { variables: { skip, first, orderBy, orderDirection, where } });
+         
+    }, [location, getDomains]);
+
+    useEffect(()=> {
+        if(data && data.domains) setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
+    }, [data])
+ 
     const handleFilterClick = (e) => {
         const elem = document.getElementById("filters");
 
@@ -87,138 +87,155 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
         refetch();
     };
 
+    const changeFilter = (value, prop) => {
+        let _query = new URLSearchParams(location.search) 
+        let _where = jsonParse(_query.get("filter")) || Where;
+        if(value === "") { 
+            delete _where[prop];
+        }  else {
+            _where[prop] = value; 
+        }
+        //setWhere(_where); 
+        _query.set("filter",  jsonStringify(_where));
+        navigate(location.pathname + "?"+ _query.toString())
+    }
+
     const handleOrderBy = (e) => { 
-        let _query = new URLSearchParams(search)
+        let _query = new URLSearchParams(location.search)
         _query.set("orderBy", e.target.value); 
         setOrderBy(e.target.value);
         navigate(location.pathname + "?"+ _query.toString())
     }
 
     const handleOrderDirection = (e, t) => {  
-        let _query = new URLSearchParams(search)
+        let _query = new URLSearchParams(location.search)
         let direction = orderDirection === "asc" ? "desc": "asc";
         _query.set("orderDirection", direction);
         setOrderDirection(direction)
         navigate(location.pathname + "?"+ _query.toString())
     } 
     
-    let timeout;
-    const handleSearchText = (e) => {
-        if(timeout) clearTimeout(timeout);
-        timeout = setTimeout(()=> {
-            let _query = new URLSearchParams(search) 
-            let _where = jsonParse(_query.get("filter")) || Where;
-            if(e.target.value === "") { 
-                delete _where.label_contains_nocase;
-            }  else {
-                _where.label_contains_nocase = e.target.value; 
-            }
-            setWhere(_where);
-            _query.set("filter",  jsonStringify(_where));
-            navigate(location.pathname + "?"+ _query.toString())
+    const onKeydownSearch = (e) => {
+        if( e.key === "Enter" ) {
+            clearTimeout(timeout);
+            changeFilter(e.target.value, "label_contains_nocase");
+        }
+    }
+
+    const onChangeSearch = (e) => { 
+        if(timeout) {  
+            clearTimeout(timeout);
+        } 
+ 
+        timeout = setTimeout(()=> { 
+            changeFilter(e.target.value, "label_contains_nocase");
         }, DEBOUNCE_INTERVAL); 
     }
 
-    const handleStartWith = (e) => {
-        if(timeout) clearTimeout(timeout);
-
-        timeout = setTimeout(()=> {
-            let _query = new URLSearchParams(search) 
-            let _where = jsonParse(_query.get("filter")) || Where; 
-            
-            if(e.target.value !== "")
-                _where.label_starts_with_nocase = e.target.value; 
-            else 
-                delete _where.label_starts_with_nocase;
-
-            setWhere(_where);
-            _query.set("filter",  jsonStringify(_where));
-            navigate(location.pathname + "?"+ _query.toString())
-        }, DEBOUNCE_INTERVAL);
+    const onKeydownStartwith = (e) => {
+        if( e.key === "Enter" ) {
+            clearTimeout(timeout);
+            changeFilter(e.target.value, "label_starts_with_nocase");
+        }
     }
 
-    const handleEndWith = (e) => {
-        if(timeout) clearTimeout(timeout);
-
-        timeout = setTimeout(()=> {
-            let _query = new URLSearchParams(search) 
-            let _where = jsonParse(_query.get("filter")) || Where;  
-            if(e.target.value !== "")
-                _where.label_ends_with_nocase = e.target.value;
-            else 
-                delete _where.label_ends_with_nocase;
-            setWhere(_where);
-            _query.set("filter",  jsonStringify(_where));
-            navigate(location.pathname + "?"+ _query.toString())
-        }, DEBOUNCE_INTERVAL);
+    const onChangeStartwith = (e) => {
+        if(timeout) {  
+            clearTimeout(timeout);
+        } 
+ 
+        timeout = setTimeout(()=> { 
+            changeFilter(e.target.value, "label_starts_with_nocase");
+        }, DEBOUNCE_INTERVAL); 
     }
 
-    const handleMinLength = (e) => {
-        if(timeout) clearTimeout(timeout);
-
-        timeout = setTimeout(()=> {
-            let _query = new URLSearchParams(search) 
-            let _where = jsonParse(_query.get("filter")) || Where;  
-            if(e.target.value !== "")
-                _where.length_gte = Number(e.target.value); 
-            else 
-            delete _where.length_gte;
-            setWhere(_where);
-            _query.set("filter",  jsonStringify(_where));
-            navigate(location.pathname + "?"+ _query.toString())
-        }, DEBOUNCE_INTERVAL);
+    const onKeydownEndwith = (e) => {
+        if( e.key === "Enter" ) {
+            clearTimeout(timeout);
+            changeFilter(e.target.value, "label_ends_with_nocase");
+        }
     }
 
-    const handleMaxLength = (e) => {
-        if(timeout) clearTimeout(timeout);
+    const onChangeEndwith = (e) => {
+        if(timeout) {  
+            clearTimeout(timeout);
+        } 
+ 
+        timeout = setTimeout(()=> { 
+            changeFilter(e.target.value, "label_ends_with_nocase");
+        }, DEBOUNCE_INTERVAL); 
+    } 
 
-        timeout = setTimeout(()=> {
-            let _query = new URLSearchParams(search) 
-            let _where = jsonParse(_query.get("filter")) || Where;
-            if(e.target.value !== "")
-                _where.length_lte = Number(e.target.value);
-            else 
-                delete _where.length_lte;
-            setWhere(_where);
-            _query.set("filter",  jsonStringify(_where));
-            navigate(location.pathname + "?"+ _query.toString())
-        }, DEBOUNCE_INTERVAL);
+    const onKeydownMinLength= (e) => {
+        if( e.key === "Enter" ) {
+            clearTimeout(timeout);
+            changeFilter(Number(e.target.value), "length_gte");
+        }
     }
 
-    const handleMinSegmentLength = (e) => {
-        if(timeout) clearTimeout(timeout);
+    const onChangeMinLength = (e) => {
+        if(timeout) {  
+            clearTimeout(timeout);
+        } 
+ 
+        timeout = setTimeout(()=> { 
+            changeFilter(Number(e.target.value), "length_gte");
+        }, DEBOUNCE_INTERVAL); 
+    } 
 
-        timeout = setTimeout(()=> {
-            let _query = new URLSearchParams(search) 
-            let _where = jsonParse(_query.get("filter")) || Where;
-            if(e.target.value !== "")
-                _where.segmentLength_gte = Number(e.target.value); 
-            else 
-                delete _where.segmentLength_gte;
-            setWhere(_where);
-            _query.set("filter",  jsonStringify(_where));
-            navigate(location.pathname + "?"+ _query.toString())
-        }, DEBOUNCE_INTERVAL);
+    const onKeydownMaxLength= (e) => {
+        if( e.key === "Enter" ) {
+            clearTimeout(timeout);
+            changeFilter(Number(e.target.value), "length_lte");
+        }
     }
 
-    const handleMaxSegmentLength = (e) => {
-        if(timeout) clearTimeout(timeout);
-
-        timeout = setTimeout(()=> {
-            let _query = new URLSearchParams(search) 
-            let _where = jsonParse(_query.get("filter")) || Where;
-            if(e.target.value !== "")
-                _where.segmentLength_lte = Number(e.target.value); 
-            else 
-                delete _where.segmentLength_lte;
-            setWhere(_where);
-            _query.set("filter",  jsonStringify(_where));
-            navigate(location.pathname + "?"+ _query.toString())
-        }, DEBOUNCE_INTERVAL);
+    const onChangeMaxLength = (e) => {
+        if(timeout) {  
+            clearTimeout(timeout);
+        } 
+ 
+        timeout = setTimeout(()=> { 
+            changeFilter(Number(e.target.value), "length_lte");
+        }, DEBOUNCE_INTERVAL); 
+    }
+  
+    const onKeydownMinSegmentLength= (e) => {
+        if( e.key === "Enter" ) {
+            clearTimeout(timeout);
+            changeFilter(Number(e.target.value), "segmentLength_gte");
+        }
     }
 
+    const onChangeMinSegmentLength = (e) => {
+        if(timeout) {  
+            clearTimeout(timeout);
+        } 
+ 
+        timeout = setTimeout(()=> { 
+            changeFilter(Number(e.target.value), "segmentLength_gte");
+        }, DEBOUNCE_INTERVAL); 
+    }
+  
+    const onKeydownMaxSegmentLength= (e) => {
+        if( e.key === "Enter" ) {
+            clearTimeout(timeout);
+            changeFilter(Number(e.target.value), "segmentLength_lte");
+        }
+    }
+
+    const onChangeMaxSegmentLength = (e) => {
+        if(timeout) {  
+            clearTimeout(timeout);
+        } 
+ 
+        timeout = setTimeout(()=> { 
+            changeFilter(Number(e.target.value), "segmentLength_lte");
+        }, DEBOUNCE_INTERVAL); 
+    }
+ 
     const handleResetFilter = (e) => {
-        let _query = new URLSearchParams(search) 
+        let _query = new URLSearchParams(location.search) 
         setWhere(Where);
         _query.set("filter",  jsonStringify(Where));
         emptyFilters();
@@ -290,7 +307,7 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
                                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                                                 </svg>
                                             </span>
-                                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={handleSearchText} defaultValue={where.label_contains_nocase} placeholder="Search Name"  /> 
+                                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={onChangeSearch} onKeyDown={onKeydownSearch} defaultValue={where?.label_contains_nocase} placeholder="Search Name"  /> 
                                         </div> 
                                     </div> 
                                 </div>
@@ -340,8 +357,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
                                         </button> 
                                         <div id="startsWith" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="text" name="startWith" onChange={handleStartWith} defaultValue={where.label_starts_with_nocase} className="form-control" placeholder="Start with" />
-                                                <input type="text" name="endWith" onChange={handleEndWith} defaultValue={where.label_ends_with_nocase} className="form-control" placeholder="End with" />
+                                                <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Start with" />
+                                                <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="End with" />
                                             </div>
                                         </div>
                                     </div>
@@ -351,8 +368,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
                                         </button> 
                                         <div id="length" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="number" name="minLength" onChange={handleMinLength} defaultValue={where.length_gte} className="form-control" placeholder="Min Length" />
-                                                <input type="number" name="maxLength" onChange={handleMaxLength} defaultValue={where.length_lte} className="form-control" placeholder="Max Length  " />
+                                                <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min Length" />
+                                                <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max Length  " />
                                             </div>
                                         </div>
                                     </div>
@@ -362,8 +379,8 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
                                         </button> 
                                         <div id="segmentLength" className="accordion-collapse collapse show">
                                             <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                                <input type="number" name="minSegmentLength" onChange={handleMinSegmentLength} defaultValue={where.segmentLength_gte} className="form-control" placeholder="Min Segment Length" />
-                                                <input type="number" name="maxSegmentLength" onChange={handleMaxSegmentLength} defaultValue={where.segmentLength_lte} className="form-control" placeholder="Max Segment Length  " />
+                                                <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min Segment Length" />
+                                                <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max Segment Length  " />
                                             </div>
                                         </div>
                                     </div>
@@ -523,7 +540,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                         {data.domains.map((domain) => (
                         <tr key={domain.id}>
                             <td className="p-3">
-                                <div className="d-flex ">
+                                <div className="d-flex">
                                     <div className="flex-shrink-0">
                                         <div className='bg-thumb' style={{width: "46px", height: "46px"}}>
                                             <LazyLoadImage
@@ -569,13 +586,13 @@ const FilterResults = ( { called, loading, error, data }) => {
                             <td className="p-3"> 
                                 {(function() {
                                     if (isPremium(domain.expires) ) {
-                                    return (<span className="text-success fw-bold">{ getExpires(domain.expires)  } <br />(Available for Premium)</span>)
+                                    return (<small className="text-success">Available in Premium since { getExpires(domain.expires, true)  }</small>)
                                     } else if(isExpiring(domain.expires)) {
-                                    return (<span className="text-warning fw-bol">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
+                                    return (<small className="text-warning"> In grace period since {  getExpires(domain.expires, true)  }</small>)
                                     } else if(isExpired(domain.expires)) {
-                                    return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Available) </span>)
+                                    return (<small className="text-success"> Available since {  getExpires(domain.expires, true)  } </small>)
                                     } else {
-                                        return (<span className="text-muted fw-bold">{  getExpires(domain.expires) } </span>)
+                                        return (<small className="text-muted">{  getExpires(domain.expires, false) } </small>)
                                     }
                                 })()} 
                             </td>
