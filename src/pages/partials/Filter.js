@@ -108,7 +108,6 @@ const Filter = ({PageTitle, Tab, First, Skip, OrderBy, OrderDirection, Where}) =
         timeout = setTimeout(()=> {
             let _query = new URLSearchParams(search) 
             let _where = jsonParse(_query.get("filter")) || Where;
-            console.log(_where)
             if(e.target.value === "") { 
                 delete _where.label_contains_nocase;
             }  else {
@@ -545,7 +544,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                                         data-bs-toggle="tooltip" 
                                         data-bs-title={"View "+ domain.name +" on EnsOcean"}
                                         title={"View "+ domain.name +" on EnsOcean"}
-                                        to={"/"+ domain.name }>
+                                        to={"/"+ encodeURIComponent(domain.name) }>
                                             {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
                                         </Link> 
                                         &nbsp;

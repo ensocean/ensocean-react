@@ -37,7 +37,7 @@ export default function App () {
             <Route path="/find" element={<Find />} />
             <Route path="/404" element={<NotFound />} />
             <Route path="/account/:address" element={<Account />} />
-            <Route path="/:label.:extension" element={<Domain />} />
+            <Route path="/:label.eth" element={<Domain />} />
             <Route path="*" element={<Navigate replace={true} to="/404" />} />
           </Route> 
         </Routes>
