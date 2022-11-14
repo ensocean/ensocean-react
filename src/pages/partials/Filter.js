@@ -527,7 +527,7 @@ const FilterResults = ( { called, loading, error, data }) => {
                         {data.domains.map((domain) => (
                         <tr key={domain.id}>
                             <td className="p-3">
-                                <div className="d-flex ">
+                                <div className="d-flex">
                                     <div className="flex-shrink-0">
                                         <div className='bg-thumb' style={{width: "46px", height: "46px"}}>
                                             <LazyLoadImage
@@ -573,13 +573,13 @@ const FilterResults = ( { called, loading, error, data }) => {
                             <td className="p-3"> 
                                 {(function() {
                                     if (isPremium(domain.expires) ) {
-                                    return (<span className="text-success fw-bold">{ getExpires(domain.expires)  } <br />(Available for Premium)</span>)
+                                    return (<small className="text-success">Available in Premium since { getExpires(domain.expires, true)  }</small>)
                                     } else if(isExpiring(domain.expires)) {
-                                    return (<span className="text-warning fw-bol">{  getExpires(domain.expires)  }<br /> (In Grace Period)</span>)
+                                    return (<small className="text-warning"> In grace period since {  getExpires(domain.expires, true)  }</small>)
                                     } else if(isExpired(domain.expires)) {
-                                    return (<span className="text-success fw-bold">{  getExpires(domain.expires)  } <br />(Available) </span>)
+                                    return (<small className="text-success"> Available since {  getExpires(domain.expires, true)  } </small>)
                                     } else {
-                                        return (<span className="text-muted fw-bold">{  getExpires(domain.expires) } </span>)
+                                        return (<small className="text-muted">{  getExpires(domain.expires, false) } </small>)
                                     }
                                 })()} 
                             </td>

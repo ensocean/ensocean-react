@@ -86,14 +86,16 @@ const GetRegistered = ({data, loading, error }) => {
                                 </div>
                             </div>
                             <div className="flex-grow-1 ms-3">
+                                <div className="d-flex flex-column flex-md-row justify-content-between">
                                 <Link
                                     className="text-decoration-none link-dark fs-5 fw-bold" 
                                     data-bs-toggle="tooltip" 
                                     data-bs-title={"View "+ domain.name +" on EnsOcean"}
                                     title={"View "+ domain.name +" on EnsOcean"}
                                     to={encodeURIComponent(domain.name)}>
-                                        {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
-                                    </Link>
+
+                                    {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
+                                    
                                     { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                         &nbsp;
@@ -110,9 +112,11 @@ const GetRegistered = ({data, loading, error }) => {
                                             </svg>
                                         </span>
                                     }
-                                    <small className="float-end text-muted">
+                                </Link>
+                                <small className="float-end text-muted mt-2 mt-lg-0">
                                     {getTimeAgo(domain.registered)}
-                                    </small>
+                                </small>
+                                </div>
                             </div> 
                         </div> 
                     </li>
