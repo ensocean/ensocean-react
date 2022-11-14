@@ -6,7 +6,6 @@ import spinner from '../../assets/spinner.svg'
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
-const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
  
 const RECENTLY_REGISTERED = gql`
 {
