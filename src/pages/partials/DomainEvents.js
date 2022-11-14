@@ -1,10 +1,7 @@
  
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { obscureAddress } from "../../helpers/String";
-import moment from 'moment';
-import TimeAgo from "javascript-time-ago"; 
-const timeAgo = new TimeAgo();
+import { getTimeAgo, obscureAddress } from "../../helpers/String";
 
 const ETHERSCAN_ADDR = process.env.REACT_APP_ETHERSCAN_ADDR;
 
@@ -43,6 +40,7 @@ const DomainEvents = ({ id }) => {
     
     return (
         <>
+        <div className="col-12">
             <div className="accordion" id="events">
                 <div className="accordion-item">
                     <h2 className="accordion-header">
@@ -72,7 +70,7 @@ const DomainEvents = ({ id }) => {
                                             <td className="p-3">{event.from != null && <Link to={"/account/"+ event.from}>{obscureAddress(event.from)}</Link>}</td>
                                             <td className="p-3">{event.to != null && <Link to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link>}</td>
                                             <td className="p-3"><a target="_blank" rel="noreferrer" href={ETHERSCAN_ADDR + "/tx/"+ event.transactionID} bs-data-toogle="tooltip" title="View on etherscan" bs-data-title="View on etherscan">{obscureAddress(event.transactionID)}</a></td>
-                                            <td className="p-3">{timeAgo.format(moment.unix(event.blockTimestamp).toDate())}</td>
+                                            <td className="p-3">{getTimeAgo(event.blockTimestamp)}</td>
                                         </tr>
                                     ))} 
                                     </tbody>
@@ -82,6 +80,7 @@ const DomainEvents = ({ id }) => {
                     </div>
                 </div>
             </div>
+        </div>
         </>
     )
 }

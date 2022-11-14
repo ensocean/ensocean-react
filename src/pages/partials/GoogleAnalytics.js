@@ -13,7 +13,6 @@ export default function useGoogleAnalytics() {
   }, [])
 
   useEffect(() => { 
-    console.log("path:"+ location.pathname + location.search +" id: "+ TRACKING_ID)
     ReactGA.send({ hitType: "pageview", page: location.pathname + location.search });
   }, [location])
 }
