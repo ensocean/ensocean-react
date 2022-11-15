@@ -12,6 +12,7 @@ import Faq from "./pages/Faq";
 import Discover from './pages/Discover'; 
 import Domain from './pages/Domain';
 import { ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
