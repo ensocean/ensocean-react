@@ -11,6 +11,7 @@ import listUl from "../../assets/list-ul.svg";
 import gridFill from "../../assets/grid-fill.svg";
 import funnelFill from "../../assets/funnel-fill.svg";
 import arrowRepeat from "../../assets/arrow-repeat.svg";
+import arrowRepeatSpin from "../../assets/arrow-repeat-spin.svg";
 import searchIcon from "../../assets/search.svg";
 import sortUp from "../../assets/sort-up.svg";
 import sortDown from "../../assets/sort-down.svg";
@@ -52,14 +53,15 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const [where, setWhere] = useState(Where); 
     const [view, setView] = useState(localStorage.getItem("view") || "gallery");
     const [csvData, setCsvData] = useState([]); 
-    
-    const [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery()), {
+    const [filterCount, setFilterCount] = useState(0); 
+ 
+    let [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery()), {
         variables: { skip, first, orderBy, orderDirection, where },
         notifyOnNetworkStatusChange: true
     }); 
-
+ 
     if(!called) getDomains();
-
+ 
     useEffect(() => {  
 
         const _search = location.search;
@@ -86,6 +88,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     useEffect(()=> {
         if(data && data.domains) setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
     }, [data])
+
+ 
      
     const handleFilterClick = (e) => {
         const elem = document.getElementById("filters");
@@ -106,8 +110,14 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         let _query = new URLSearchParams(location.search) 
         let _where = jsonParse(_query.get("filter")) || Where;
         if(value === "") { 
-            delete _where[prop];
-        }  else {
+            delete _where[prop]; 
+            setFilterCount(filterCount - 1);
+        }  else { 
+            console.log(_where[prop])
+            console.log(value)
+            if(!_where[prop]) {
+                setFilterCount(filterCount + 1);
+            }  
             _where[prop] = value; 
         }
         //setWhere(_where); 
@@ -242,8 +252,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const onChangeMaxSegmentLength = (e) => {
         if(timeout) {  
             clearTimeout(timeout);
-        } 
- 
+        }  
         timeout = setTimeout(()=> { 
             changeFilter(Number(e.target.value), "segmentLength_lte");
         }, DEBOUNCE_INTERVAL); 
@@ -253,6 +262,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         let _query = new URLSearchParams(location.search) 
         setWhere(Where);
         _query.set("filter",  jsonStringify(Where));
+        setFilterCount(0);
         emptyFilters();
         navigate(location.pathname + "?"+ _query.toString())
     }
@@ -279,11 +289,17 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 <div className="flex-fill"> 
                     <div className="flex-grow-1"> 
                         <div className="d-flex flex-row gap-2">
-                            <button className="btn btn-outline-secondary rounded-0" type="button" onClick={handleFilterClick}>
+                            <button className="btn btn-outline-secondary rounded-0 position-relative" type="button" onClick={handleFilterClick}>
                                 <img src={funnelFill} alt= ""  />
+                                {filterCount > 0 && 
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {filterCount}
+                                        <span class="visually-hidden">selected filters</span>
+                                    </span>
+                                }
                             </button>
                             <button className="btn btn-outline-secondary rounded-0" type="button" onClick={handleRefreshClick}>
-                                <img src={arrowRepeat} alt= ""  />
+                                 <img src={loading ? arrowRepeatSpin: arrowRepeat } alt= ""  />
                             </button>
                             <div className="input-group input-group-lg">
                                 <span className="input-group-text bg-light border-end-0 rounded-0">
