@@ -21,12 +21,16 @@ const Discover = () => {
   
     if(tab === "expired") {  
         pageTitle = "Recently Expired";
+        orderBy = "expires";
+        orderDirection = "desc";
         where = { 
             label_not: null,
             expires_lte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix() 
         }
     } else if(tab === "expiring") {  
         pageTitle = "Expiring Soon";
+        orderBy = "expires";
+        orderDirection = "asc";
         where = { 
             label_not: null,
             expires_lte: moment().utc().unix(),
@@ -34,6 +38,8 @@ const Discover = () => {
         };
     } else if(tab === "premium") { 
         pageTitle = "Premium Right Now";
+        orderBy = "expires";
+        orderDirection = "asc";
         where = { 
             label_not: null,
             expires_lte: moment().add(-GRACE_PERIOD, "days").utc().unix(),
@@ -41,12 +47,16 @@ const Discover = () => {
         }
     } else if(tab === "registered") { 
         pageTitle = "Recently Registered";
+        orderBy = "registered";
+        orderDirection = "desc";
         where = { 
             label_not: null,
             registered_not: null
         }
     } else {
         pageTitle = "Browse";
+        orderBy = "created";
+        orderDirection = "desc";
         where = { 
             label_not: null
         }
