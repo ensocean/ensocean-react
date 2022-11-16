@@ -17,10 +17,14 @@ import sortUp from "../../assets/sort-up.svg";
 import sortDown from "../../assets/sort-down.svg";
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
+import notAvailable from "../../assets/not-available.svg";
+import moment from 'moment'; 
 
 const DEBOUNCE_INTERVAL = 500;
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
+const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
+const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
 
 let timeout;
 let csvHeaders = [
@@ -35,23 +39,32 @@ let csvHeaders = [
     { label: "Length", key: "length" },
     { label: "Segment Length", key: "segmentLength" },
     { label: "Tags", key: "tags" }
-];
+]; 
+
  
-const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
+const Filter = () => { 
       
     let location = useLocation(); 
     let navigate = useNavigate(); 
+
+    const query = new URLSearchParams(location.search);  
+    const _tab = query.get("tab") || "all";
+    const _first = Number(query.get("first") || "100");
+    const _skip = Number(query.get("skip") || "0");
+    const _orderBy = query.get("orderBy") || "created";
+    const _orderDirection = query.get("orderDirection") || "desc";
+    const _where = jsonParse(query.get("filter")) || { label_not: null };
+    const _view = localStorage.getItem("view") || query.get("view") || "gallery";
    
-    console.log(Where);
-  
+
     const [search, setSearch] = useState(location.search);
-    const [tab, setTab] = useState(Tab);
-    const [first, setFirst] = useState(First);
-    const [skip, setSkip] = useState(Skip);
-    const [orderBy, setOrderBy] = useState(OrderBy);
-    const [orderDirection, setOrderDirection] = useState(OrderDirection);
-    const [where, setWhere] = useState(Where); 
-    const [view, setView] = useState(localStorage.getItem("view") || "gallery");
+    const [tab, setTab] = useState(_tab);
+    const [first, setFirst] = useState(_first);
+    const [skip, setSkip] = useState(_skip);
+    const [orderBy, setOrderBy] = useState(_orderBy);
+    const [orderDirection, setOrderDirection] = useState(_orderDirection);
+    const [where, setWhere] = useState(_where); 
+    const [view, setView] = useState(_view);
     const [csvData, setCsvData] = useState([]); 
     const [filterCount, setFilterCount] = useState(0); 
  
@@ -60,45 +73,66 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         notifyOnNetworkStatusChange: true
     }); 
  
-    if(!called) getDomains();
+    useEffect(()=> { 
  
-    useEffect(() => {  
+        // TODO: usteki degerlerin yerini bunlar alıcak eger bos iseler.
+        if(_tab === "expired") {
+            setWhere({ 
+                label_not: null,
+                expires_lte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()
+            });
+            setOrderBy("expires");
+            setOrderDirection("desc");
+        } else if(_tab === "expiring") {   
+            setWhere({ 
+                label_not: null,
+                expires_lte: moment().utc().unix(),
+                expires_gte: moment().add(-PREMIUM_PERIOD, "days").utc().unix()
+            });
+            setOrderBy("expires");
+            setOrderDirection("asc");
+        } else if(_tab === "premium") {   
+            setWhere({
+                label_not: null,
+                expires_lte: moment().add(-GRACE_PERIOD, "days").utc().unix(),
+                expires_gte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()
+            });
+            setOrderBy("expires");
+            setOrderDirection("asc");
+        } else if(_tab === "registered") {   
+            setWhere({
+                label_not: null,
+                registered_not: null
+            });
+            setOrderBy("registered");
+            setOrderDirection("desc");
+        } else { 
+            setWhere({
+                label_not: null 
+            });
+            setOrderBy("created");
+            setOrderDirection("desc");
+        }
 
-        const _search = location.search;
-        const _query = new URLSearchParams(_search);
-        const _tab = _query.get("tab") || Tab;
-        const _first = _query.get("first") || First;
-        const _skip = _query.get("skip") || Skip;
-        const _orderBy = _query.get("orderBy") || OrderBy;
-        const _orderDirection = _query.get("orderDirection") || OrderDirection; 
-        const _where = jsonParse(_query.get("filter")) || Where; 
-    
-        setSearch(_search)
-        setTab(_tab);  
-        setFirst(Number(_first));  
-        setSkip(Number(_skip)); 
-        setOrderBy(_orderBy); 
-        setOrderDirection(_orderDirection);  
-        setWhere(_where);  
-         
-        getDomains( { variables: { _skip, _first, _orderBy, _orderDirection, _where } });
-         
-    }, [location]);
+        //getDomains({ variables: { skip, first, orderBy, orderDirection, where } })
+
+        refetch();
+ 
+    }, [location.search]);
 
     useEffect(()=> {
         if(data && data.domains) setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
     }, [data])
 
- 
-     
+  
     const handleFilterClick = (e) => {
         const elem = document.getElementById("filters");
         if(elem.classList.contains("d-none")) {
+            elem.classList.add("d-lg-block")
             elem.classList.remove("d-none") 
-            elem.classList.add("d-block")  
-        } else {
+        } else { 
+            elem.classList.remove("d-lg-block") 
             elem.classList.add("d-none") 
-            elem.classList.remove("d-block")  
         }   
     } 
 
@@ -108,19 +142,17 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
 
     const changeFilter = (value, prop) => {
         let _query = new URLSearchParams(location.search) 
-        let _where = jsonParse(_query.get("filter")) || Where;
+        let _where = jsonParse(_query.get("filter")) || where;
         if(value === "") { 
             delete _where[prop]; 
             setFilterCount(filterCount - 1);
-        }  else { 
-            console.log(_where[prop])
-            console.log(value)
+        }  else {  
             if(!_where[prop]) {
                 setFilterCount(filterCount + 1);
             }  
             _where[prop] = value; 
         }
-        //setWhere(_where); 
+        setWhere(_where); 
         _query.set("filter",  jsonStringify(_where));
         navigate(location.pathname + "?"+ _query.toString())
     }
@@ -260,8 +292,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
  
     const handleResetFilter = (e) => {
         let _query = new URLSearchParams(location.search) 
-        setWhere(Where);
-        _query.set("filter",  jsonStringify(Where));
+        setWhere(where);
+        _query.set("filter",  jsonStringify(where));
         setFilterCount(0);
         emptyFilters();
         navigate(location.pathname + "?"+ _query.toString())
@@ -292,9 +324,9 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             <button className="btn btn-outline-secondary rounded-0 position-relative" type="button" onClick={handleFilterClick}>
                                 <img src={funnelFill} alt= ""  />
                                 {filterCount > 0 && 
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                         {filterCount}
-                                        <span class="visually-hidden">selected filters</span>
+                                        <span className="visually-hidden">selected filters</span>
                                     </span>
                                 }
                             </button>
@@ -333,46 +365,115 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div> 
             </div>
         </div> 
-        <div className="d-flex justify-content-between flex-column flex-lg-row">
-            <div className="card overflow-auto d-block flex-shrink-1 h-100 sticky-top t-20 rounded-0" id="filters">
-                <div className="card-header d-flex flex-row justify-content-between ">
-                    <button className="btn fs-5 p-0 m-0 ">Filter</button> 
-                    <button className="btn border-0" type="button" onClick={handleFilterClick}>
-                        <img src={arrowLeft} alt= "" />
-                    </button> 
-                </div>
-                <div className="card-body p-0">
+        <div className="d-flex flex-row justify-content-start">
+            <div className="col-auto d-none d-lg-block w-25 overflow-auto sticky-md-top" style={{ height: "400px"}} id="filters" >
+                <div className=" me-lg-2" >
                     <div className="accordion">
                         <div className="accordion-item border-0 rounded-0">
-                            <button className="accordion-button fw-bold fs-4 rounded-0" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
-                                <h6 className="accordion-header">Starts/Ends With</h6>
+                            <button className="accordion-button fw-bold fs-4 rounded-0 bg-white ps-0 pt-3 pb-3" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
                             </button> 
                             <div id="startsWith" className="accordion-collapse collapse show">
-                                <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                    <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Start with" />
-                                    <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="End with" />
+                                <div className="input-group  pt-3 pb-3">
+                                    <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
+                                    <span className="input-group-text">and</span>                                    
+                                    <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
                                 </div>
                             </div>
                         </div>
                         <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
-                                <h6 className="accordion-header">Length</h6>
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
+                                <h5 className="accordion-header fw-bold text-dark">Length</h5>
                             </button> 
                             <div id="length" className="accordion-collapse collapse show">
-                                <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min Length" />
-                                    <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max Length  " />
+                                <div className="input-group   pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
                                 </div>
                             </div>
                         </div>
                         <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h6 className="accordion-header">Segment Length</h6>
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
                             </button> 
                             <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group gap-3 p-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min Segment Length" />
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max Segment Length  " />
+                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                            </button> 
+                            <div id="segmentLength" className="accordion-collapse collapse show">
+                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                            </button> 
+                            <div id="segmentLength" className="accordion-collapse collapse show">
+                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                            </button> 
+                            <div id="segmentLength" className="accordion-collapse collapse show">
+                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                            </button> 
+                            <div id="segmentLength" className="accordion-collapse collapse show">
+                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                            </button> 
+                            <div id="segmentLength" className="accordion-collapse collapse show">
+                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                            </button> 
+                            <div id="segmentLength" className="accordion-collapse collapse show">
+                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
                                 </div>
                             </div>
                         </div>
@@ -381,8 +482,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </button> 
                     </div>
                 </div> 
-            </div> 
-            <div className="flex-lg-fill w-100 flex-shrink-0"> 
+            </div>
+            <div className="col w-75"> 
                 <div className="d-flex justify-content-between">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
@@ -398,7 +499,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </button>
                     </div> 
                 </div>
-                <div className="container-fluid border-top m-2 ps-0 pt-3" id="#results">
+                <div className="container-fluid p-0 mt-2" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
             </div> 
@@ -444,57 +545,57 @@ const FilterResults = ( { called, loading, error, data, view }) => {
         if(view === "list") {
             return ( 
             <>
-                <div className='table-responsive p-lg-3 placeholder-glow'>
-                    <table className='table table-hover m-0'>
-                        <thead className="table-light fw-bold fs-6">
-                            <tr>
-                                <th className="p-3">Name</th> 
-                                <th className="p-3">Expires</th>
-                                <th className="p-3">Owner</th>
-                                <th className="p-3">Created</th>
-                                <th className="p-3">Registered</th>
-                                <th className="p-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody> 
-                            {[...Array(10)].map((x, i) =>
-                            <tr key={i}>
-                                <td className="p-3"><span className="placeholder col-12"></span></td> 
-                                <td className="p-3"><span className="placeholder col-12"></span></td>
-                                <td className="p-3"><span className="placeholder col-12"></span></td>
-                                <td className="p-3"><span className="placeholder col-12"></span></td>
-                                <td className="p-3"><span className="placeholder col-12"></span></td>
-                                <td className="p-3"><span className="placeholder col-12"></span></td>
-                            </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>  
+            <div className='table-responsive placeholder-glow'>
+                <table className='table table-hover'>
+                    <thead className="table-light text-start">
+                        <tr>
+                            <th className="p-3">Name</th> 
+                            <th className="p-3">Expires</th>
+                            <th className="p-3">Owner</th>
+                            <th className="p-3">Created</th>
+                            <th className="p-3">Registered</th>
+                            <th className="p-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-start"> 
+                        {[...Array(10)].map((x, i) =>
+                        <tr key={i}>
+                            <td className="p-3"><span className="placeholder col-12"></span></td> 
+                            <td className="p-3"><span className="placeholder col-8"></span></td>
+                            <td className="p-3"><span className="placeholder col-8"></span></td>
+                            <td className="p-3"><span className="placeholder col-4"></span></td>
+                            <td className="p-3"><span className="placeholder col-4"></span></td>
+                            <td className="p-3"><span className="placeholder col-6"></span></td>
+                        </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>  
             </>     
                 )
         } else {
             return (
                 <>
-                    <div className="row g-4 placeholder-wave">
-                        {[...Array(12)].map((x, i) =>
-                        <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6" key={i}>
-                            <div className="card h-100 text-start">
-                                <div className="card-body p-0"> 
-                                    <span className="placeholder w-100" style={{height: "290px"}}></span>
-                                    <p className="card-text"> </p>
-                                </div>
-                                <div className="card-footer bg-white p-2 placeholder-wave">
-                                    <h6 className="card-title m-0 fw-bold">
-                                        <span className="placeholder w-75"></span>
-                                    </h6>
-                                    <small className="text-muted placeholder-wave">
-                                        <span className="placeholder w-50"></span>
-                                    </small>
-                                </div>
+                <div className="row g-2 placeholder-glow">
+                    {[...Array(12)].map((x, i) =>
+                    <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={i}>
+                        <div className="card h-100 text-start">
+                            <div className="card-body p-0"> 
+                                <span className="placeholder w-100" style={{minHeight: "167px"}}></span>
+                                <p className="card-text"> </p>
                             </div>
-                        </div> 
-                        )}
-                    </div>  
+                            <div className="card-footer bg-white p-2 placeholder-wave">
+                                <h6 className="card-title m-0 fw-bold">
+                                    <span className="placeholder w-75"></span>
+                                </h6>
+                                <small className="text-muted placeholder-wave">
+                                    <span className="placeholder w-50"></span>
+                                </small>
+                            </div>
+                        </div>
+                    </div> 
+                    )}
+                </div>  
                 </>
             )
         } 
@@ -509,9 +610,9 @@ const FilterResults = ( { called, loading, error, data, view }) => {
         if(view === "list") {
             return (
                 <>
-                <div className="table-responsive p-lg-3">
-                    <table className='table table-hover m-0'>
-                        <thead className="table-light fw-bold fs-6 text-left">
+                <div className="table-responsive">
+                    <table className='table table-hover'>
+                        <thead className="table-light text-start">
                             <tr>
                                 <th className="p-3">Name</th>
                                 <th className="p-3">Expires</th> 
@@ -521,7 +622,7 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                                 <th className="p-3">Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="text-start">
                             {data.domains.length < 1 &&
                                 <tr>
                                     <td colSpan='6' className='p-3'><span className='text-warning'>No Result</span></td>
@@ -531,19 +632,18 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                             <tr key={domain.id}>
                                 <td className="p-3">
                                     <div className="d-flex">
-                                        <div className="flex-shrink-0">
-                                            <div className='bg-thumb' style={{width: "46px", height: "46px"}}>
-                                                <LazyLoadImage
-                                                    alt={domain.name} 
-                                                    className="img-fluid h-100 w-100 border border-2"
-                                                    width={"46px"}
-                                                    height={"46px"}
-                                                    onError={(e)=> { e.target.style.display = "none"; e.target.parentNode.style.display = "none"; }}
-                                                    placeholderSrc={spinner}
-                                                    visibleByDefault={false}
-                                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                                    />
-                                            </div>
+                                        <div className="flex-shrink-0"> 
+                                            <LazyLoadImage
+                                                alt={domain.name} 
+                                                className="img-fluid"
+                                                onError={(e)=> { e.target.src = notAvailable; }}
+                                                placeholder={<img src={spinner} className="img-fluid" />}
+                                                placeholderSrc={spinner}
+                                                visibleByDefault={false}
+                                                width={46}
+                                                height={46}
+                                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                                />  
                                         </div>
                                         <div className="flex-grow-1 ms-3 d-flex align-items-start">
                                             <Link
@@ -604,23 +704,23 @@ const FilterResults = ( { called, loading, error, data, view }) => {
         } else {
             return (
                 <> 
-                <div className="row g-4">
+                <div className="row g-2">
                     {data.domains.length < 1 &&
                         <div className="col-12 text-center text-warning">No Result found</div>
                     } 
                     {data.domains.map((domain) => (
-                    <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-6" key={domain.id}>
-                        <div className="card h-100 text-start"> 
-                            <LazyLoadImage
+                    <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={domain.id}>
+                        <div className="card h-100 text-start">
+                                <LazyLoadImage
                                 alt={domain.name} 
                                 className="img-fluid card-img-top"
-                                onError={(e)=> { e.target.style.display = "none"; e.target.parentNode.style.display = "none"; }}
-                                placeholderSrc={spinner}
-                                visibleByDefault={false}
+                                onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
                                 src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
                                 /> 
+                                <img id={domain.id} src={spinner} className="img-fluid card-img-top " />
                             <div className="card-body p-2">
-                                <h5 className="card-title m-0 fw-bold">
+                                <h6 className="card-title m-0 text-truncate">
                                     <Link
                                         className="text-decoration-none link-dark" 
                                         data-bs-toggle="tooltip" 
@@ -641,8 +741,7 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                                                 <img src={dashCircleFill} alt= ""  />
                                             </span>
                                         }
-                                </h5>
-                                <p className="card-text"></p>
+                                </h6>
                             </div>
                             <div className="card-footer bg-white p-2">
                                 <small className="text-muted">

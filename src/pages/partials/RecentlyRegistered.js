@@ -5,6 +5,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import spinner from '../../assets/spinner.svg'
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
+import notAvailable from "../../assets/not-available.svg";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -73,18 +74,16 @@ const GetRegistered = ({data, loading, error }) => {
                     <li key={domain.id} className="list-group-item list-group-item-action p-3">
                         <div className="d-flex">
                             <div className="flex-shrink-0">
-                                <div className='bg-thumb' style={{width: "46px", height: "46px"}}>
                                 <LazyLoadImage
                                     alt={domain.name} 
-                                    className="img-fluid h-100 w-100 border border-2"
-                                    width={"46px"}
-                                    height={"46px"}
-                                    onError={(e)=> { e.target.style.display = "none"; e.target.parentNode.style.display = "none"; }}
+                                    className="img-fluid img-thumbnail"
+                                    onError={(e)=> {e.target.src = notAvailable; }}
+                                    placeholder={<img src={spinner} className="img-fluid" />}
                                     placeholderSrc={spinner}
-                                    visibleByDefault={false}
+                                    width={46}
+                                    height={46}
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                    />
-                                </div>
+                                    /> 
                             </div>
                             <div className="flex-grow-1 ms-3">
                                 <div className="d-flex flex-column flex-md-row justify-content-between">

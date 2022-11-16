@@ -47,10 +47,7 @@ li.active a {
   height: auto;
 
 }
-
-.btn:hover {
-  background-color: inherit !important
-}
+ 
 
 @media (min-width: 776px) {  
   
@@ -81,6 +78,10 @@ li.active a {
 
 .t-20 {
   top:5px;
+}
+
+.s-0 {
+  left:0;
 }
 
 td {
