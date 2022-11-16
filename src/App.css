@@ -48,6 +48,9 @@ li.active a {
 
 }
 
+.btn:hover {
+  background-color: inherit !important
+}
 
 @media (min-width: 776px) {  
   

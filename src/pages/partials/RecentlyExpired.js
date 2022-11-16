@@ -101,13 +101,13 @@ const GetExpired = ({ data, loading, error }) => {
                                   { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                       <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                         &nbsp;
-                                        <img src={exclamationTriangleFill} />
+                                        <img src={exclamationTriangleFill} alt="" className="bg-warning" />
                                       </span>
                                   } 
                                   { !isValidName(domain.label) && 
                                       <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
                                           &nbsp;
-                                          <img src={dashCircleFill} />
+                                          <img src={dashCircleFill} alt="" className="bg-danger" />
                                       </span>
                                   } 
                               </Link> 

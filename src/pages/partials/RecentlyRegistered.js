@@ -99,16 +99,16 @@ const GetRegistered = ({data, loading, error }) => {
                                     
                                     { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                        &nbsp;
-                                            <img src={exclamationTriangleFill} />
+                                            &nbsp;
+                                            <img src={exclamationTriangleFill} alt=""  />
                                         </span>
                                     } 
                                     { !isValidName(domain.label) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
                                             &nbsp;
-                                            <img src={dashCircleFill} />
+                                            <img src={dashCircleFill} alt=""   />
                                         </span>
-                                    }
+                                    } 
                                 </Link>
                                 <small className="float-end text-muted mt-2 mt-lg-0">
                                     {getTimeAgo(domain.registered)}
