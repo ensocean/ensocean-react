@@ -79,7 +79,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     useEffect(() => {  
  
         setSearch(_search)
-        setTab(_tab);    
+        setTab(_tab);  
+        setWhere(_where);    
+        setOrderBy(_orderBy);
+        setOrderDirection(_orderDirection);
         refetch();
           
     }, [location, _tab]);
@@ -118,7 +121,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         }
         _query.set("filter",  jsonStringify(_where));
         setWhere(_where); 
-        getDomains();
+        refetch();
         navigate(location.pathname + "?"+ _query.toString())
     }
 
@@ -126,7 +129,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         let _query = new URLSearchParams(location.search)
         _query.set("orderBy", e.target.value); 
         setOrderBy(e.target.value);
-        getDomains();
+        refetch();
         navigate(location.pathname + "?"+ _query.toString())
     }
 
@@ -135,7 +138,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         let direction = orderDirection === "asc" ? "desc": "asc";
         _query.set("orderDirection", direction);
         setOrderDirection(direction);
-        getDomains();
+        refetch();
         navigate(location.pathname + "?"+ _query.toString())
     } 
     
@@ -617,17 +620,15 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                     } 
                     {data.domains.map((domain) => (
                     <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={domain.id}>
-                        <div className="card h-100 text-start">
-                                 
-                                    <LazyLoadImage
-                                        alt={domain.name} 
-                                        className="img-fluid card-img-top"
-                                        onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                        afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
-                                        src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                    /> 
-                                    <img id={domain.id} src={spinner} className="img-fluid card-img-top " />
-                             
+                        <div className="card text-start"> 
+                                <LazyLoadImage
+                                    alt={domain.name} 
+                                    className="img-fluid card-img-top" 
+                                    onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                    afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
+                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                /> 
+                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" />
                             <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate">
                                     <Link
