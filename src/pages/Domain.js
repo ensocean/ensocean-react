@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import DomainEvents from "./partials/DomainEvents";
 import spinner from '../assets/spinner.svg'
+import notAvailable from "../assets/not-available.svg";
 import shareIcon from '../assets/share.svg'
 import clipboardIcon from "../assets/clipboard.svg";
 import heartIcon from "../assets/heart.svg";
@@ -138,18 +139,17 @@ const Domain = () => {
                             <div className="card mb-3 border-light border-0">
                                 <div className="row"> 
                                     <div className="col-lg-4">
-                                    <div className='h-100 bg-thumb'>
-                                        <LazyLoadImage
-                                            alt={label} 
-                                            className="img-fluid h-100 w-100 border border-2"
-                                            width={"100%"}
-                                            height={"100%"}
-                                            onError={(e)=> { e.target.style.display = "none"; e.target.parentNode.style.display = "none"; }}
-                                            placeholderSrc={spinner}
-                                            visibleByDefault={false}
-                                            src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
-                                            />
-                                    </div>  
+                                        <div className="card h-100 text-start">
+                                            <LazyLoadImage
+                                                alt={label} 
+                                                className="img-fluid img-thumbnail card-img-top"
+                                                onError={(e)=> { document.getElementById("img_"+ label).remove();  e.target.src = notAvailable; }}
+                                                afterLoad={(e)=> { document.getElementById("img_"+ label).remove(); }}
+                                                placeholderSrc={spinner}
+                                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
+                                            />  
+                                            <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top " />
+                                        </div>
                                     </div>
                                     <div className='col-lg-8'> 
                                             <div className="alert alert-success">Name available for registration!</div>
@@ -242,19 +242,17 @@ const Domain = () => {
                 <div className='container-fluid'>
                     <div className='container'>
                         <div className="row"> 
-                            <div className="col-lg-4"> 
-                                <div className='h-100 bg-thumb'>
+                            <div className="col-lg-4">   
+                                <div className="card h-100 text-start">
                                     <LazyLoadImage
-                                        alt={domain.name} 
-                                        className="img-fluid h-100 w-100 border border-2"
-                                        width={"100%"}
-                                        height={"100%"}
-                                        onError={(e)=> { e.target.style.display = "none"; e.target.parentNode.style.display = "none"; }}
-                                        placeholderSrc={spinner}
-                                        visibleByDefault={false}
-                                        src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                        /> 
-                                </div>  
+                                    alt={domain.name} 
+                                    className="img-fluid card-img-top"
+                                    onError={(e)=> { document.getElementById(domain.label).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                    afterLoad={(e)=> { document.getElementById(domain.label).remove(); }}
+                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                    />  
+                                    <img id={domain.label} src={spinner} className="img-fluid card-img-top " />
+                                </div>
                             </div>
                             <div className='col-lg-8 mt-3 mt-lg-0'>
                                 <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 

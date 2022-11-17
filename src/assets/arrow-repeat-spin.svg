@@ -1,11 +1,8 @@
-
-
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" fill="currentColor" className="bi bi-arrow-repeat" viewBox="0 0 16 16">
-     
-    <path id="arrow" class="st0" d="M9.3,16.4c3.2-0.4,5.8-2.9,6.2-6.1c0.5-4.2-2.8-7.7-6.9-7.8V0.6c0-0.1-0.1-0.2-0.2-0.1l-4,2.9
-    	c-0.1,0-0.1,0.1,0,0.2l3.9,2.8c0.1,0.1,0.2,0,0.2-0.1V4.5c2.9,0,5.2,2.5,5,5.4c-0.2,2.5-2.2,4.5-4.8,4.7c-2.7,0.2-5-1.7-5.4-4.2
-    	c-0.1-0.5-0.5-0.8-1-0.8c-0.6,0-1,0.5-1,1.1C2.1,14.2,5.4,16.9,9.3,16.4L9.3,16.4z">
-    	
-    <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="360 8.4 9.5" to="0 8.4 9.5" dur="0.5s" additive="sum" repeatCount="indefinite" />
-  </path>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-repeat" viewBox="0 0 16 16">
+    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z">
+      <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="360 8 8" to="0 8 8" dur="0.5s" additive="sum" repeatCount="indefinite" />
+    </path>
+    <path fillRule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z">
+      <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="360 8 8" to="0 8 8" dur="0.5s" additive="sum" repeatCount="indefinite" />
+    </path>
 </svg>

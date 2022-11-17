@@ -5,6 +5,7 @@ import { getExpireCondition, getExpires, getTokenId, isExpired, isValidName, obs
 import spinner from '../../assets/spinner.svg'
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
+import notAvailable from "../../assets/not-available.svg";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -75,18 +76,18 @@ const GetExpired = ({ data, loading, error }) => {
 
                     <div className="d-flex">
                       <div className="flex-shrink-0">
-                        <div className='bg-thumb' style={{width: "46px", height: "46px"}}>
-                          <LazyLoadImage
-                              alt={domain.name} 
-                              className="img-fluid h-100 w-100 border border-2"
-                              width={"46px"}
-                              height={"46px"}
-                              onError={(e)=> { e.target.style.display = "none"; e.target.parentNode.style.display = "none"; }}
-                              placeholderSrc={spinner}
-                              visibleByDefault={false}
-                              src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                              />
-                        </div>
+                        <div className="card h-100 text-start">
+                            <LazyLoadImage
+                                alt={domain.name} 
+                                className="img-fluid"
+                                onError={(e)=> { e.target.src = notAvailable; }}
+                                placeholder={<img src={spinner} className="img-fluid" />}
+                                placeholderSrc={spinner}
+                                width={46}
+                                height={46}
+                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                              /> 
+                          </div>
                       </div>
                       <div className="flex-grow-1 ms-3">
                           <div className="d-flex flex-column flex-md-row justify-content-between">
@@ -101,13 +102,13 @@ const GetExpired = ({ data, loading, error }) => {
                                   { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                       <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                         &nbsp;
-                                        <img src={exclamationTriangleFill} />
+                                        <img src={exclamationTriangleFill} alt="" className="bg-warning" />
                                       </span>
                                   } 
                                   { !isValidName(domain.label) && 
                                       <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
                                           &nbsp;
-                                          <img src={dashCircleFill} />
+                                          <img src={dashCircleFill} alt="" className="bg-danger" />
                                       </span>
                                   } 
                               </Link> 
