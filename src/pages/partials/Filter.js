@@ -337,120 +337,56 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             </div>
         </div> 
         <div className="d-flex flex-row justify-content-start">
-            <div className="col-auto d-none d-lg-block w-25 overflow-auto sticky-md-top" style={{ height: "400px"}} id="filters" >
-                <div className=" me-lg-2" >
-                    <div className="accordion">
-                        <div className="accordion-item border-0 rounded-0">
-                            <button className="accordion-button fw-bold fs-4 rounded-0 bg-white ps-0 pt-3 pb-3" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
-                                <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
-                            </button> 
-                            <div id="startsWith" className="accordion-collapse collapse show">
-                                <div className="input-group  pt-3 pb-3">
-                                    <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
-                                    <span className="input-group-text">and</span>                                    
-                                    <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
+            <div className="col-auto d-none d-lg-block w-25 overflow-auto sticky-md-top me-lg-2" style={{ height: "500px"}} id="filters" >
+                <div class="card rounded-0" id="filters">
+                    <div class="card-header d-flex flex-row justify-content-between ">
+                        <button class="btn fs-5">Filter</button>
+                        <button class="btn border-0" type="button" onClick={handleFilterClick}>
+                            <img src={arrowLeft} />
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div className="accordion">
+                            <div className="accordion-item border-0 rounded-0">
+                                <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                    <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
+                                </button> 
+                                <div id="startsWith" className="accordion-collapse collapse show">
+                                    <div className="input-group p-3">
+                                        <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
+                                        <span className="input-group-text">and</span>                                    
+                                        <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
-                                <h5 className="accordion-header fw-bold text-dark">Length</h5>
-                            </button> 
-                            <div id="length" className="accordion-collapse collapse show">
-                                <div className="input-group   pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
+                            <div className="accordion-item border-0">
+                                <button className="accordion-button fw-bold fs-4 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
+                                    <h5 className="accordion-header fw-bold text-dark">Length</h5>
+                                </button> 
+                                <div id="length" className="accordion-collapse collapse show">
+                                    <div className="input-group p-3">
+                                        <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
+                                        <span className="input-group-text">to</span>
+                                        <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                            </button> 
-                            <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                            <div className="accordion-item border-0">
+                                <button className="accordion-button fw-bold fs-4 bg-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                    <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                                </button> 
+                                <div id="segmentLength" className="accordion-collapse collapse show">
+                                    <div className="input-group p-3">
+                                        <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                        <span className="input-group-text">to</span>
+                                        <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                            </div> 
+                            <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
+                                Reset Filters
                             </button> 
-                            <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                </div>
-                            </div>
                         </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                            </button> 
-                            <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                            </button> 
-                            <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                            </button> 
-                            <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                            </button> 
-                            <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="accordion-item border-0">
-                            <button className="accordion-button fw-bold fs-4 bg-white  ps-0 pt-3 pb-3 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                            </button> 
-                            <div id="segmentLength" className="accordion-collapse collapse show">
-                                <div className="input-group pt-3 pb-3 d-flex flex-row justify-content-between">
-                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                    <span className="input-group-text">to</span>
-                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                </div>
-                            </div>
-                        </div>
-                        <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
-                            Reset Filters
-                        </button> 
                     </div>
                 </div> 
             </div>
