@@ -684,14 +684,21 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                     {data.domains.map((domain) => (
                     <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={domain.id}>
                         <div className="card h-100 text-start">
-                                <LazyLoadImage
-                                    alt={domain.name} 
-                                    className="img-fluid card-img-top"
-                                    onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
-                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                /> 
-                                <img id={domain.id} src={spinner} className="img-fluid card-img-top " />
+                                <Link
+                                    className="text-decoration-none link-dark" 
+                                    data-bs-toggle="tooltip" 
+                                    data-bs-title={"View "+ domain.name +" on EnsOcean"}
+                                    title={"View "+ domain.name +" on EnsOcean"}
+                                    to={"/"+ encodeURIComponent(domain.name) }>
+                                    <LazyLoadImage
+                                        alt={domain.name} 
+                                        className="img-fluid card-img-top"
+                                        onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                        afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
+                                        src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                    /> 
+                                    <img id={domain.id} src={spinner} className="img-fluid card-img-top " />
+                                </Link> 
                             <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate">
                                     <Link
