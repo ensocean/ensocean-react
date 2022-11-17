@@ -100,17 +100,16 @@ const GetExpired = ({ data, loading, error }) => {
                                   {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
 
                                   { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
-                                      <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                        &nbsp;
-                                        <img src={exclamationTriangleFill} alt="" className="bg-warning" />
-                                      </span>
-                                  } 
-                                  { !isValidName(domain.label) && 
-                                      <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                          &nbsp;
-                                          <img src={dashCircleFill} alt="" className="bg-danger" />
-                                      </span>
-                                  } 
+                                        <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
+                                            <img src={exclamationTriangleFill} alt= "" />
+                                        </span>
+                                    }
+                                    &nbsp;
+                                    { !isValidName(domain.label) && 
+                                        <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
+                                            <img src={dashCircleFill} alt= ""  />
+                                        </span>
+                                    }
                               </Link> 
                               <small className="float-end text-success mt-2 mt-lg-0">
                                   { isExpired(domain.expires) &&

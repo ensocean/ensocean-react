@@ -13,6 +13,7 @@ const DOMAIN_EVENTS = gql`
             orderDirection: desc 
             where: {
               domain: $id
+              name_not_in: ["NewOwner", "Register", "Mint"]
             }
         ) 
         {
@@ -65,7 +66,7 @@ const DomainEvents = ({ id }) => {
                                     <tbody>
                                     {data.domainEvents.map((event) => (
                                         <tr key={event.id}>
-                                            <td className="p-3">{event.name}</td>
+                                            <td className="p-3">{event.name === "Transferred" ? "Register": event.name }</td>
                                             <td className="p-3">{event.cost}</td>
                                             <td className="p-3">{event.from != null && <Link to={"/account/"+ event.from}>{obscureAddress(event.from)}</Link>}</td>
                                             <td className="p-3">{event.to != null && <Link to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link>}</td>
