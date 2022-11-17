@@ -1,4 +1,5 @@
-import { useQuery, gql } from "@apollo/client";
+import React, {useState, useEffect} from "react"; 
+import { useQuery, useLazyQuery, gql } from "@apollo/client";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 import { getExpireCondition, getExpires, getTokenId, isExpired, isValidName, obscureLabel } from "../../helpers/String";
@@ -6,6 +7,7 @@ import spinner from '../../assets/spinner.svg'
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
 import notAvailable from "../../assets/not-available.svg";
+import refreshIcon from "../../assets/arrow-repeat.svg";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -33,15 +35,29 @@ const RECENTLY_EXPIRED = gql`
 
 
 const RecentExpired = () => {
-    const { data, loading, error } = useQuery(RECENTLY_EXPIRED);
+    const [getExpired, { called, loading, error, data, refetch }] = useLazyQuery(RECENTLY_EXPIRED,
+      {
+        variables: {  },
+        notifyOnNetworkStatusChange: true
+    });
+ 
+    if(!called) getExpired();
+  
+    const handleRefresh = (e) => {
+      refetch();
+    }
+
     return (
       <>
         <div className="card">
           <div className="card-header d-flex justify-content-between">
               <h5 className='fs-4'>Just Dropped</h5>
+              <button className="btn btn-outline-primary">
+                <img src={refreshIcon}  alt="" onClick={handleRefresh} />
+              </button>
           </div> 
           <ol className="list-group list-group-flush placeholder-glow">
-            <GetExpired data={data} loading={loading} error={error} />
+            <GetExpired called={called} data={data} loading={loading} error={error} />
           </ol> 
           <div className="card-footer">
               <Link className="btn btn-success" to="/discover?tab=expired" title="View all expired ENS domains">View More</Link>
@@ -51,7 +67,9 @@ const RecentExpired = () => {
     )
 }
 
-const GetExpired = ({ data, loading, error }) => {
+const GetExpired = ({called, data, loading, error }) => {
+   
+
     if(loading) {
         return ( 
             <>

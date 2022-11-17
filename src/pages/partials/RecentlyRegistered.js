@@ -1,4 +1,4 @@
-import { useQuery, gql } from "@apollo/client";
+import { useQuery,  gql, useLazyQuery } from "@apollo/client";
 import { Link } from "react-router-dom"; 
 import { getTimeAgo, isValidName, obscureLabel, getTokenId } from '../../helpers/String';
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -6,6 +6,7 @@ import spinner from '../../assets/spinner.svg'
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
 import notAvailable from "../../assets/not-available.svg";
+import refreshIcon from "../../assets/arrow-repeat.svg";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -31,16 +32,28 @@ const RECENTLY_REGISTERED = gql`
 `;
 
 const RecentRegistered = () => {
-    const { data, loading, error } = useQuery(RECENTLY_REGISTERED);
+    const [getRegistered, { called, loading, error, data, refetch}] = useLazyQuery(RECENTLY_REGISTERED, {
+        variables: {  },
+        notifyOnNetworkStatusChange: true
+    });
     
+    if(!called) getRegistered();
+
+    const handleRefresh = (e) => {
+        refetch();
+    }
+
     return (
       <>
         <div className="card">
           <div className="card-header d-flex justify-content-between">
               <h5 className='fs-4'>Recently Registered</h5>
+              <button className="btn btn-outline-primary">
+                <img src={refreshIcon}  alt="" onClick={handleRefresh} />
+              </button>
           </div> 
           <ol className="list-group list-group-flush">
-            <GetRegistered data={data} loading={loading} error={error} />
+            <GetRegistered  called={called}  data={data} loading={loading} error={error} />
           </ol> 
           <div className="card-footer">
               <Link className="btn btn-success" to="/discover?tab=registered" title="View all expired ENS domains">View More</Link>
@@ -50,7 +63,8 @@ const RecentRegistered = () => {
     )
 }
 
-const GetRegistered = ({data, loading, error }) => {
+const GetRegistered = ({called, data, loading, error }) => {
+    
     if(loading) {
         return ( 
             <>
@@ -98,7 +112,7 @@ const GetRegistered = ({data, loading, error }) => {
                                     {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
                                     
                                     { ' ' }
-                                    
+
                                     { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                             <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                                 <img src={exclamationTriangleFill} alt= "" />
