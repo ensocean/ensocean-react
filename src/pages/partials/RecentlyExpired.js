@@ -98,7 +98,7 @@ const GetExpired = ({ data, loading, error }) => {
                                   title={"View "+ domain.name +" on EnsOcean"}
                                   to={encodeURIComponent(domain.name)}>
                                   {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
-
+                                  { ' ' }
                                   { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                             <img src={exclamationTriangleFill} alt= "" />
