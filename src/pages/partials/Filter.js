@@ -79,12 +79,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     useEffect(() => {  
  
         setSearch(_search)
-        setTab(_tab);   
-        setOrderBy(_orderBy);
-        setOrderDirection(_orderDirection);
-        setWhere(_where);  
+        setTab(_tab);    
+        refetch();
           
-    }, [location]);
+    }, [location, _tab]);
 
     useEffect(()=> {
         if(data && data.domains) setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
@@ -120,7 +118,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         }
         _query.set("filter",  jsonStringify(_where));
         setWhere(_where); 
-        refetch();
+        getDomains();
         navigate(location.pathname + "?"+ _query.toString())
     }
 
@@ -128,7 +126,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         let _query = new URLSearchParams(location.search)
         _query.set("orderBy", e.target.value); 
         setOrderBy(e.target.value);
-        refetch();
+        getDomains();
         navigate(location.pathname + "?"+ _query.toString())
     }
 
@@ -137,7 +135,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         let direction = orderDirection === "asc" ? "desc": "asc";
         _query.set("orderDirection", direction);
         setOrderDirection(direction);
-        refetch();
+        getDomains();
         navigate(location.pathname + "?"+ _query.toString())
     } 
     
