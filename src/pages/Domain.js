@@ -2,7 +2,7 @@ import React  from "react";
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
 import {Helmet} from "react-helmet";
-import { getDateString, getLength, getSegmentLength, getTokenId, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
+import { getDateString, getLength, getSegmentLength, getTokenId, isExpired, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -243,7 +243,7 @@ const Domain = () => {
                     <div className='container'>
                         <div className="row"> 
                             <div className="col-lg-4">   
-                                <div className="card h-100 text-start">
+                                <div className="card">
                                     <LazyLoadImage
                                     alt={domain.name} 
                                     className="img-fluid card-img-top"
@@ -256,6 +256,9 @@ const Domain = () => {
                             </div>
                             <div className='col-lg-8 mt-3 mt-lg-0'>
                                 <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
+                                    { isExpired(domain.expires) && 
+                                        <div className="alert alert-success">Name available for registration!</div>
+                                    }
                                     { isValidName(domain.label) === false &&
                                             <div className="alert alert-danger">Malformed!</div>
                                     }
