@@ -78,7 +78,7 @@ const Discover = () => {
                 <div className="card-header border-0">
                     <ul className="nav nav-tabs card-header-tabs">
                         <li className="nav-item">
-                            <Link className={"nav-link fs-5 p-3 "+ (tab === "all" ? "active": "") } to="/discover?tab=all">All</Link>
+                            <Link className={"nav-link fs-5 p-3 "+ (tab === "all" || tab === "" ? "active": "") } to="/discover?tab=all">All</Link>
                         </li>
                         <li className="nav-item">
                             <Link className={"nav-link fs-5 p-3 "+ (tab === "expired" ? "active": "")} to="/discover?tab=expired">Expired</Link>
