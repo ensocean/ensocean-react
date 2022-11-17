@@ -2,6 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";  
 import  "bootstrap/dist/js/bootstrap.esm.min.js"; 
 import './App.css'; 
+
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./pages/Layout";
@@ -17,6 +18,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
 import NotFound from "./pages/Notfound";   
+
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
@@ -38,7 +40,7 @@ export default function App () {
             <Route path="/find" element={<Find />} />
             <Route path="/404" element={<NotFound />} />
             <Route path="/account/:address" element={<Account />} />
-            <Route path="/:label.eth" element={<Domain />} />
+            <Route path="/:label.:extension" element={<Domain />} />
             <Route path="*" element={<Navigate replace={true} to="/404" />} />
           </Route> 
         </Routes>

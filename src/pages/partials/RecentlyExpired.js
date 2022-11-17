@@ -76,16 +76,18 @@ const GetExpired = ({ data, loading, error }) => {
 
                     <div className="d-flex">
                       <div className="flex-shrink-0">
-                        <LazyLoadImage
+                        <div className="card h-100 text-start">
+                            <LazyLoadImage
                                 alt={domain.name} 
-                                className="img-fluid img-thumbnail"
+                                className="img-fluid"
                                 onError={(e)=> { e.target.src = notAvailable; }}
                                 placeholder={<img src={spinner} className="img-fluid" />}
                                 placeholderSrc={spinner}
                                 width={46}
                                 height={46}
                                 src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                /> 
+                              /> 
+                          </div>
                       </div>
                       <div className="flex-grow-1 ms-3">
                           <div className="d-flex flex-column flex-md-row justify-content-between">

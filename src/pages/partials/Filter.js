@@ -42,23 +42,24 @@ let csvHeaders = [
 ]; 
 
  
-const Filter = () => { 
+const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
       
     let location = useLocation(); 
     let navigate = useNavigate(); 
+     
+    const _search = location.search;
+    const _query = new URLSearchParams(_search);
+    const _tab = _query.get("tab") || Tab;
+    const _first = _query.get("first") || First;
+    const _skip = _query.get("skip") || Skip;
+    const _orderBy = _query.get("orderBy") || OrderBy;
+    const _orderDirection = _query.get("orderDirection") || OrderDirection; 
+    const _where = jsonParse(_query.get("filter")) || Where; 
+    const _view = localStorage.getItem("view") || _query.get("_view") || View; 
+    
 
-    const query = new URLSearchParams(location.search);  
-    const _tab = query.get("tab") || "all";
-    const _first = Number(query.get("first") || "100");
-    const _skip = Number(query.get("skip") || "0");
-    const _orderBy = query.get("orderBy") || "created";
-    const _orderDirection = query.get("orderDirection") || "desc";
-    const _where = jsonParse(query.get("filter")) || { label_not: null };
-    const _view = localStorage.getItem("view") || query.get("view") || "gallery";
-   
-
-    const [search, setSearch] = useState(location.search);
-    const [tab, setTab] = useState(_tab);
+    const [search, setSearch] = useState(_search);
+    const [tab, setTab] = useState(Tab);
     const [first, setFirst] = useState(_first);
     const [skip, setSkip] = useState(_skip);
     const [orderBy, setOrderBy] = useState(_orderBy);
@@ -72,53 +73,18 @@ const Filter = () => {
         variables: { skip, first, orderBy, orderDirection, where },
         notifyOnNetworkStatusChange: true
     }); 
- 
-    useEffect(()=> { 
- 
-        // TODO: usteki degerlerin yerini bunlar alıcak eger bos iseler.
-        if(_tab === "expired") {
-            setWhere({ 
-                label_not: null,
-                expires_lte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()
-            });
-            setOrderBy("expires");
-            setOrderDirection("desc");
-        } else if(_tab === "expiring") {   
-            setWhere({ 
-                label_not: null,
-                expires_lte: moment().utc().unix(),
-                expires_gte: moment().add(-PREMIUM_PERIOD, "days").utc().unix()
-            });
-            setOrderBy("expires");
-            setOrderDirection("asc");
-        } else if(_tab === "premium") {   
-            setWhere({
-                label_not: null,
-                expires_lte: moment().add(-GRACE_PERIOD, "days").utc().unix(),
-                expires_gte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()
-            });
-            setOrderBy("expires");
-            setOrderDirection("asc");
-        } else if(_tab === "registered") {   
-            setWhere({
-                label_not: null,
-                registered_not: null
-            });
-            setOrderBy("registered");
-            setOrderDirection("desc");
-        } else { 
-            setWhere({
-                label_not: null 
-            });
-            setOrderBy("created");
-            setOrderDirection("desc");
-        }
 
-        //getDomains({ variables: { skip, first, orderBy, orderDirection, where } })
-
-        refetch();
+    if(!called) getDomains();
+  
+    useEffect(() => {  
  
-    }, [location.search]);
+        setSearch(_search)
+        setTab(_tab);   
+        setOrderBy(_orderBy);
+        setOrderDirection(_orderDirection);
+        setWhere(_where);  
+          
+    }, [location]);
 
     useEffect(()=> {
         if(data && data.domains) setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
@@ -152,8 +118,9 @@ const Filter = () => {
             }  
             _where[prop] = value; 
         }
-        setWhere(_where); 
         _query.set("filter",  jsonStringify(_where));
+        setWhere(_where); 
+        refetch();
         navigate(location.pathname + "?"+ _query.toString())
     }
 
@@ -161,6 +128,7 @@ const Filter = () => {
         let _query = new URLSearchParams(location.search)
         _query.set("orderBy", e.target.value); 
         setOrderBy(e.target.value);
+        refetch();
         navigate(location.pathname + "?"+ _query.toString())
     }
 
@@ -168,7 +136,8 @@ const Filter = () => {
         let _query = new URLSearchParams(location.search)
         let direction = orderDirection === "asc" ? "desc": "asc";
         _query.set("orderDirection", direction);
-        setOrderDirection(direction)
+        setOrderDirection(direction);
+        refetch();
         navigate(location.pathname + "?"+ _query.toString())
     } 
     
@@ -187,6 +156,7 @@ const Filter = () => {
         timeout = setTimeout(()=> { 
             changeFilter(e.target.value, "label_contains_nocase");
         }, DEBOUNCE_INTERVAL); 
+ 
     }
 
     const onKeydownStartwith = (e) => {
@@ -291,11 +261,12 @@ const Filter = () => {
     }
  
     const handleResetFilter = (e) => {
-        let _query = new URLSearchParams(location.search) 
+        let _query = new URLSearchParams(_search) 
         setWhere(where);
         _query.set("filter",  jsonStringify(where));
         setFilterCount(0);
         emptyFilters();
+        refetch();
         navigate(location.pathname + "?"+ _query.toString())
     }
 
@@ -633,17 +604,19 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                                 <td className="p-3">
                                     <div className="d-flex">
                                         <div className="flex-shrink-0"> 
-                                            <LazyLoadImage
-                                                alt={domain.name} 
-                                                className="img-fluid"
-                                                onError={(e)=> { e.target.src = notAvailable; }}
-                                                placeholder={<img src={spinner} className="img-fluid" />}
-                                                placeholderSrc={spinner}
-                                                visibleByDefault={false}
-                                                width={46}
-                                                height={46}
-                                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                                />  
+                                            <div className="card h-100 text-start">
+                                                <LazyLoadImage
+                                                    alt={domain.name} 
+                                                    className="img-fluid"
+                                                    onError={(e)=> { e.target.src = notAvailable; }}
+                                                    placeholder={<img src={spinner} className="img-fluid" />}
+                                                    placeholderSrc={spinner}
+                                                    visibleByDefault={false}
+                                                    width={46}
+                                                    height={46}
+                                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                                    />  
+                                            </div>
                                         </div>
                                         <div className="flex-grow-1 ms-3 d-flex align-items-start">
                                             <Link
@@ -712,11 +685,11 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                     <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={domain.id}>
                         <div className="card h-100 text-start">
                                 <LazyLoadImage
-                                alt={domain.name} 
-                                className="img-fluid card-img-top"
-                                onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
-                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                    alt={domain.name} 
+                                    className="img-fluid card-img-top"
+                                    onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                    afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
+                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
                                 /> 
                                 <img id={domain.id} src={spinner} className="img-fluid card-img-top " />
                             <div className="card-body p-2">

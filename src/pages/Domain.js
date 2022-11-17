@@ -139,13 +139,17 @@ const Domain = () => {
                             <div className="card mb-3 border-light border-0">
                                 <div className="row"> 
                                     <div className="col-lg-4">
-                                        <LazyLoadImage
-                                        alt={label} 
-                                        className="img-fluid card-img-top"
-                                        onError={(e)=> {  e.target.src = notAvailable; e.target.alt="Not available" }}
-                                        afterLoad={(e)=> {   }}
-                                        src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
-                                        />  
+                                        <div className="card h-100 text-start">
+                                            <LazyLoadImage
+                                                alt={label} 
+                                                className="img-fluid img-thumbnail card-img-top"
+                                                onError={(e)=> { document.getElementById("img_"+ label).remove();  e.target.src = notAvailable; }}
+                                                afterLoad={(e)=> { document.getElementById("img_"+ label).remove(); }}
+                                                placeholderSrc={spinner}
+                                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
+                                            />  
+                                            <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top " />
+                                        </div>
                                     </div>
                                     <div className='col-lg-8'> 
                                             <div className="alert alert-success">Name available for registration!</div>
@@ -238,8 +242,8 @@ const Domain = () => {
                 <div className='container-fluid'>
                     <div className='container'>
                         <div className="row"> 
-                            <div className="col-lg-4">  
-                                    
+                            <div className="col-lg-4">   
+                                <div className="card h-100 text-start">
                                     <LazyLoadImage
                                     alt={domain.name} 
                                     className="img-fluid card-img-top"
@@ -248,6 +252,7 @@ const Domain = () => {
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
                                     />  
                                     <img id={domain.label} src={spinner} className="img-fluid card-img-top " />
+                                </div>
                             </div>
                             <div className='col-lg-8 mt-3 mt-lg-0'>
                                 <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
