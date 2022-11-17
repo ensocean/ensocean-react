@@ -8,12 +8,11 @@ const ETHERSCAN_ADDR = process.env.REACT_APP_ETHERSCAN_ADDR;
 const DOMAIN_EVENTS = gql`
     query DomainsEvents( $id: String! ) {
         domainEvents(
-            first: 25
+            first: 50
             orderBy: blockNumber 
             orderDirection: desc 
             where: {
-              domain: $id
-              name_not_in: ["NewOwner", "Register", "Mint"]
+              domain: $id 
             }
         ) 
         {
@@ -55,8 +54,7 @@ const DomainEvents = ({ id }) => {
                                 <table className='table table-hover m-0'>
                                     <thead className="table-light fw-bold fs-6">
                                         <tr>
-                                            <th className="p-3">Event</th>
-                                            <th className="p-3">Cost</th>
+                                            <th className="p-3">Event</th> 
                                             <th className="p-3">From</th>
                                             <th className="p-3">To</th>
                                             <th className="p-3">Tx</th>
@@ -66,11 +64,22 @@ const DomainEvents = ({ id }) => {
                                     <tbody>
                                     {data.domainEvents.map((event) => (
                                         <tr key={event.id}>
-                                            <td className="p-3">{event.name === "Transferred" ? "Register": event.name }</td>
-                                            <td className="p-3">{event.cost}</td>
-                                            <td className="p-3">{event.from != null && <Link to={"/account/"+ event.from}>{obscureAddress(event.from)}</Link>}</td>
-                                            <td className="p-3">{event.to != null && <Link to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link>}</td>
-                                            <td className="p-3"><a target="_blank" rel="noreferrer" href={ETHERSCAN_ADDR + "/tx/"+ event.transactionID} bs-data-toogle="tooltip" title="View on etherscan" bs-data-title="View on etherscan">{obscureAddress(event.transactionID)}</a></td>
+                                            <td className="p-3">{event.name }</td>
+                                            <td className="p-3">{event.from != null && 
+                                                <button className="btn btn-outline-warning">
+                                                    <Link className="text-dark" to={"/account/"+ event.from}>{ obscureAddress(event.from)}</Link>
+                                                </button>}
+                                            </td>
+                                            <td className="p-3">{event.to != null && 
+                                                <button className="btn btn-outline-warning">
+                                                    <Link className="text-dark" to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link>
+                                                </button>}
+                                            </td>
+                                            <td className="p-3">
+                                                <button className="btn btn-outline-warning">
+                                                    <a className="text-dark" target="_blank" rel="noreferrer" href={ETHERSCAN_ADDR + "/tx/"+ event.transactionID} bs-data-toogle="tooltip" title="View on etherscan" bs-data-title="View on etherscan">{obscureAddress(event.transactionID)}</a>
+                                                </button>
+                                            </td>
                                             <td className="p-3">{getTimeAgo(event.blockTimestamp)}</td>
                                         </tr>
                                     ))} 
