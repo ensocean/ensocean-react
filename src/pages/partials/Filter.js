@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"; 
+import React, {useState, useEffect, useRef} from "react"; 
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, isValidName, jsonParse, jsonStringify, obscureAddress, obscureLabel, getTokenId } from '../../helpers/String';
 import { useLazyQuery, gql } from '@apollo/client';
@@ -44,6 +44,8 @@ let csvHeaders = [
  
 const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
       
+    const listInnerRef = useRef();
+
     let location = useLocation(); 
     let navigate = useNavigate(); 
      
@@ -69,29 +71,38 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const [csvData, setCsvData] = useState([]); 
     const [filterCount, setFilterCount] = useState(0); 
  
+    
+
     let [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery()), {
         variables: { skip, first, orderBy, orderDirection, where },
         notifyOnNetworkStatusChange: true
     }); 
 
-    if(!called) getDomains();
+    if(!called)  {  
+        getDomains();
+    }
   
     useEffect(() => {  
  
+         
         setSearch(_search)
         setTab(_tab);  
-        setWhere(_where);    
+        setWhere(_where);  
         setOrderBy(_orderBy);
         setOrderDirection(_orderDirection);
-        refetch();
+        setSkip(_skip);
+        setFirst(_first);
+
+        //refetch();
+        getDomains();
           
-    }, [location, _tab]);
+    }, [location]);
 
     useEffect(()=> {
         if(data && data.domains) setCsvData(data.domains.map(t=> { return { tokenId: getTokenId(t.label), ...t }}));
     }, [data])
 
-  
+    
     const handleFilterClick = (e) => {
         const elem = document.getElementById("filters");
         if(elem.classList.contains("d-none")) {
@@ -108,37 +119,51 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     };
 
     const changeFilter = (value, prop) => {
-        let _query = new URLSearchParams(location.search) 
-        let _where = jsonParse(_query.get("filter")) || where;
+        let _query = new URLSearchParams(search) 
+        let newWhere = jsonParse(_query.get("filter")) || where;
         if(value === "") { 
-            delete _where[prop]; 
+            delete newWhere[prop]; 
             setFilterCount(filterCount - 1);
         }  else {  
-            if(!_where[prop]) {
+            if(!newWhere[prop]) {
                 setFilterCount(filterCount + 1);
             }  
-            _where[prop] = value; 
+            newWhere[prop] = value; 
         }
-        _query.set("filter",  jsonStringify(_where));
-        setWhere(_where); 
-        refetch();
-        navigate(location.pathname + "?"+ _query.toString())
+        _query.set("filter",  jsonStringify(newWhere)); 
+        setWhere(newWhere);
+        getDomains({ variables: { skip, first, orderBy, orderDirection, newWhere } });
+        navigate(location.pathname + "?"+ _query.toString()) 
     }
 
     const handleOrderBy = (e) => { 
         let _query = new URLSearchParams(location.search)
         _query.set("orderBy", e.target.value); 
-        setOrderBy(e.target.value);
-        refetch();
+        setOrderBy(e.target.value); 
         navigate(location.pathname + "?"+ _query.toString())
+    }
+
+    const handlePagePrev = (e) => { 
+        let nextSkip = skip - first;
+        let _query = new URLSearchParams(location.search)
+        _query.set("skip", nextSkip); 
+        setSkip(nextSkip);
+        navigate(location.pathname + "?"+ _query.toString());
+    }
+
+    const handlePageNext = (e) => { 
+        let nextSkip = skip + first;
+        let _query = new URLSearchParams(location.search)
+        _query.set("skip", nextSkip);  
+        setSkip(nextSkip);
+        navigate(location.pathname + "?"+ _query.toString());
     }
 
     const handleOrderDirection = (e, t) => {  
         let _query = new URLSearchParams(location.search)
         let direction = orderDirection === "asc" ? "desc": "asc";
         _query.set("orderDirection", direction);
-        setOrderDirection(direction);
-        refetch();
+        setOrderDirection(direction); 
         navigate(location.pathname + "?"+ _query.toString())
     } 
     
@@ -337,80 +362,115 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div> 
             </div>
         </div> 
-        <div className="d-flex flex-row justify-content-start">
-            <div className="col-auto d-none d-lg-block w-25 overflow-auto sticky-md-top me-lg-2" style={{ height: "500px"}} id="filters" >
-                <div class="card rounded-0" id="filters">
-                    <div class="card-header d-flex flex-row justify-content-between ">
-                        <button class="btn fs-5">Filter</button>
-                        <button class="btn border-0" type="button" onClick={handleFilterClick}>
-                            <img src={arrowLeft} />
-                        </button>
-                    </div>
-                    <div class="card-body p-0">
-                        <div className="accordion">
-                            <div className="accordion-item border-0 rounded-0">
-                                <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
-                                    <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
-                                </button> 
-                                <div id="startsWith" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
-                                        <span className="input-group-text">and</span>                                    
-                                        <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item border-0">
-                                <button className="accordion-button fw-bold fs-4 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
-                                    <h5 className="accordion-header fw-bold text-dark">Length</h5>
-                                </button> 
-                                <div id="length" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
-                                        <span className="input-group-text">to</span>
-                                        <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item border-0">
-                                <button className="accordion-button fw-bold fs-4 bg-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                    <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                                </button> 
-                                <div id="segmentLength" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                        <span className="input-group-text">to</span>
-                                        <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                    </div>
-                                </div>
-                            </div> 
-                            <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
-                                Reset Filters
-                            </button> 
+        <div className="">
+            <div className="d-flex flex-column flex-xxl-row justify-content-between">
+                <div className="flex-shrink-0 me-lg-2 d-none d-xxl-block" style={{ height: "500px"}} id="filters" >
+                    <div className="card rounded-0" id="filters">
+                        <div className="card-header d-flex flex-row justify-content-between ">
+                            <button className="btn fs-5">Filter</button>
+                            <button className="btn border-0" type="button" onClick={handleFilterClick}>
+                                <img src={arrowLeft} />
+                            </button>
                         </div>
-                    </div>
-                </div> 
-            </div>
-            <div className="col w-75"> 
-                <div className="d-flex justify-content-between">
-                    <div className="csv-download">
-                        <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                            <img src={fileTypeCsv} alt= "" />
-                        </CSVLink> 
-                    </div>
-                    <div className="view-types">
-                        <button type="button" className={view === "list" ? "btn btn-default active": "btn btn-default"} onClick={(e) => onClickView(e, "list")}>
-                            <img src={listUl} alt= "" />
-                        </button>  
-                        <button type="button" className={view === "gallery" ? "btn btn-default active": "btn btn-default"} onClick={(e) => onClickView(e, "gallery")}>
-                            <img src={gridFill} alt= "" />
-                        </button>
+                        <div className="card-body p-0">
+                            <div className="accordion">
+                                <div className="accordion-item border-0 rounded-0">
+                                    <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                        <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
+                                    </button> 
+                                    <div id="startsWith" className="accordion-collapse collapse show">
+                                        <div className="input-group p-3">
+                                            <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
+                                            <span className="input-group-text">and</span>                                    
+                                            <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="accordion-item border-0">
+                                    <button className="accordion-button fw-bold fs-4 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
+                                        <h5 className="accordion-header fw-bold text-dark">Length</h5>
+                                    </button> 
+                                    <div id="length" className="accordion-collapse collapse show">
+                                        <div className="input-group p-3">
+                                            <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
+                                            <span className="input-group-text">to</span>
+                                            <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="accordion-item border-0">
+                                    <button className="accordion-button fw-bold fs-4 bg-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                        <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                                    </button> 
+                                    <div id="segmentLength" className="accordion-collapse collapse show">
+                                        <div className="input-group p-3">
+                                            <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                            <span className="input-group-text">to</span>
+                                            <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                        </div>
+                                    </div>
+                                </div> 
+                                <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
+                                    Reset Filters
+                                </button> 
+                            </div>
+                        </div>
                     </div> 
                 </div>
-                <div className="container-fluid p-0 mt-2" id="#results">
-                    <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
+                <div className="flex-grow-1">
+                    <div className="d-flex justify-content-between">
+                        <div className="csv-download">
+                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                                <img src={fileTypeCsv} alt= "" />
+                            </CSVLink> 
+                        </div>
+                        
+                        <div className="paging d-flex gap-2"> 
+                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={(e)=> setSkip(skip - first) }>
+                                {"<"} Prev
+                            </button>  
+                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={(e)=> setSkip(skip + first) }>
+                                Next {">"}
+                            </button> 
+                        </div>
+
+                        <div className="view-types d-flex gap-2">
+                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                                <img src={listUl} alt= "" />
+                            </button>  
+                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                                <img src={gridFill} alt= "" />
+                            </button>
+                        </div> 
+                    </div>
+                    <div className="container-fluid p-0 mt-2" id="#results">
+                        <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
+                    </div> 
+                    <div className="d-flex justify-content-between mt-2">
+                        <div className="csv-download">
+                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                                <img src={fileTypeCsv} alt= "" />
+                            </CSVLink> 
+                        </div> 
+                        <div className="paging d-flex gap-2"> 
+                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                                {"<"} Prev
+                            </button>  
+                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                                Next {">"}
+                            </button> 
+                        </div> 
+                        <div className="view-types d-flex gap-2">
+                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                                <img src={listUl} alt= "" />
+                            </button>  
+                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                                <img src={gridFill} alt= "" />
+                            </button>
+                        </div> 
+                    </div>  
                 </div> 
-            </div> 
+            </div>
         </div> 
         </>
     );
@@ -445,7 +505,7 @@ function getQuery() {
 }
  
  
-const FilterResults = ( { called, loading, error, data, view }) => {
+const FilterResults = ( { called, loading, error, data, view}) => {
     if(!called) return;
  
     if (loading)  {
@@ -624,8 +684,8 @@ const FilterResults = ( { called, loading, error, data, view }) => {
                                 <LazyLoadImage
                                     alt={domain.name} 
                                     className="img-fluid card-img-top" 
-                                    onError={(e)=> { document.getElementById(domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById(domain.id).remove(); }}
+                                    onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                    afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
                                 /> 
                                 <img id={domain.id} src={spinner} className="img-fluid card-img-top" />
