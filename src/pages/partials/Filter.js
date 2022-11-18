@@ -66,8 +66,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const _search = location.search;
     let _query = new URLSearchParams(_search);
     let _tab = _query.get("tab") || Tab;
-    let _first = _query.get("first") || First;
-    let _skip = _query.get("skip") || Skip;
+    let _first = Number(_query.get("first") || First);
+    let _skip = Number(_query.get("skip") || Skip);
     let _orderBy = _query.get("orderBy") || OrderBy;
     let _orderDirection = _query.get("orderDirection") || OrderDirection; 
     let _where = jsonParse(_query.get("filter")) || Where; 
@@ -97,8 +97,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
   
          _query = new URLSearchParams(_search);
          _tab = _query.get("tab") || Tab;
-         _first = _query.get("first") || First;
-         _skip = _query.get("skip") || Skip;
+         _first = Number(_query.get("first") || First);
+         _skip = Number(_query.get("skip") || Skip);
          _orderBy = _query.get("orderBy") || OrderBy;
          _orderDirection = _query.get("orderDirection") || OrderDirection; 
          _where = jsonParse(_query.get("filter")) || Where; 
@@ -192,7 +192,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     }
 
     const handlePagePrev = (e) => { 
-        let nextSkip = skip - first;
+        let nextSkip = Number(skip - first);
         let _query = new URLSearchParams(location.search)
         _query.set("skip", nextSkip); 
         setSkip(nextSkip);
@@ -200,7 +200,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     }
 
     const handlePageNext = (e) => { 
-        let nextSkip = skip + first;
+        let nextSkip = Number(skip + first);
         let _query = new URLSearchParams(location.search)
         _query.set("skip", nextSkip);  
         setSkip(nextSkip);
@@ -411,127 +411,125 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div> 
             </div>
         </div> 
-        <div className="container-fluid">
-            <div className="d-flex flex-column flex-lg-row">
-                <div className="flex-shrink-0 me-lg-2 mb-2" id="filters" >
-                    <div className="card rounded-0" id="filters">
-                        <div className="card-header d-flex flex-row justify-content-between ">
-                            <button className="btn fs-5">Filter</button>
-                            <button className="btn border-0" type="button" onClick={handleFilterClick}>
-                                <img src={arrowLeft} />
-                            </button>
-                        </div>
-                        <div className="card-body p-0">
-                            <div className="accordion">
-                                <div className="accordion-item border-0 rounded-0">
-                                    <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
-                                        <h5 className="accordion-header fw-bold text-dark">Character Set</h5>
-                                    </button> 
-                                    <div id="charSet" className="accordion-collapse collapse show overflow-auto text-muted p-3" style={{height: "240px"}}>
-                                        {defaultTags.map((t) =>
-                                            <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
-                                                <label htmlFor={t} className="cursor-pointer">{t}</label>
-                                                <input name="tags" className="form-check-input rounded-0" type="checkbox" id={t} value={t} onChange={onChangeTag} />
-                                            </div>
-                                        )} 
-                                    </div>
-                                </div>
-                                <div className="accordion-item border-0 rounded-0">
-                                    <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
-                                        <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
-                                    </button> 
-                                    <div id="startsWith" className="accordion-collapse collapse show">
-                                        <div className="input-group p-3">
-                                            <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
-                                            <span className="input-group-text">and</span>                                    
-                                            <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="accordion-item border-0">
-                                    <button className="accordion-button fw-bold fs-4 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
-                                        <h5 className="accordion-header fw-bold text-dark">Length</h5>
-                                    </button> 
-                                    <div id="length" className="accordion-collapse collapse show">
-                                        <div className="input-group p-3">
-                                            <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
-                                            <span className="input-group-text">to</span>
-                                            <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="accordion-item border-0">
-                                    <button className="accordion-button fw-bold fs-4 bg-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                        <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
-                                    </button> 
-                                    <div id="segmentLength" className="accordion-collapse collapse show">
-                                        <div className="input-group p-3">
-                                            <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                            <span className="input-group-text">to</span>
-                                            <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                        </div>
-                                    </div>
-                                </div> 
-                                <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
-                                    Reset Filters
-                                </button> 
-                            </div>
-                        </div>
-                    </div> 
-                </div>
-                <div className="flex-grow-1">
-                    <div className="d-flex justify-content-between">
-                        <div className="csv-download">
-                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                                <img src={fileTypeCsv} alt= "" />
-                            </CSVLink> 
-                        </div>
-                        
-                        <div className="paging d-flex gap-2"> 
-                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={(e)=> setSkip(skip - first) }>
-                                {"<"} Prev
-                            </button>  
-                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={(e)=> setSkip(skip + first) }>
-                                Next {">"}
-                            </button> 
-                        </div>
-
-                        <div className="view-types d-flex gap-2">
-                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                                <img src={listUl} alt= "" />
-                            </button>  
-                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                                <img src={gridFill} alt= "" />
-                            </button>
-                        </div> 
+        <div className="d-flex flex-column flex-lg-row">
+            <div className="flex-shrink-0 me-lg-2 mb-2" id="filters" >
+                <div className="card rounded-0" id="filters">
+                    <div className="card-header d-flex flex-row justify-content-between ">
+                        <button className="btn fs-5">Filter</button>
+                        <button className="btn border-0" type="button" onClick={handleFilterClick}>
+                            <img src={arrowLeft} />
+                        </button>
                     </div>
-                    <div className="container-fluid p-0 mt-2" id="#results">
-                        <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
-                    </div> 
-                    <div className="d-flex justify-content-between mt-2">
-                        <div className="csv-download">
-                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                                <img src={fileTypeCsv} alt= "" />
-                            </CSVLink> 
-                        </div> 
-                        <div className="paging d-flex gap-2"> 
-                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                                {"<"} Prev
-                            </button>  
-                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                                Next {">"}
+                    <div className="card-body p-0">
+                        <div className="accordion">
+                            <div className="accordion-item border-0 rounded-0">
+                                <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
+                                    <h5 className="accordion-header fw-bold text-dark">Character Set</h5>
+                                </button> 
+                                <div id="charSet" className="accordion-collapse collapse show overflow-auto text-muted p-3" style={{height: "240px"}}>
+                                    {defaultTags.map((t) =>
+                                        <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
+                                            <label htmlFor={t} className="cursor-pointer">{t}</label>
+                                            <input name="tags" className="form-check-input rounded-0" type="checkbox" id={t} value={t} onChange={onChangeTag} />
+                                        </div>
+                                    )} 
+                                </div>
+                            </div>
+                            <div className="accordion-item border-0 rounded-0">
+                                <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                    <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
+                                </button> 
+                                <div id="startsWith" className="accordion-collapse collapse show">
+                                    <div className="input-group p-3">
+                                        <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
+                                        <span className="input-group-text">and</span>                                    
+                                        <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="accordion-item border-0">
+                                <button className="accordion-button fw-bold fs-4 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
+                                    <h5 className="accordion-header fw-bold text-dark">Length</h5>
+                                </button> 
+                                <div id="length" className="accordion-collapse collapse show">
+                                    <div className="input-group p-3">
+                                        <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
+                                        <span className="input-group-text">to</span>
+                                        <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="accordion-item border-0">
+                                <button className="accordion-button fw-bold fs-4 bg-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                    <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                                </button> 
+                                <div id="segmentLength" className="accordion-collapse collapse show">
+                                    <div className="input-group p-3">
+                                        <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                        <span className="input-group-text">to</span>
+                                        <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                    </div>
+                                </div>
+                            </div> 
+                            <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
+                                Reset Filters
                             </button> 
-                        </div> 
-                        <div className="view-types d-flex gap-2">
-                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                                <img src={listUl} alt= "" />
-                            </button>  
-                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                                <img src={gridFill} alt= "" />
-                            </button>
-                        </div> 
-                    </div>  
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div className="flex-grow-1">
+                <div className="d-flex justify-content-between">
+                    <div className="csv-download">
+                        <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                            <img src={fileTypeCsv} alt= "" />
+                        </CSVLink> 
+                    </div>
+                    
+                    <div className="paging d-flex gap-2"> 
+                        <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                            {"<"} Prev
+                        </button>  
+                        <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                            Next {">"}
+                        </button> 
+                    </div> 
+
+                    <div className="view-types d-flex gap-2">
+                        <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                            <img src={listUl} alt= "" />
+                        </button>  
+                        <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                            <img src={gridFill} alt= "" />
+                        </button>
+                    </div> 
                 </div>
+                <div className="container-fluid p-0 mt-2" id="#results">
+                    <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
+                </div> 
+                <div className="d-flex justify-content-between mt-2">
+                    <div className="csv-download">
+                        <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                            <img src={fileTypeCsv} alt= "" />
+                        </CSVLink> 
+                    </div> 
+                    <div className="paging d-flex gap-2"> 
+                        <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                            {"<"} Prev
+                        </button>  
+                        <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                            Next {">"}
+                        </button> 
+                    </div> 
+                    <div className="view-types d-flex gap-2">
+                        <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                            <img src={listUl} alt= "" />
+                        </button>  
+                        <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                            <img src={gridFill} alt= "" />
+                        </button>
+                    </div> 
+                </div>  
             </div>
         </div> 
         </>
