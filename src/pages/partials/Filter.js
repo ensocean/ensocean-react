@@ -367,7 +367,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 <div className="flex-fill"> 
                     <div className="flex-grow-1"> 
                         <div className="d-flex flex-row gap-2">
-                            <button className="btn btn-outline-secondary rounded-0 position-relative" type="button" onClick={handleFilterClick}>
+                            <button className="btn btn-outline-light rounded-0 border position-relative" type="button" onClick={handleFilterClick}>
                                 <img src={funnelFill} alt= ""  />
                                 {filterCount > 0 && 
                                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -376,7 +376,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                     </span>
                                 }
                             </button>
-                            <button className="btn btn-outline-secondary rounded-0" type="button" onClick={handleRefreshClick}>
+                            <button className="btn btn-outline-light rounded-0 border" type="button" onClick={handleRefreshClick}>
                                  <img src={loading ? arrowRepeatSpin: arrowRepeat } alt= ""  />
                             </button>
                             <div className="input-group input-group-lg">
@@ -389,7 +389,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </div>
                 </div> 
                 <div className="d-flex">
-                    <div className="input-group input-group-lg gap-2">
+                    <div className="input-group input-group-lg gap-2 rounded-0">
                         <select className="form-select rounded-0" onChange={handleOrderBy} value={orderBy}>
                             <option value="expires">Expiration</option>
                             <option value="registered">Registration</option>
@@ -398,12 +398,12 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             <option value="length">Length</option>
                         </select>
                         {orderDirection === "desc" &&
-                            <button className="btn btn-outline-secondary rounded-0" type="button"  onClick={handleOrderDirection} >
+                            <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
                                <img src={sortUp} alt= ""  />
                             </button>
                         }
                         {orderDirection === "asc" &&
-                            <button className="btn btn-outline-secondary rounded-0" type="button"  onClick={handleOrderDirection} >
+                            <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
                                 <img src={sortDown} alt= ""  />
                             </button>
                         }
@@ -431,7 +431,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                         {defaultTags.map((t) =>
                                             <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
                                                 <label htmlFor={t} className="cursor-pointer">{t}</label>
-                                                <input name="tags" className="form-check-input" type="checkbox" id={t} value={t} onChange={onChangeTag} />
+                                                <input name="tags" className="form-check-input rounded-0" type="checkbox" id={t} value={t} onChange={onChangeTag} />
                                             </div>
                                         )} 
                                     </div>
@@ -479,7 +479,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </div>
                     </div> 
                 </div>
-                <div className="flex-fill">
+                <div className="flex-grow-1">
                     <div className="d-flex justify-content-between">
                         <div className="csv-download">
                             <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
@@ -575,7 +575,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         if(view === "list") {
             return ( 
             <>
-            <div className='table-responsive placeholder-glow'>
+            <div className='w-100 table-responsive placeholder-glow'>
                 <table className='table table-hover'>
                     <thead className="table-light text-start">
                         <tr>
@@ -640,7 +640,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         if(view === "list") {
             return (
                 <>
-                <div className="table-responsive">
+                <div className="w-100 table-responsive">
                     <table className='table table-hover'>
                         <thead className="table-light text-start">
                             <tr>

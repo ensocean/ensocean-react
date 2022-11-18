@@ -4,6 +4,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 import { getExpireCondition, getExpires, getTokenId, isExpired, isValidName, obscureLabel } from "../../helpers/String";
 import spinner from '../../assets/spinner.svg'
+import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg'
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
 import notAvailable from "../../assets/not-available.svg";
@@ -52,8 +53,13 @@ const RecentExpired = () => {
         <div className="card">
           <div className="card-header d-flex justify-content-between">
               <h5 className='fs-4'>Just Dropped</h5>
-              <button className="btn btn-outline-primary">
-                <img src={refreshIcon}  alt="" onClick={handleRefresh} />
+              <button className={loading ? "btn btn-outline-light disabled": "btn btn-outline-light"}>
+              {loading &&
+                <img src={arrowRepeatSpinIcon} alt="" /> 
+              }
+              {!loading &&
+                <img src={refreshIcon} alt="" onClick={handleRefresh} /> 
+              }
               </button>
           </div> 
           <ol className="list-group list-group-flush placeholder-glow">
