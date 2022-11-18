@@ -263,8 +263,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
  
     const handleResetFilter = (e) => {
         let _query = new URLSearchParams(_search) 
-        setWhere(where);
-        _query.set("filter",  jsonStringify(where));
+        setWhere(Where);
+        _query.set("filter",  jsonStringify(Where));
         setFilterCount(0);
         emptyFilters();
         refetch();
