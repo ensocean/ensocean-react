@@ -136,58 +136,56 @@ const Domain = () => {
                     </div>
                     <div className='container-fluid'> 
                         <div className='container'>
-                            <div className="card mb-3 border-light border-0">
-                                <div className="row"> 
-                                    <div className="col-lg-4">
-                                        <div className="card h-100 text-start">
-                                            <LazyLoadImage
-                                                alt={label} 
-                                                className="img-fluid img-thumbnail card-img-top"
-                                                onError={(e)=> { document.getElementById("img_"+ label).remove();  e.target.src = notAvailable; }}
-                                                afterLoad={(e)=> { document.getElementById("img_"+ label).remove(); }}
-                                                placeholderSrc={spinner}
-                                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
-                                            />  
-                                            <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top " />
-                                        </div>
+                            <div className="row"> 
+                                <div className="col-lg-4">
+                                    <div className="card h-100 text-start">
+                                        <LazyLoadImage
+                                            alt={label} 
+                                            className="img-fluid img-thumbnail card-img-top"
+                                            onError={(e)=> { document.getElementById("img_"+ label).remove();  e.target.src = notAvailable; }}
+                                            afterLoad={(e)=> { document.getElementById("img_"+ label).remove(); }}
+                                            placeholderSrc={spinner}
+                                            src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
+                                        />  
+                                        <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top " />
                                     </div>
-                                    <div className='col-lg-8'> 
-                                            <div className="alert alert-success">Name available for registration!</div>
-                                            <h5 className="card-title fs-4">Details</h5>
-                                            <hr />
-                                            <ul className='list-group list-group-flush'>
-                                                <li className='list-group-item border-0 p-0 pb-3'>
-                                                    <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>-</span>
-                                                </li>
-                                                <li className='list-group-item border-0 p-0 pb-3'>
-                                                    <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>-</span>
-                                                </li>
-                                                <li className='list-group-item border-0 p-0 pb-3'> 
-                                                    <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end'>{obscureLabel(getTokenId(label), 25)}</span>
-                                                    <CopyToClipboard text={getTokenId(label)}
-                                                        onCopy={() => toast.success("TokenId Copied") }>
-                                                        <span className="cursor-pointer">
-                                                            <img src={clipboardIcon} alt="" />
-                                                        </span>
-                                                    </CopyToClipboard> 
-                                                </li>
-                                                <li className='list-group-item border-0 p-0 pb-3'>
-                                                    <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{getLength(label)}</span>
-                                                </li>
-                                                <li className='list-group-item border-0 p-0 pb-3'>
-                                                    <span className='fw-bold fs-6 text-muted'>Segment Length </span> <span className='float-end'>{getSegmentLength(label)}</span>
-                                                </li>
-                                                <li className='list-group-item border-0 p-0 pb-3'>
-                                                    <span className='fw-bold fs-6 text-muted'>Created Date </span> <span className='float-end'>-</span>
-                                                </li>
-                                                <li className='list-group-item border-0 p-0 pb-3'>
-                                                    <span className='fw-bold fs-6 text-muted'>Registered Date </span> <span className='float-end'>-</span>
-                                                </li>
-                                                <li className='list-group-item border-0 p-0 pb-3'>
-                                                    <span className='fw-bold fs-6 text-muted'>Expires Date </span> <span className='float-end'>-</span>
-                                                </li>
-                                            </ul> 
-                                    </div>
+                                </div>
+                                <div className='col-lg-8 mt-3 mt-lg-0'>
+                                        <div className="alert alert-success">Name available for registration!</div>
+                                        <h5 className="card-title fs-4">Details</h5>
+                                        <hr />
+                                        <ul className='list-group list-group-flush'>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>-</span>
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>-</span>
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'> 
+                                                <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end'>{obscureLabel(getTokenId(label), 25)}</span>
+                                                <CopyToClipboard text={getTokenId(label)}
+                                                    onCopy={() => toast.success("TokenId Copied") }>
+                                                    <span className="cursor-pointer">
+                                                        <img src={clipboardIcon} alt="" />
+                                                    </span>
+                                                </CopyToClipboard> 
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{getLength(label)}</span>
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <span className='fw-bold fs-6 text-muted'>Segment Length </span> <span className='float-end'>{getSegmentLength(label)}</span>
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <span className='fw-bold fs-6 text-muted'>Created Date </span> <span className='float-end'>-</span>
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <span className='fw-bold fs-6 text-muted'>Registered Date </span> <span className='float-end'>-</span>
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <span className='fw-bold fs-6 text-muted'>Expires Date </span> <span className='float-end'>-</span>
+                                            </li>
+                                        </ul> 
                                 </div>
                             </div>
                         </div> 

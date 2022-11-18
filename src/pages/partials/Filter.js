@@ -41,6 +41,20 @@ let csvHeaders = [
     { label: "Tags", key: "tags" }
 ]; 
 
+let defaultTags = [
+    "include-letter",
+    "only-letter",
+    "include-digit",
+    "only-digit",
+    "include-unicode",
+    "only-unicode",
+    "include-emoji",
+    "only-emoji",
+    "include-arabic",
+    "only-arabic",
+    "palindrome"
+];
+
  
 const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
       
@@ -57,8 +71,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const _orderBy = _query.get("orderBy") || OrderBy;
     const _orderDirection = _query.get("orderDirection") || OrderDirection; 
     const _where = jsonParse(_query.get("filter")) || Where; 
-    const _view = localStorage.getItem("view") || _query.get("_view") || View; 
-    
+    const _view = localStorage.getItem("view") || _query.get("_view") || View;  
 
     const [search, setSearch] = useState(_search);
     const [tab, setTab] = useState(Tab);
@@ -67,7 +80,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const [orderBy, setOrderBy] = useState(_orderBy);
     const [orderDirection, setOrderDirection] = useState(_orderDirection);
     const [where, setWhere] = useState(_where); 
-    const [view, setView] = useState(_view);
+    const [view, setView] = useState(_view); 
     const [csvData, setCsvData] = useState([]); 
     const [filterCount, setFilterCount] = useState(0); 
  
@@ -83,15 +96,14 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     }
   
     useEffect(() => {  
- 
-         
+  
         setSearch(_search)
         setTab(_tab);  
         setWhere(_where);  
         setOrderBy(_orderBy);
         setOrderDirection(_orderDirection);
         setSkip(_skip);
-        setFirst(_first);
+        setFirst(_first); 
 
         //refetch();
         getDomains();
@@ -117,6 +129,32 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const handleRefreshClick = (e) => {   
         refetch();
     };
+
+    const onChangeTag = (e) => { 
+        
+        let existsTags = where.tags_contains;
+        if(e.target.checked) { 
+            if(existsTags) {
+                if(!existsTags.includes(e.target.value)) {
+                    existsTags.push(e.target.value);
+                    changeFilter(existsTags, "tags_contains");
+                } 
+            } else {
+                existsTags = [e.target.value]
+                changeFilter(existsTags, "tags_contains");
+            }
+        } else { 
+            if(existsTags) {
+                if(existsTags.includes(e.target.value)) {
+                    existsTags.splice(existsTags.indexOf(e.target.value), 1);
+                    changeFilter(existsTags, "tags_contains");
+                }
+            } else {
+                existsTags = []
+                changeFilter(existsTags, "tags_contains");
+            }
+        }
+    }
 
     const changeFilter = (value, prop) => {
         let _query = new URLSearchParams(search) 
@@ -339,7 +377,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </div> 
                     </div>
                 </div> 
-                <div className="">
+                <div className="d-flex">
                     <div className="input-group input-group-lg gap-2">
                         <select className="form-select rounded-0" onChange={handleOrderBy} value={orderBy}>
                             <option value="expires">Expiration</option>
@@ -364,7 +402,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         </div> 
         <div className="">
             <div className="d-flex flex-column flex-xxl-row justify-content-between">
-                <div className="flex-shrink-0 me-lg-2 d-none d-xxl-block" style={{ height: "500px"}} id="filters" >
+                <div className="flex-shrink-0 me-lg-2 d-none d-xxl-block sticky-top overflow-auto" style={{ maxWidth:"320px", height: "100%"}} id="filters" >
                     <div className="card rounded-0" id="filters">
                         <div className="card-header d-flex flex-row justify-content-between ">
                             <button className="btn fs-5">Filter</button>
@@ -374,6 +412,19 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </div>
                         <div className="card-body p-0">
                             <div className="accordion">
+                                <div className="accordion-item border-0 rounded-0">
+                                    <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
+                                        <h5 className="accordion-header fw-bold text-dark">Character Set</h5>
+                                    </button> 
+                                    <div id="charSet" className="accordion-collapse collapse show overflow-auto text-muted p-3" style={{height: "240px"}}>
+                                        {defaultTags.map((t) =>
+                                            <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
+                                                <label htmlFor={t} className="cursor-pointer">{t}</label>
+                                                <input className="form-check-input" type="checkbox" key={t} value={t} onChange={onChangeTag} />
+                                            </div>
+                                        )} 
+                                    </div>
+                                </div>
                                 <div className="accordion-item border-0 rounded-0">
                                     <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
                                         <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
@@ -417,7 +468,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </div>
                     </div> 
                 </div>
-                <div className="flex-grow-1">
+                <div className="flex-md-grow-1">
                     <div className="d-flex justify-content-between">
                         <div className="csv-download">
                             <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
