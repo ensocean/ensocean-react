@@ -64,14 +64,14 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     let navigate = useNavigate(); 
      
     const _search = location.search;
-    const _query = new URLSearchParams(_search);
-    const _tab = _query.get("tab") || Tab;
-    const _first = _query.get("first") || First;
-    const _skip = _query.get("skip") || Skip;
-    const _orderBy = _query.get("orderBy") || OrderBy;
-    const _orderDirection = _query.get("orderDirection") || OrderDirection; 
-    const _where = jsonParse(_query.get("filter")) || Where; 
-    const _view = localStorage.getItem("view") || _query.get("_view") || View;  
+    let _query = new URLSearchParams(_search);
+    let _tab = _query.get("tab") || Tab;
+    let _first = _query.get("first") || First;
+    let _skip = _query.get("skip") || Skip;
+    let _orderBy = _query.get("orderBy") || OrderBy;
+    let _orderDirection = _query.get("orderDirection") || OrderDirection; 
+    let _where = jsonParse(_query.get("filter")) || Where; 
+    let _view = localStorage.getItem("view") || _query.get("_view") || View;  
 
     const [search, setSearch] = useState(_search);
     const [tab, setTab] = useState(Tab);
@@ -83,9 +83,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const [view, setView] = useState(_view); 
     const [csvData, setCsvData] = useState([]); 
     const [filterCount, setFilterCount] = useState(0); 
- 
-    
-
+   
     let [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery()), {
         variables: { skip, first, orderBy, orderDirection, where },
         notifyOnNetworkStatusChange: true
@@ -97,6 +95,15 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
   
     useEffect(() => {  
   
+         _query = new URLSearchParams(_search);
+         _tab = _query.get("tab") || Tab;
+         _first = _query.get("first") || First;
+         _skip = _query.get("skip") || Skip;
+         _orderBy = _query.get("orderBy") || OrderBy;
+         _orderDirection = _query.get("orderDirection") || OrderDirection; 
+         _where = jsonParse(_query.get("filter")) || Where; 
+         _view = localStorage.getItem("view") || _query.get("_view") || View;  
+        
         setSearch(_search)
         setTab(_tab);  
         setWhere(_where);  
@@ -132,7 +139,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
 
     const onChangeTag = (e) => { 
         
-        let existsTags = where.tags_contains;
+        let existsTags = _where.tags_contains;
         if(e.target.checked) { 
             if(existsTags) {
                 if(!existsTags.includes(e.target.value)) {
@@ -147,11 +154,14 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             if(existsTags) {
                 if(existsTags.includes(e.target.value)) {
                     existsTags.splice(existsTags.indexOf(e.target.value), 1);
-                    changeFilter(existsTags, "tags_contains");
-                }
-            } else {
-                existsTags = []
-                changeFilter(existsTags, "tags_contains");
+                    if(existsTags.length < 1) {
+                        changeFilter(null, "tags_contains");
+                    } else {
+                        changeFilter(existsTags, "tags_contains");
+                    }
+                }  
+            } else { 
+                changeFilter(null, "tags_contains");
             }
         }
     }
@@ -159,13 +169,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const changeFilter = (value, prop) => {
         let _query = new URLSearchParams(search) 
         let newWhere = jsonParse(_query.get("filter")) || where;
-        if(value === "") { 
+        if(value === null || value === undefined || value === "") { 
             delete newWhere[prop]; 
             setFilterCount(filterCount - 1);
         }  else {  
             if(!newWhere[prop]) {
                 setFilterCount(filterCount + 1);
-            }  
+            } 
             newWhere[prop] = value; 
         }
         _query.set("filter",  jsonStringify(newWhere)); 
@@ -342,6 +352,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         document.getElementsByName("startWith")[0].value = "";
         document.getElementsByName("endWith")[0].value = "";
         document.getElementsByName("searchText")[0].value = "";
+        document.getElementsByName("tags").forEach((t)=> t.checked = false);
     }
 
     const onClickView = (e, v) => {
@@ -400,9 +411,9 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div> 
             </div>
         </div> 
-        <div className="">
-            <div className="d-flex flex-column flex-xxl-row justify-content-between">
-                <div className="flex-shrink-0 me-lg-2 d-none d-xxl-block sticky-top overflow-auto" style={{ maxWidth:"320px", height: "100%"}} id="filters" >
+        <div className="container-fluid">
+            <div className="d-flex flex-column flex-lg-row">
+                <div className="flex-shrink-0 me-lg-2 mb-2" id="filters" >
                     <div className="card rounded-0" id="filters">
                         <div className="card-header d-flex flex-row justify-content-between ">
                             <button className="btn fs-5">Filter</button>
@@ -420,7 +431,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                         {defaultTags.map((t) =>
                                             <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
                                                 <label htmlFor={t} className="cursor-pointer">{t}</label>
-                                                <input className="form-check-input" type="checkbox" key={t} value={t} onChange={onChangeTag} />
+                                                <input name="tags" className="form-check-input" type="checkbox" id={t} value={t} onChange={onChangeTag} />
                                             </div>
                                         )} 
                                     </div>
@@ -468,7 +479,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </div>
                     </div> 
                 </div>
-                <div className="flex-md-grow-1">
+                <div className="flex-fill">
                     <div className="d-flex justify-content-between">
                         <div className="csv-download">
                             <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
@@ -520,7 +531,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             </button>
                         </div> 
                     </div>  
-                </div> 
+                </div>
             </div>
         </div> 
         </>
