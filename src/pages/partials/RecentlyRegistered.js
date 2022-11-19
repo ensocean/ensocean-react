@@ -25,7 +25,7 @@ const RECENTLY_REGISTERED = gql`
     registered
     expires
     owner
-    registrant,
+    registrant
     length
     tags
   }
@@ -68,14 +68,17 @@ const RecentRegistered = () => {
                     <span className="placeholder col-2"></span>
                 </li>
                 )}
-            </> 
-            }
+            </>}
 
-            { error &&
+            { !loading && error &&
                 <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
             }
 
-            { data && data.domains.length > 0 &&
+            { !loading && !error && data && data.domains.length < 1 &&
+                <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-warning">No Result</li>
+            }
+
+            { !loading && !error && data && data.domains.length > 0 &&
                 <> 
                 {data.domains.map((domain) => (
                     <li key={domain.id} className="list-group-item list-group-item-action p-3">
@@ -95,32 +98,32 @@ const RecentRegistered = () => {
                             </div>
                             <div className="flex-grow-1 ms-3">
                                 <div className="d-flex flex-column flex-md-row justify-content-between">
-                                <Link
-                                    className="text-decoration-none link-dark fs-5 fw-bold" 
-                                    data-bs-toggle="tooltip" 
-                                    data-bs-title={"View "+ domain.name +" on EnsOcean"}
-                                    title={"View "+ domain.name +" on EnsOcean"}
-                                    to={encodeURIComponent(domain.name)}>
+                                    <Link
+                                        className="text-decoration-none link-dark fs-5 fw-bold" 
+                                        data-bs-toggle="tooltip" 
+                                        data-bs-title={"View "+ domain.name +" on EnsOcean"}
+                                        title={"View "+ domain.name +" on EnsOcean"}
+                                        to={encodeURIComponent(domain.name)}>
 
-                                    {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
-                                    
-                                    { ' ' }
+                                        {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
+                                        
+                                        { ' ' }
 
-                                    { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
-                                            <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                                <img src={exclamationTriangleFill} alt= "" />
-                                            </span>
-                                        }
-                                        &nbsp;
-                                        { !isValidName(domain.label) && 
-                                            <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                                <img src={dashCircleFill} alt= ""  />
-                                            </span>
-                                        }
-                                </Link>
-                                <small className="float-end text-muted mt-2 mt-lg-0">
-                                    {getTimeAgo(domain.registered)}
-                                </small>
+                                        { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
+                                                <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
+                                                    <img src={exclamationTriangleFill} alt= "" />
+                                                </span>
+                                            }
+                                            &nbsp;
+                                            { !isValidName(domain.label) && 
+                                                <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
+                                                    <img src={dashCircleFill} alt= ""  />
+                                                </span>
+                                            }
+                                    </Link>
+                                    <small className="float-end text-muted mt-2 mt-lg-0">
+                                        {getTimeAgo(domain.registered)}
+                                    </small>
                                 </div>
                             </div> 
                         </div> 
@@ -128,11 +131,7 @@ const RecentRegistered = () => {
                 ))}
                 </>
             }
-
-            { data && data.domains.length < 1 &&
-                <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-warning">No Result</li>
-            }
-
+ 
           </ol> 
           <div className="card-footer">
               <Link className="btn btn-success" to="/discover?tab=registered" title="View all expired ENS domains">View More</Link>
