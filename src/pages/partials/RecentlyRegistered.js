@@ -59,20 +59,8 @@ const RecentRegistered = () => {
               </button>
           </div> 
           <ol className="list-group list-group-flush">
-            <GetRegistered  called={called}  data={data} loading={loading} error={error} />
-          </ol> 
-          <div className="card-footer">
-              <Link className="btn btn-success" to="/discover?tab=registered" title="View all expired ENS domains">View More</Link>
-          </div>
-        </div>
-      </>
-    )
-}
 
-const GetRegistered = ({called, data, loading, error }) => {
-    
-    if(loading) {
-        return ( 
+            { loading &&
             <>
                 {[...Array(10)].map((x, i) =>
                 <li key={i} className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex">
@@ -80,24 +68,23 @@ const GetRegistered = ({called, data, loading, error }) => {
                     <span className="placeholder col-2"></span>
                 </li>
                 )}
-            </>     
-        )
-    } else if (error) {
-        return <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
-    } else {
-        return (
-            <>
-                {data.domains.length < 1 &&
-                  <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-warning">No Result</li>
-                }
+            </> 
+            }
+
+            { error &&
+                <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
+            }
+
+            { data && data.domains.length > 0 &&
+                <> 
                 {data.domains.map((domain) => (
                     <li key={domain.id} className="list-group-item list-group-item-action p-3">
                         <div className="d-flex">
                             <div className="flex-shrink-0">
-                                <div className="card h-100 text-start">
+                                <div className="card text-start">
                                     <LazyLoadImage
                                         alt={domain.name} 
-                                        className="img-fluid card-img-top"
+                                        className="img-fluid card-img-top card-img-bottom"
                                         onError={(e)=> {e.target.src = notAvailable; }}
                                         placeholderSrc={spinner}
                                         width={46}
@@ -138,10 +125,21 @@ const GetRegistered = ({called, data, loading, error }) => {
                             </div> 
                         </div> 
                     </li>
-                ))} 
-            </>
-        )
-    } 
-}
+                ))}
+                </>
+            }
 
+            { data.domains.length < 1 &&
+                <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-warning">No Result</li>
+            }
+
+          </ol> 
+          <div className="card-footer">
+              <Link className="btn btn-success" to="/discover?tab=registered" title="View all expired ENS domains">View More</Link>
+          </div>
+        </div>
+      </>
+    )
+}
+ 
 export default RecentRegistered;
