@@ -129,7 +129,7 @@ const RecentRegistered = () => {
                 </>
             }
 
-            { data.domains.length < 1 &&
+            { data && data.domains.length < 1 &&
                 <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex text-warning">No Result</li>
             }
 
