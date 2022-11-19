@@ -36,7 +36,7 @@ const RECENTLY_EXPIRED = gql`
 
 
 const RecentExpired = () => {
-  
+
     const [getExpired, { called, loading, error, data, refetch }] = useLazyQuery(RECENTLY_EXPIRED,
       {
         variables: {  },
@@ -76,15 +76,15 @@ const RecentExpired = () => {
               </>     
             }
 
-            { error && 
+            { !loading && error && 
                 <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
             }
 
-            { data && data.domains.length < 1 &&
+            { !loading && !error && data && data.domains.length < 1 &&
                 <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-warning'>No Result</span></li>
             }
 
-            { data && data.domains.length > 0 &&
+            { !loading && !error && data && data.domains.length > 0 &&
               <> 
                   {data.domains.map((domain) => (
                   <li key={domain.id} className="list-group-item list-group-item-action p-3">
