@@ -33,7 +33,7 @@ class NavbarSearchFrom extends React.Component {
                 <div className="input-group input-group-lg">
                     <input className="form-control border-primary" type="search" placeholder="Search for web3 name " value={this.state.value} onChange={this.handleChange} />
                     <button className="btn btn-outline-primary" type="submit">
-                        <img src={searchIcon} />
+                        <img src={searchIcon}  alt=""  />
                     </button>
                 </div>
             </form>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"; 
+import React, {useState, useEffect } from "react"; 
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, isValidName, jsonParse, jsonStringify, obscureAddress, obscureLabel, getTokenId } from '../../helpers/String';
 import { useLazyQuery, gql } from '@apollo/client';
@@ -18,13 +18,12 @@ import sortDown from "../../assets/sort-down.svg";
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
 import notAvailable from "../../assets/not-available.svg";
-import moment from 'moment'; 
+ 
 
 const DEBOUNCE_INTERVAL = 500;
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
-const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
-const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
+
 
 let timeout;
 let csvHeaders = [
@@ -57,8 +56,6 @@ let defaultTags = [
 
  
 const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
-      
-    const listInnerRef = useRef();
 
     let location = useLocation(); 
     let navigate = useNavigate(); 
@@ -417,7 +414,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     <div className="card-header d-flex flex-row justify-content-between ">
                         <button className="btn fs-5">Filter</button>
                         <button className="btn border-0" type="button" onClick={handleFilterClick}>
-                            <img src={arrowLeft} />
+                            <img src={arrowLeft} alt="" />
                         </button>
                     </div>
                     <div className="card-body p-0">
@@ -666,7 +663,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                                     alt={domain.name} 
                                                     className="img-fluid carg-img-top card-img-bottom"
                                                     onError={(e)=> { e.target.src = notAvailable; }}
-                                                    placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" />}
+                                                    placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" alt="" />}
                                                     placeholderSrc={spinner}
                                                     visibleByDefault={false}
                                                     width={46}
@@ -748,7 +745,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                     afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
                                 /> 
-                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" />
+                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
                             <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate">
                                     <Link

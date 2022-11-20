@@ -12,7 +12,7 @@ const Navbar = () => {
                     <img src={logo} alt="EnsOcean" className="float-start me-1" /><span className="logo">EnsOcean</span>
                 </Link> 
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <img src={listIcon} />
+                    <img src={listIcon} alt="" />
                 </button>
                 <div className="collapse navbar-collapse gap-2 mt-3 mt-lg-0 mt-md-3 mt-sm-3" id="navbarContent">
                     <NavbarSearchFrom navigate={useNavigate()}  />

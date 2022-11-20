@@ -26,27 +26,27 @@ const Footer = () => {
                             <ul className="list-inline list-unstyled float-lg-end float-sm-none">
                             <li className="list-inline-item"> 
                                 <a href="https://opensea.io/EnsOceanOfficial" target="_blank" rel="noreferrer" title="View EnsOcean on Opensea">
-                                    <img src={openSeaIcon} />
+                                    <img src={openSeaIcon} alt="" />
                                 </a>        
                             </li>
                             <li className="list-inline-item"> 
                                 <a href="https://github.com/ensocean" target="_blank" rel="noreferrer" title="View EnsOcean on Github">
-                                    <img src={githubIcon} />
+                                    <img src={githubIcon} alt=""  />
                                 </a>
                             </li>
                             <li className="list-inline-item"> 
                                 <a href="https://twitter.com/ensocean" target="_blank" rel="noreferrer" title="Follow EnsOcean on Twitter">
-                                    <img src={twitterIcon} />
+                                    <img src={twitterIcon} alt=""  />
                                 </a>
                             </li>   
                             <li className="list-inline-item"> 
                                 <a href="https://telegram.me/ensocean" target="_blank" rel="noreferrer"  title="Join EnsOcean Telegram Channel">
-                                    <img src={telegramIcon} />
+                                    <img src={telegramIcon} alt=""  />
                                 </a>
                             </li> 
                             <li className="list-inline-item">
                                 <a href="mailto:support@ensocean.com" target="_blank"  rel="noreferrer" title="Contact Via Email" className="text-decoration-none"> 
-                                    <img src={envelopeFillIcon} />
+                                    <img src={envelopeFillIcon} alt=""  />
                                 </a>
                             </li> 
                             </ul>
