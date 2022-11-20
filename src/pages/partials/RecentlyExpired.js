@@ -95,7 +95,7 @@ const RecentExpired = () => {
                                   alt={domain.name} 
                                   className="img-fluid card-img-top card-img-bottom"
                                   onError={(e)=> { e.target.src = notAvailable; }}
-                                  placeholder={<img src={spinner} className="img-fluid" />}
+                                  placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" />}
                                   placeholderSrc={spinner}
                                   width={46}
                                   height={46}

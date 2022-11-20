@@ -169,7 +169,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const changeFilter = (value, prop) => {
         let _query = new URLSearchParams(search) 
         let newWhere = jsonParse(_query.get("filter")) || where;
-        if(value === null || value === undefined || value === "") { 
+        if(value === null || value === undefined || value === "" || value === "0" || value < 1) { 
             delete newWhere[prop]; 
             setFilterCount(filterCount - 1);
         }  else {  
@@ -177,9 +177,9 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 setFilterCount(filterCount + 1);
             } 
             newWhere[prop] = value; 
-        }
+        } 
         _query.set("filter",  jsonStringify(newWhere)); 
-        setWhere(newWhere);
+        setWhere(newWhere); 
         getDomains({ variables: { skip, first, orderBy, orderDirection, newWhere } });
         navigate(location.pathname + "?"+ _query.toString()) 
     }
@@ -661,12 +661,12 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                 <td className="p-3">
                                     <div className="d-flex">
                                         <div className="flex-shrink-0"> 
-                                            <div className="card h-100 text-start">
+                                            <div className="card text-start">
                                                 <LazyLoadImage
                                                     alt={domain.name} 
-                                                    className="img-fluid"
+                                                    className="img-fluid carg-img-top card-img-bottom"
                                                     onError={(e)=> { e.target.src = notAvailable; }}
-                                                    placeholder={<img src={spinner} className="img-fluid" />}
+                                                    placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" />}
                                                     placeholderSrc={spinner}
                                                     visibleByDefault={false}
                                                     width={46}
