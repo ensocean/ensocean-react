@@ -17,35 +17,91 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
-import NotFound from "./pages/Notfound";   
+import NotFound from "./pages/Notfound";    
  
+import '@rainbow-me/rainbowkit/styles.css';
+
+import { 
+  RainbowKitProvider,
+  connectorsForWallets
+} from '@rainbow-me/rainbowkit';
+
+import { 
+  rainbowWallet,
+  walletConnectWallet,
+  trustWallet,
+  coinbaseWallet,
+  metaMaskWallet
+} from '@rainbow-me/rainbowkit/wallets';
+
+import {
+  chain,
+  configureChains,
+  createClient,
+  WagmiConfig
+} from 'wagmi';
+
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { infuraProvider } from 'wagmi/providers/infura'; 
+
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
   cache: new InMemoryCache() 
 });
+   
+const { chains, provider } = configureChains(
+  [chain[process.env.REACT_APP_SUPPORTED_NETWORK]],
+  [
+    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY, priority: 0, weight: 1 }),
+    infuraProvider({ apiKey: process.env.REACT_APP_INFURA_KEY, priority: 1, weight: 2 }),
+  ]
+);
  
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Recommended',
+    wallets: [ 
+      metaMaskWallet({chains}),
+      coinbaseWallet({chains}),
+      rainbowWallet({ chains }),
+      walletConnectWallet({ chains }), 
+      trustWallet({chains})
+    ],
+  },
+]);
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider
+});
+
 export default function App () {  
   return ( 
-    <ApolloProvider client={client}> 
-    <React.StrictMode>
-      <BrowserRouter forceRefresh={true}>
-        <Routes>  
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/faq" element={<Faq />} />
-            <Route path="/discover" forceRefresh={true} element={<Discover />} />
-            <Route path="/find" element={<Find />} />
-            <Route path="/404" element={<NotFound />} />
-            <Route path="/account/:address" element={<Account />} />
-            <Route path="/:label.:extension" element={<Domain />} />
-            <Route path="*" element={<Navigate replace={true} to="/404" />} />
-          </Route> 
-        </Routes>
-      </BrowserRouter>
-      <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
-      </React.StrictMode>
-    </ApolloProvider>
+    <WagmiConfig client={wagmiClient}>
+      <RainbowKitProvider chains={chains}>
+        <ApolloProvider client={client}> 
+          <React.StrictMode>
+            <BrowserRouter forceRefresh={true}>
+              <Routes>  
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/faq" element={<Faq />} />
+                  <Route path="/discover" forceRefresh={true} element={<Discover />} />
+                  <Route path="/find" element={<Find />} />
+                  <Route path="/404" element={<NotFound />} /> 
+                  <Route path="/account/:address" element={<Account />} />
+                  <Route path="/:label.:extension" element={<Domain />} />
+                  <Route path="*" element={<Navigate replace={true} to="/404" />} />
+                </Route> 
+              </Routes>
+            </BrowserRouter>
+            <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
+          </React.StrictMode>
+        </ApolloProvider>
+      </RainbowKitProvider>
+    </WagmiConfig>
   );
 }
