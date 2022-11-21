@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react"; 
+import React, {useState, useEffect } from "react"; 
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, isValidName, jsonParse, jsonStringify, obscureAddress, obscureLabel, getTokenId } from '../../helpers/String';
 import { useLazyQuery, gql } from '@apollo/client';
@@ -18,13 +18,12 @@ import sortDown from "../../assets/sort-down.svg";
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
 import notAvailable from "../../assets/not-available.svg";
-import moment from 'moment'; 
+ 
 
 const DEBOUNCE_INTERVAL = 500;
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
-const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
-const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
+
 
 let timeout;
 let csvHeaders = [
@@ -57,8 +56,6 @@ let defaultTags = [
 
  
 const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
-      
-    const listInnerRef = useRef();
 
     let location = useLocation(); 
     let navigate = useNavigate(); 
@@ -169,7 +166,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const changeFilter = (value, prop) => {
         let _query = new URLSearchParams(search) 
         let newWhere = jsonParse(_query.get("filter")) || where;
-        if(value === null || value === undefined || value === "") { 
+        if(value === null || value === undefined || value === "" || value === "0" || value < 1) { 
             delete newWhere[prop]; 
             setFilterCount(filterCount - 1);
         }  else {  
@@ -177,9 +174,9 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 setFilterCount(filterCount + 1);
             } 
             newWhere[prop] = value; 
-        }
+        } 
         _query.set("filter",  jsonStringify(newWhere)); 
-        setWhere(newWhere);
+        setWhere(newWhere); 
         getDomains({ variables: { skip, first, orderBy, orderDirection, newWhere } });
         navigate(location.pathname + "?"+ _query.toString()) 
     }
@@ -417,7 +414,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     <div className="card-header d-flex flex-row justify-content-between ">
                         <button className="btn fs-5">Filter</button>
                         <button className="btn border-0" type="button" onClick={handleFilterClick}>
-                            <img src={arrowLeft} />
+                            <img src={arrowLeft} alt="" />
                         </button>
                     </div>
                     <div className="card-body p-0">
@@ -661,12 +658,12 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                 <td className="p-3">
                                     <div className="d-flex">
                                         <div className="flex-shrink-0"> 
-                                            <div className="card h-100 text-start">
+                                            <div className="card text-start">
                                                 <LazyLoadImage
                                                     alt={domain.name} 
-                                                    className="img-fluid"
+                                                    className="img-fluid carg-img-top card-img-bottom"
                                                     onError={(e)=> { e.target.src = notAvailable; }}
-                                                    placeholder={<img src={spinner} className="img-fluid" />}
+                                                    placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" alt="" />}
                                                     placeholderSrc={spinner}
                                                     visibleByDefault={false}
                                                     width={46}
@@ -748,7 +745,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                     afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
                                 /> 
-                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" />
+                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
                             <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate">
                                     <Link

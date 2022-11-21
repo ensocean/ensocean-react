@@ -1,4 +1,4 @@
-import { useQuery,  gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import { Link } from "react-router-dom"; 
 import { getTimeAgo, isValidName, obscureLabel, getTokenId } from '../../helpers/String';
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -89,6 +89,7 @@ const RecentRegistered = () => {
                                         alt={domain.name} 
                                         className="img-fluid card-img-top card-img-bottom"
                                         onError={(e)=> {e.target.src = notAvailable; }}
+                                        placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" alt="" />}
                                         placeholderSrc={spinner}
                                         width={46}
                                         height={46}

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from "react"; 
-import { useQuery, useLazyQuery, gql } from "@apollo/client";
+import React from "react"; 
+import { useLazyQuery, gql } from "@apollo/client";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 import { getExpireCondition, getExpires, getTokenId, isExpired, isValidName, obscureLabel } from "../../helpers/String";
@@ -95,7 +95,7 @@ const RecentExpired = () => {
                                   alt={domain.name} 
                                   className="img-fluid card-img-top card-img-bottom"
                                   onError={(e)=> { e.target.src = notAvailable; }}
-                                  placeholder={<img src={spinner} className="img-fluid" />}
+                                  placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" alt="" />}
                                   placeholderSrc={spinner}
                                   width={46}
                                   height={46}

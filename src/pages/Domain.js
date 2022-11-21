@@ -147,7 +147,7 @@ const Domain = () => {
                                             placeholderSrc={spinner}
                                             src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
                                         />  
-                                        <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top " />
+                                        <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top " alt=""  />
                                     </div>
                                 </div>
                                 <div className='col-lg-8 mt-3 mt-lg-0'>
@@ -249,7 +249,7 @@ const Domain = () => {
                                     afterLoad={(e)=> { document.getElementById(domain.label).remove(); }}
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
                                     />  
-                                    <img id={domain.label} src={spinner} className="img-fluid card-img-top " />
+                                    <img id={domain.label} src={spinner} className="img-fluid card-img-top " alt=""  />
                                 </div>
                             </div>
                             <div className='col-lg-8 mt-3 mt-lg-0'>

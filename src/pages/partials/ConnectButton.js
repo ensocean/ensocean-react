@@ -1,134 +1,92 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import '@rainbow-me/rainbowkit/styles.css';
-
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  useConnectModal,
-  useAccountModal,
-  useChainModal,
-} from '@rainbow-me/rainbowkit';
-import {
-  chain,
-  configureChains,
-  createClient,
-  WagmiConfig,
-} from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public'; 
-
-const { chains, provider } = configureChains(
-    [chain.mainnet, chain.goerli ],
-    [
-      alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY }),
-      publicProvider()
-    ]
-  );
-  
-const { connectors } = getDefaultWallets({
-    appName: 'My RainbowKit App',
-    chains
-});
-
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors,
-    provider
-})
-
-const CustomConnectButton = () => {
-    const { openConnectModal } = useConnectModal();
-    const { openAccountModal } = useAccountModal();
-    const { openChainModal } = useChainModal();
-
-    return (
-        <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>
-            <ConnectButton.Custom>
-        {({
-          account,
-          chain,
-          openAccountModal,
-          openChainModal,
-          openConnectModal,
-          authenticationStatus,
-          mounted,
-        }) => {
-         
-          const ready = mounted && authenticationStatus !== 'loading';
-          const connected =
-            ready &&
-            account &&
-            chain &&
-            (!authenticationStatus ||
-              authenticationStatus === 'authenticated');
-  
-          return (
-            <div
-              {...(!ready && {
-                'aria-hidden': true,
-                'style': {
-                  opacity: 0,
-                  pointerEvents: 'none',
-                  userSelect: 'none',
-                },
-              })}
-            >
-              {(() => {
-                if (!connected) {
-                  return (
-                    <button onClick={openConnectModal} type="button">
-                      Connect Wallet
-                    </button>
-                  );
-                }
-  
-                if (chain.unsupported) {
-                  return (
-                    <button onClick={openChainModal} type="button">
-                      Wrong network
-                    </button>
-                  );
-                }
-  
-                return (
-                  <div style={{ display: 'flex', gap: 12 }}>
-                    <button 
-                      style={{ display: 'flex', alignItems: 'center' }}
-                      type="button"
-                    >
-                      {chain.hasIcon && (
-                        <div
-                          style={{
-                            background: chain.iconBackground,
-                            width: 12,
-                            height: 12,
-                            borderRadius: 999,
-                            overflow: 'hidden',
-                            marginRight: 4,
-                          }}
-                        >
-                          {chain.iconUrl && (
-                            <img
-                              alt={chain.name ?? 'Chain icon'}
-                              src={chain.iconUrl}
-                              style={{ width: 12, height: 12 }}
-                            />
-                          )}
-                        </div>
-                      )}
-                      {chain.name}
-                    </button> 
-                  </div>
-                );
-              })()}
-            </div>
-          );
-        }}
-            </ConnectButton.Custom>
-        </RainbowKitProvider>
-        </WagmiConfig>
-    );
-  };
  
-export default CustomConnectButton;
+import '@rainbow-me/rainbowkit/styles.css';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+
+import { 
+  useDisconnect,
+  useConnect, 
+  useAccount,   
+  useEnsAvatar,
+  useEnsName,
+  useNetwork,
+  useSwitchNetwork
+} from 'wagmi';
+ 
+import { obscureAddress } from '../../helpers/String';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import { toast } from 'react-toastify';
+
+
+window.Buffer = require("buffer").Buffer;
+ 
+function ConnectButton() { 
+  const { address, connector, isConnected } = useAccount()
+  const { data: ensAvatar } = useEnsAvatar({ address })
+  const { data: ensName } = useEnsName({ address })
+  const { connect, connectors, pendingConnector } = useConnect()
+  const { disconnect } = useDisconnect();
+  const { chain } = useNetwork()
+  const { chains, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  const { openConnectModal } = useConnectModal(); 
+  const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
+
+  const handleConnect = (e) => {
+    e.preventDefault();
+    openConnectModal();
+  }
+  
+  const handleDisconnect = (e) => {
+    e.preventDefault();
+    disconnect();
+  }
+
+  const handleSwitchChain = (e) => {
+    e.preventDefault();
+    switchNetwork?.(SUPPORTED_CHAIN_ID);
+    if(error) { 
+      toast.error(error.message)
+    }
+  }
+  
+  if (isConnected) {
+   
+    if(SUPPORTED_CHAIN_ID !== chain?.id) {
+      return (
+        <>
+        <span className='text-dark me-2'>{obscureAddress(address)}</span>
+        <button className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+          {'Wrong Network'} {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && ' (switching)'}
+        </button>
+        </> 
+      )
+    } else if(SUPPORTED_CHAIN_ID === chain?.id && ensName) {
+        return (
+          <span className='text-dark me-2'>{ensName} 
+          <CopyToClipboard text={address}  onCopy={() => toast.success("Your address has been copied to clipboard") }>
+            <span className='cursor-pointer'>({obscureAddress(address)})</span>
+          </CopyToClipboard>
+          </span>
+        )
+    } else if (SUPPORTED_CHAIN_ID === chain?.id && !ensName) {
+        return (
+          <>
+          <span className='text-dark me-2'>
+          <CopyToClipboard text={address}  onCopy={() => toast.success("Your address has been copied to clipboard") }>
+            <span className='cursor-pointer'>{obscureAddress(address)}</span>
+          </CopyToClipboard>
+          </span>
+          <button className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>
+          </>
+        )
+    } 
+
+  } else { 
+    return (
+      <> 
+        <button className='btn btn-primary' onClick={handleConnect}>Connect Wallet</button>
+      </>
+    )
+  } 
+}
+
+export default ConnectButton;
