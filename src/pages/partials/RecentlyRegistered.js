@@ -48,7 +48,7 @@ const RecentRegistered = () => {
       <>
         <div className="card">
           <div className="card-header d-flex justify-content-between">
-              <h5 className='fs-4'>Recently Registered</h5>
+              <h5 className='fs-4 m-1'>Recently Registered</h5>
               <button className={loading ? "btn btn-outline-light disabled": "btn btn-outline-light"}>
                 {loading &&
                     <img src={arrowRepeatSpinIcon} alt="" /> 
