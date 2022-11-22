@@ -15,6 +15,7 @@ import {
 import { obscureAddress } from '../../helpers/String';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 
 window.Buffer = require("buffer").Buffer;
@@ -53,28 +54,24 @@ function ConnectButton() {
     if(SUPPORTED_CHAIN_ID !== chain?.id) {
       return (
         <>
-        <span className='text-dark me-2'>{obscureAddress(address)}</span>
+        <Link to={"/account/"+ address}>{obscureAddress(address)}</Link>
         <button className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
           {'Wrong Network'} {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && ' (switching)'}
         </button>
         </> 
       )
     } else if(SUPPORTED_CHAIN_ID === chain?.id && ensName) {
-        return (
-          <span className='text-dark me-2'>{ensName} 
-          <CopyToClipboard text={address}  onCopy={() => toast.success("Your address has been copied to clipboard") }>
-            <span className='cursor-pointer'>({obscureAddress(address)})</span>
-          </CopyToClipboard>
-          </span>
+        return ( 
+          <Link to={"/account/"+ address}>
+             {ensName} ({obscureAddress(address)}) 
+          </Link> 
         )
     } else if (SUPPORTED_CHAIN_ID === chain?.id && !ensName) {
         return (
-          <>
-          <span className='text-dark me-2'>
-          <CopyToClipboard text={address}  onCopy={() => toast.success("Your address has been copied to clipboard") }>
-            <span className='cursor-pointer'>{obscureAddress(address)}</span>
-          </CopyToClipboard>
-          </span>
+          <> 
+          <Link to={"/account/"+ address}>
+             {obscureAddress(address)} 
+          </Link> 
           <button className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>
           </>
         )
