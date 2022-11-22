@@ -32,17 +32,17 @@ const Navbar = () => {
                 <Link className="navbar-brand me-4" title="EnsOcean" to="/">
                     <img src={logo} alt="EnsOcean" className="float-start me-1" /><span className="logo">EnsOcean</span>
                 </Link>
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
-                    <span class="navbar-toggler-icon"></span>
+                <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <span className="navbar-toggler-icon"></span>
                 </button> 
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                    <div class="offcanvas-header">
+                <div className="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div className="offcanvas-header">
                         <Link className="navbar-brand" title="EnsOcean" to="/">
                             <img src={logo} alt="EnsOcean" className="float-start me-1" /><span className="logo">EnsOcean</span>
                         </Link>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div class="offcanvas-body">
+                    <div className="offcanvas-body">
                         <form className="flex-fill" role="search" onSubmit={handleSubmit}>
                             <div className="input-group input-group-lg">
                                 <input className="form-control border-primary" type="search" placeholder="Search for web3 name " value={value} onChange={handleChange} />
@@ -51,7 +51,7 @@ const Navbar = () => {
                                 </button>
                             </div>
                         </form>
-                        <ul class="navbar-nav justify-content-start align-items-canter flex-grow-1 mt-3 mt-lg-1 ">
+                        <ul className="navbar-nav justify-content-start align-items-canter flex-grow-1 mt-3 mt-lg-1 ">
                             <li className="nav-item">
                                 <Link className="nav-link active" to="/">Home</Link>
                             </li> 

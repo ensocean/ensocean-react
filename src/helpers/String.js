@@ -12,6 +12,14 @@ export const obscureAddress = (address) => {
     return address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length);
 }
 
+export const obscureName = (name, len) => {
+    if(getLength(name) > len) {
+        return Array.from(name).slice(0, len / 2).join("") + "..." + Array.from(name).slice(name.length - (len / 2), name.length).join("");
+    } else {
+        return name;
+    }
+}
+
 export const obscureLabel = (label, len) => {
     if(getLength(label) > len) {
         return Array.from(label).slice(0, len).join("") + "...";
