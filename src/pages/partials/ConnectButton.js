@@ -52,9 +52,9 @@ function ConnectButton() {
   if (isConnected) {
     return ( 
       <> 
-        <Link to={"/account/"+ address}>
+        <a className='btn btn-outline-default' href={"/account/"+ address}>
           { ensName ? obscureName(ensName, 20) : obscureAddress(address) } 
-        </Link>  
+        </a>  
         { SUPPORTED_CHAIN_ID !== chain?.id ? <button className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
           {'Wrong Network'} {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && ' (switching)'}
         </button> : <button className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>}
