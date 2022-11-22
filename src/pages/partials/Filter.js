@@ -726,21 +726,21 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         } else {
             return (
                 <> 
-                <div className="row g-2">
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6">
                     {data.domains.length < 1 &&
                         <div className="col-12 text-center text-warning">No Result found</div>
                     } 
                     {data.domains.map((domain) => (
-                    <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={domain.id}>
+                    <div className="col mt-3" key={domain.id}>
                         <div className="card text-start"> 
-                                <LazyLoadImage
-                                    alt={domain.name} 
-                                    className="img-fluid card-img-top" 
-                                    onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
-                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                /> 
-                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
+                            <LazyLoadImage
+                                alt={domain.name} 
+                                className="img-fluid card-img-top" 
+                                onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
+                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                            /> 
+                            <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
                             <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate">
                                     <Link
