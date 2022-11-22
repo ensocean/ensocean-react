@@ -29,8 +29,9 @@ const Navbar = () => {
         <AlertNetwork />
         <nav id="navbar" className="navbar navbar-expand-lg">
             <div className="container-fluid">
-                <a className="text-dark text-decoration-none fs-3 fw-bold me-4 ms-2" title="EnsOcean" href="/">
-                    <img src={logo} alt="EnsOcean" className="align-text-top me-1 img-fluid" /><span className="logo">EnsOcean</span>
+                <a className="navbar-brand" title="EnsOcean" href="/">
+                    <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
+                    EnsOcean
                 </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span className="navbar-toggler-icon"></span>
@@ -59,7 +60,7 @@ const Navbar = () => {
                                 <a className="nav-link active" href="/discover">Discover</a>
                             </li>
                         </ul>
-                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
                             <ConnectButton />
                         </div>
                     </div>

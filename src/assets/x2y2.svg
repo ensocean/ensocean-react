@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120.99 121.11" width="28px" height="28px">
+  <defs>
+    <linearGradient id="X2Y2-01_svg__linear-gradient" y1="60.55" x2="107.73" y2="60.55" gradientTransform="matrix(1 0 0 -1 0 121.11)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00e0ff"></stop>
+      <stop offset="0.28" stop-color="#298ae5"></stop>
+      <stop offset="0.33" stop-color="#2c84e3"></stop>
+      <stop offset="0.93" stop-color="#5430c9"></stop>
+    </linearGradient>
+    <linearGradient id="X2Y2-01_svg__linear-gradient-2" x1="24.17" y1="60.55" x2="96.83" y2="60.55" gradientTransform="matrix(1 0 0 -1 0 121.11)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00e0ff"></stop>
+      <stop offset="0.26" stop-color="#298ae5"></stop>
+      <stop offset="0.31" stop-color="#2c84e3"></stop>
+      <stop offset="0.93" stop-color="#5430c9"></stop>
+    </linearGradient>
+    <linearGradient id="X2Y2-01_svg__linear-gradient-3" x1="35.64" y1="60.56" x2="121.09" y2="60.56" gradientTransform="matrix(1 0 0 -1 0 121.11)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00e0ff"></stop>
+      <stop offset="0.12" stop-color="#298ae5"></stop>
+      <stop offset="0.17" stop-color="#2c84e3"></stop>
+      <stop offset="0.85" stop-color="#5430c9"></stop>
+    </linearGradient>
+    <style>
+      .X2Y2-01_svg__cls-1 {
+        fill: #fff
+      }
+    </style>
+  </defs>
+  <path d="M107.69 98C97 112.94 74.36 124.7 49.63 120.1A60.54 60.54 0 0 1 40.94 3.27 60 60 0 0 1 107.73 23C96 12.66 82.37 7.89 66.83 9.63S38.81 19 30 32a51.05 51.05 0 0 0 4.6 63 50.18 50.18 0 0 0 35.92 16.74c14.21.62 26.58-4.21 37.17-13.74Z" style="fill: url(&quot;#X2Y2-01_svg__linear-gradient&quot;);"></path>
+  <path d="M96.83 60.68a36.33 36.33 0 1 1-36-36.46 36.28 36.28 0 0 1 36 36.46Zm-60.5-.21c.19 13.16 10.24 24.19 24.24 24.15a23.76 23.76 0 0 0 24-24.2 23.74 23.74 0 0 0-24.12-23.93c-13.09-.03-23.8 10.15-24.12 23.98Z" style="fill: url(&quot;#X2Y2-01_svg__linear-gradient-2&quot;);"></path>
+  <path d="M35.69 91.5c11.6 9.31 24.56 12.41 39 8.3a39.38 39.38 0 0 0 21.78-15.74c10.8-15.37 9.64-36.6-2.66-50.44a40.21 40.21 0 0 0-28.2-14c-11.24-.77-21.19 2.78-30 10.18C37 26 47.31 18.42 54.93 15.43a47.2 47.2 0 0 1 23.89-2.93 48.44 48.44 0 0 1 6.29 94.86c-20.71 5.57-40.05-3.5-49.42-15.86Z" style="fill: url(&quot;#X2Y2-01_svg__linear-gradient-3&quot;);"></path>
+</svg>
