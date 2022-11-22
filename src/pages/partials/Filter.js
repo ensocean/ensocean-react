@@ -120,6 +120,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
 
     
     const handleFilterClick = (e) => {
+        e.preventDefault();
         const elem = document.getElementById("filters");
         if(elem.classList.contains("d-none")) {
             elem.classList.add("d-lg-block")
@@ -128,6 +129,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             elem.classList.remove("d-lg-block") 
             elem.classList.add("d-none") 
         }   
+       
     } 
 
     const handleRefreshClick = (e) => {   
@@ -364,7 +366,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 <div className="flex-fill"> 
                     <div className="flex-grow-1"> 
                         <div className="d-flex flex-row gap-2">
-                            <button className="btn btn-outline-light rounded-0 border position-relative" type="button" onClick={handleFilterClick}>
+                            <button className="btn btn-outline-light rounded-0 border position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
                                 <img src={funnelFill} alt= ""  />
                                 {filterCount > 0 && 
                                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -408,22 +410,20 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div> 
             </div>
         </div> 
-        <div className="d-flex flex-column flex-lg-row">
-            <div className="flex-shrink-0 me-lg-2 mb-2" id="filters" >
-                <div className="card rounded-0" id="filters">
-                    <div className="card-header d-flex flex-row justify-content-between ">
-                        <button className="btn fs-5">Filter</button>
-                        <button className="btn border-0" type="button" onClick={handleFilterClick}>
-                            <img src={arrowLeft} alt="" />
-                        </button>
+        <div className="d-flex flex-column flex-lg-row align-items-start"> 
+             
+                <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
+                    <div className="offcanvas-header card-header">
+                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5>
+                        <button type="button" className="btn-close me-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div className="card-body p-0">
-                        <div className="accordion">
+                    <div className="offcanvas-body p-0 m-0">
+                        <div className="accordion w-100">
                             <div className="accordion-item border-0 rounded-0">
-                                <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
-                                    <h5 className="accordion-header fw-bold text-dark">Character Set</h5>
+                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
+                                    <h6 className="accordion-header fw-bold text-dark">Character Set</h6>
                                 </button> 
-                                <div id="charSet" className="accordion-collapse collapse show overflow-auto text-muted p-3" style={{height: "240px"}}>
+                                <div id="charSet" className="accordion-collapse collapse show text-muted p-3 overflow-scroll" style={{height: "240px"}}>
                                     {defaultTags.map((t) =>
                                         <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
                                             <label htmlFor={t} className="cursor-pointer">{t}</label>
@@ -433,8 +433,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                 </div>
                             </div>
                             <div className="accordion-item border-0 rounded-0">
-                                <button className="accordion-button fw-bold fs-4 rounded-0 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
-                                    <h5 className="accordion-header fw-bold text-dark">Starts/Ends With</h5>
+                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                    <h6 className="accordion-header fw-bold text-dark">Starts/Ends With</h6>
                                 </button> 
                                 <div id="startsWith" className="accordion-collapse collapse show">
                                     <div className="input-group p-3">
@@ -445,8 +445,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                 </div>
                             </div>
                             <div className="accordion-item border-0">
-                                <button className="accordion-button fw-bold fs-4 bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
-                                    <h5 className="accordion-header fw-bold text-dark">Length</h5>
+                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
+                                    <h6 className="accordion-header fw-bold text-dark">Length</h6>
                                 </button> 
                                 <div id="length" className="accordion-collapse collapse show">
                                     <div className="input-group p-3">
@@ -457,8 +457,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                 </div>
                             </div>
                             <div className="accordion-item border-0">
-                                <button className="accordion-button fw-bold fs-4 bg-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                    <h5 className="accordion-header fw-bold text-dark">Segment Length</h5>
+                                <button className="accordion-button border-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                    <h6 className="accordion-header fw-bold text-dark">Segment Length</h6>
                                 </button> 
                                 <div id="segmentLength" className="accordion-collapse collapse show">
                                     <div className="input-group p-3">
@@ -474,8 +474,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </div>
                     </div>
                 </div> 
-            </div>
-            <div className="flex-grow-1">
+            <div className="flex-grow-1 w-100">
                 <div className="d-flex justify-content-between">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
@@ -578,8 +577,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             <th className="p-3">Expires</th>
                             <th className="p-3">Owner</th>
                             <th className="p-3">Created</th>
-                            <th className="p-3">Registered</th>
-                            <th className="p-3">Actions</th>
+                            <th className="p-3">Registered</th> 
                         </tr>
                     </thead>
                     <tbody className="text-start"> 
@@ -589,8 +587,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             <td className="p-3"><span className="placeholder col-8"></span></td>
                             <td className="p-3"><span className="placeholder col-8"></span></td>
                             <td className="p-3"><span className="placeholder col-4"></span></td>
-                            <td className="p-3"><span className="placeholder col-4"></span></td>
-                            <td className="p-3"><span className="placeholder col-6"></span></td>
+                            <td className="p-3"><span className="placeholder col-4"></span></td> 
                         </tr>
                         )}
                     </tbody>
@@ -643,8 +640,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                 <th className="p-3">Expires</th> 
                                 <th className="p-3">Owner</th>
                                 <th className="p-3">Created</th>
-                                <th className="p-3">Registered</th>
-                                <th className="p-3">Actions</th>
+                                <th className="p-3">Registered</th> 
                             </tr>
                         </thead>
                         <tbody className="text-start">
@@ -719,8 +715,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                     </Link> 
                                 </td>
                                 <td className="p-3">{getTimeAgo(domain.created)}</td>
-                                <td className="p-3">{getTimeAgo(domain.registered)}</td>
-                                <td className="p-3"> </td>
+                                <td className="p-3">{getTimeAgo(domain.registered)}</td> 
                             </tr>
                             ))}  
                         </tbody>
@@ -731,21 +726,21 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         } else {
             return (
                 <> 
-                <div className="row g-2">
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6">
                     {data.domains.length < 1 &&
                         <div className="col-12 text-center text-warning">No Result found</div>
                     } 
                     {data.domains.map((domain) => (
-                    <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={domain.id}>
+                    <div className="col mt-3" key={domain.id}>
                         <div className="card text-start"> 
-                                <LazyLoadImage
-                                    alt={domain.name} 
-                                    className="img-fluid card-img-top" 
-                                    onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
-                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                /> 
-                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
+                            <LazyLoadImage
+                                alt={domain.name} 
+                                className="img-fluid card-img-top" 
+                                onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
+                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                            /> 
+                            <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
                             <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate">
                                     <Link

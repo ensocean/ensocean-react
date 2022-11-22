@@ -3,21 +3,6 @@
   font-weight:lighter; 
 }
   
-.navbar-brand { 
-  color:black;  
-  font: 1.8em "Roboto", Helvetica, Arial, sans-serif; 
-  font-weight: bold;
-}
-
-li.active a {
-  color: white;
-}
- 
-.table-fit {
-  white-space: nowrap; 
-  width: 1%;
-}
- 
 .cursor-pointer {
   cursor: pointer;
 }
@@ -31,49 +16,9 @@ li.active a {
 .nav-tabs .nav-link {
   white-space: nowrap;
 }
-
  
-.bg-thumb  {
-  margin: 0 !important;
-  padding: 0 !important;
-  background-color: #0c6efd;
-  background-image: linear-gradient(rgb(47, 133, 252), rgb(12, 110, 253));
-}
-
-.img-responsive {
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-  height: auto;
-
-}
-  
-  
-@media (min-width: 500px) {  
-   
-}
- 
-@media (min-width: 200px) {  
-  
-}
-
-
-
-.t-20 {
-  top:5px;
-}
-
-.s-0 {
-  left:0;
-}
-
 td {
   min-width: 200px;
 }
-
-.table-responsive {
-  overflow: auto !important;  
-  -webkit-overflow-scrolling: touch !important;
-   
-}
+ 
  

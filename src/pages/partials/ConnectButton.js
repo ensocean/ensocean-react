@@ -12,7 +12,7 @@ import {
   useSwitchNetwork
 } from 'wagmi';
  
-import { obscureAddress } from '../../helpers/String';
+import { obscureAddress, obscureLabel, obscureName } from '../../helpers/String';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
@@ -50,32 +50,16 @@ function ConnectButton() {
   }
   
   if (isConnected) {
-   
-    if(SUPPORTED_CHAIN_ID !== chain?.id) {
-      return (
-        <>
-        <Link to={"/account/"+ address}>{obscureAddress(address)}</Link>
-        <button className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+    return ( 
+      <> 
+        <a className='btn btn-outline-default' href={"/account/"+ address}>
+          { ensName ? obscureName(ensName, 20) : obscureAddress(address) } 
+        </a>  
+        { SUPPORTED_CHAIN_ID !== chain?.id ? <button className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
           {'Wrong Network'} {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && ' (switching)'}
-        </button>
-        </> 
-      )
-    } else if(SUPPORTED_CHAIN_ID === chain?.id && ensName) {
-        return ( 
-          <Link to={"/account/"+ address}>
-             {ensName} ({obscureAddress(address)}) 
-          </Link> 
-        )
-    } else if (SUPPORTED_CHAIN_ID === chain?.id && !ensName) {
-        return (
-          <> 
-          <Link to={"/account/"+ address}>
-             {obscureAddress(address)} 
-          </Link> 
-          <button className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>
-          </>
-        )
-    } 
+        </button> : <button className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>}
+      </> 
+    ) 
 
   } else { 
     return (
