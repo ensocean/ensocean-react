@@ -467,7 +467,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             <button className="btn btn-outline-primary" type="button" onClick={handleResetFilter} >
                                 Reset Filters
                             </button>
-                            <button className="btn btn-primary" type="button" onClick={handleRefreshClick} >
+                            <button className="btn btn-primary" type="button" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" onClick={handleRefreshClick} >
                                 Done
                             </button>
                         </div>
