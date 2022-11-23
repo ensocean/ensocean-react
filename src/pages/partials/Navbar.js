@@ -25,10 +25,9 @@ const Navbar = () => {
     };
 
     return (
-        <>
-        <AlertNetwork />
+        <> 
         <nav id="navbar" className="navbar navbar-expand-lg">
-            <div className="container-fluid">
+            <div className="container-fluid p-0">
                 <a className="navbar-brand" title="EnsOcean" href="/">
                     <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
                     EnsOcean
@@ -44,7 +43,7 @@ const Navbar = () => {
                         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">
-                        <form className="flex-fill" role="search" onSubmit={handleSubmit}>
+                        <form className="flex-grow-1" role="search" onSubmit={handleSubmit}>
                             <div className="input-group input-group-lg">
                                 <input className="form-control border-primary" type="search" placeholder="Search for web3 name " value={value} onChange={handleChange} />
                                 <button className="btn btn-outline-primary" type="submit">
@@ -66,7 +65,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </div>
-        </nav>
+        </nav> 
         </>
     )
 }

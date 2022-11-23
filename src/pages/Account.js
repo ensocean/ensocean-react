@@ -24,61 +24,59 @@ const Account = () => {
           <title>{address} - EnsOcean</title>
           <meta name="description" content="" />
       </Helmet>
-      <div className="container-fluid bg-primary text-left p-3 text-white">
-        <div className="d-flex">
-            <div className="flex-shrink-0">
-                <div className="card text-start">
-                <LazyLoadImage
-                    alt={address} 
-                    className="img-fluid carg-img-top"
-                    onError={(e)=> { e.target.src = notAvailable; }}
-                    placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" alt="" />}
-                    placeholderSrc={spinner}
-                    visibleByDefault={false}
-                    width={75} 
-                    src={notAvailable}
-                    />  
+      <div className="container-fluid bg-primary">
+        <div className="container-fluid container-fluid p-0 pt-4 pb-4 text-white">
+            <div className="d-flex">
+                <div className="flex-shrink-0">
+                    <div className="card text-start">
+                    <LazyLoadImage
+                        alt={address} 
+                        className="img-fluid img-thumbnail carg-img-top card-img-bottom"
+                        onError={(e)=> { e.target.src = notAvailable; }}
+                        placeholder={<img src={spinner} className="img-fluid img-thumbnail carg-img-top card-img-bottom" alt="" />}
+                        placeholderSrc={spinner}
+                        visibleByDefault={false}
+                        width={75} 
+                        src={notAvailable}
+                        />  
+                    </div>
                 </div>
-            </div>
-            <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">
-                <h1>{obscureAddress(address)}</h1>
-                <div className="d-flex gap-3">
-                    <CopyToClipboard text={address} onCopy={() => toast.success("Address copied") }>
-                        <a href="#">
-                            <img src={clipboardIcon} width={20} height={20} alt="" />
+                <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">
+                    <h2>{obscureAddress(address)}</h2>
+                    <div className="d-flex gap-3">
+                        <CopyToClipboard text={address} onCopy={() => toast.success("Address copied") }>
+                            <a href="#">
+                                <img src={clipboardIcon} width={20} height={20} alt="" />
+                            </a>
+                        </CopyToClipboard>
+                        <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Link copied") }>
+                            <a href="#">
+                                <img src={shareIcon} width={20} height={20} alt="" />
+                            </a>
+                        </CopyToClipboard>
+                        <a target="_blank" rel="noreferrer" href={"https://etherscan.io/address/"+ address} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="View on etherscan.io" className='text-white'>
+                            <img src={etherscanIcon} width={20} height={20} alt="" />
                         </a>
-                    </CopyToClipboard>
-                    <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Link copied") }>
-                        <a href="#">
-                            <img src={shareIcon} width={20} height={20} alt="" />
+                        <a target="_blank" rel="noreferrer" href={"https://x2y2.io/user/"+ address}>
+                            <img src={x2y2Icon}  width={20} height={20} alt="" />
                         </a>
-                    </CopyToClipboard>
-                    <a target="_blank" rel="noreferrer" href={"https://etherscan.io/address/"+ address} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="View on etherscan.io" className='text-white'>
-                        <img src={etherscanIcon} width={20} height={20} alt="" />
-                    </a>
-                    <a target="_blank" rel="noreferrer" href={"https://x2y2.io/user/"+ address}>
-                        <img src={x2y2Icon}  width={20} height={20} alt="" />
-                    </a>
-                    <a target="_blank" rel="noreferrer" href={"https://rarible.com/user/"+ address}>
-                        <img src={raribleIcon}  width={20} height={20} alt="" />
-                    </a>
-                    <a target="_blank" rel="noreferrer" href={"https://looksrare.org/accounts/"+ address}>
-                        <img src={looksrareIcon}  width={20} height={20} alt="" />
-                    </a>
-                    <a target="_blank" rel="noreferrer" href={"https://opensea.io/"+ address}>
-                        <img src={openseaIcon}  width={20} height={20} alt="" />
-                    </a>
+                        <a target="_blank" rel="noreferrer" href={"https://rarible.com/user/"+ address}>
+                            <img src={raribleIcon}  width={20} height={20} alt="" />
+                        </a>
+                        <a target="_blank" rel="noreferrer" href={"https://looksrare.org/accounts/"+ address}>
+                            <img src={looksrareIcon}  width={20} height={20} alt="" />
+                        </a>
+                        <a target="_blank" rel="noreferrer" href={"https://opensea.io/"+ address}>
+                            <img src={openseaIcon}  width={20} height={20} alt="" />
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
       </div>
-      <div className="container-fluid p-0 m-0">
-            <div className="card text-center">
-                <div className="card-body">
-                    <Filter First={100} Skip={0} OrderBy={"created"} OrderDirection={"desc"} Where={where} />
-                </div>
-            </div>
-        </div>  
+      <div className="container-fluid pt-2"> 
+            <Filter First={100} Skip={0} OrderBy={"created"} OrderDirection={"desc"} Where={where} />
+      </div>  
       </> 
     );
 };

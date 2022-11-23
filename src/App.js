@@ -5,7 +5,6 @@ import './App.css';
 
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Layout from "./pages/Layout";
 import Home from "./pages/Home";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
@@ -18,6 +17,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
 import NotFound from "./pages/Notfound";    
+import Layouts from "./pages/layouts";    
  
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -84,7 +84,13 @@ export default function App () {
           <React.StrictMode>
             <BrowserRouter forceRefresh={true}>
               <Routes>  
-                <Route path="/" element={<Layout />}>
+                <Route path="/" element={<Layouts.Home />}>
+                  <Route index element={<Home />}  />
+                </Route>
+                <Route path="/" element={<Layouts.Home />}>
+                  <Route path="/:label.:extension" element={<Domain />} />
+                </Route>
+                <Route path="/" element={<Layouts.Page />}>
                   <Route index element={<Home />} />
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />
@@ -93,7 +99,7 @@ export default function App () {
                   <Route path="/find" element={<Find />} />
                   <Route path="/404" element={<NotFound />} /> 
                   <Route path="/account/:address" element={<Account />} />
-                  <Route path="/:label.:extension" element={<Domain />} />
+                  
                   <Route path="*" element={<Navigate replace={true} to="/404" />} />
                 </Route> 
               </Routes>
