@@ -5,8 +5,10 @@ import githubIcon from "../../assets/github.svg";
 import twitterIcon from "../../assets/twitter.svg";
 import telegramIcon from "../../assets/telegram.svg";
 import envelopeFillIcon from "../../assets/envelope-fill.svg";
+import useGoogleAnalytics from "./GoogleAnalytics";
 
-const Footer = () => {
+const Footer = () => { 
+    useGoogleAnalytics();
     return (
         <>
             <div className="container-fluid bg-primary p-3 text-center text-white fs-6 mt-5">

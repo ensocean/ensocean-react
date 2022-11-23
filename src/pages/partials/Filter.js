@@ -18,14 +18,13 @@ import sortDown from "../../assets/sort-down.svg";
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
 import notAvailable from "../../assets/not-available.svg";
- 
-
+  
 const DEBOUNCE_INTERVAL = 500;
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
-
-
+ 
 let timeout;
+
 let csvHeaders = [
     { label: "Label", key: "label" },
     { label: "Extension", key: "extension" },
@@ -53,7 +52,6 @@ let defaultTags = [
     "only-arabic",
     "palindrome"
 ];
-
  
 const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
 
@@ -360,122 +358,119 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     }
  
     return (
-        <> 
-        <div className="mb-3 t-20">  
-            <div className="d-flex flex-lg-row flex-column justify-content-between gap-2"> 
-                <div className="flex-fill"> 
-                    <div className="flex-grow-1"> 
-                        <div className="d-flex flex-row gap-2">
-                            <button className="btn btn-outline-light rounded-0 border position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
-                                <img src={funnelFill} alt= ""  />
-                                {filterCount > 0 && 
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {filterCount}
-                                        <span className="visually-hidden">selected filters</span>
-                                    </span>
-                                }
-                            </button>
-                            <button className="btn btn-outline-light rounded-0 border" type="button" onClick={handleRefreshClick}>
-                                 <img src={loading ? arrowRepeatSpin: arrowRepeat } alt= ""  />
-                            </button>
-                            <div className="input-group input-group-lg">
-                                <span className="input-group-text bg-light border-end-0 rounded-0">
-                                    <img src={searchIcon} alt= ""  />
+        <>  
+        <div className="d-flex flex-lg-row flex-column justify-content-between gap-2 pt-2"> 
+            <div className="flex-fill"> 
+                <div className="flex-grow-1"> 
+                    <div className="d-flex flex-row gap-2">
+                        <button className="btn btn-outline-light rounded-0 border position-relative d-xxl-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
+                            <img src={funnelFill} alt= ""  />
+                            {filterCount > 0 && 
+                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    {filterCount}
+                                    <span className="visually-hidden">selected filters</span>
                                 </span>
-                                <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={onChangeSearch} onKeyDown={onKeydownSearch} defaultValue={where?.label_contains_nocase} placeholder="Search Name"  /> 
-                            </div> 
+                            }
+                        </button>
+                        <button className="btn btn-outline-light rounded-0 border" type="button" onClick={handleRefreshClick}>
+                                <img src={loading ? arrowRepeatSpin: arrowRepeat } alt= ""  />
+                        </button>
+                        <div className="input-group input-group-lg">
+                            <span className="input-group-text bg-light border-end-0 rounded-0">
+                                <img src={searchIcon} alt= ""  />
+                            </span>
+                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={onChangeSearch} onKeyDown={onKeydownSearch} defaultValue={where?.label_contains_nocase} placeholder="Search Name"  /> 
                         </div> 
-                    </div>
-                </div> 
-                <div className="d-flex">
-                    <div className="input-group input-group-lg gap-2 rounded-0">
-                        <select className="form-select rounded-0" onChange={handleOrderBy} value={orderBy}>
-                            <option value="expires">Expiration</option>
-                            <option value="registered">Registration</option>
-                            <option value="created">Creation</option>
-                            <option value="label">Name</option>
-                            <option value="length">Length</option>
-                        </select>
-                        {orderDirection === "desc" &&
-                            <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
-                               <img src={sortUp} alt= ""  />
-                            </button>
-                        }
-                        {orderDirection === "asc" &&
-                            <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
-                                <img src={sortDown} alt= ""  />
-                            </button>
-                        }
-                    </div>
-                </div> 
-            </div>
+                    </div> 
+                </div>
+            </div> 
+            <div className="d-flex">
+                <div className="input-group input-group-lg gap-2 rounded-0">
+                    <select className="form-select rounded-0" onChange={handleOrderBy} value={orderBy}>
+                        <option value="expires">Expiration</option>
+                        <option value="registered">Registration</option>
+                        <option value="created">Creation</option>
+                        <option value="label">Name</option>
+                        <option value="length">Length</option>
+                    </select>
+                    {orderDirection === "desc" &&
+                        <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
+                            <img src={sortUp} alt= ""  />
+                        </button>
+                    }
+                    {orderDirection === "asc" &&
+                        <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
+                            <img src={sortDown} alt= ""  />
+                        </button>
+                    }
+                </div>
+            </div> 
         </div> 
-        <div className="d-flex flex-column flex-lg-row align-items-start"> 
-             
-                <div className="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
-                    <div className="offcanvas-header card-header">
-                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5>
-                        <button type="button" className="btn-close me-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div className="offcanvas-body p-0 m-0">
-                        <div className="accordion w-100">
-                            <div className="accordion-item border-0 rounded-0">
-                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
-                                    <h6 className="accordion-header fw-bold text-dark">Character Set</h6>
-                                </button> 
-                                <div id="charSet" className="accordion-collapse collapse show text-muted p-3 overflow-scroll" style={{height: "240px"}}>
-                                    {defaultTags.map((t) =>
-                                        <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
-                                            <label htmlFor={t} className="cursor-pointer">{t}</label>
-                                            <input name="tags" className="form-check-input rounded-0" type="checkbox" id={t} value={t} onChange={onChangeTag} />
-                                        </div>
-                                    )} 
-                                </div>
-                            </div>
-                            <div className="accordion-item border-0 rounded-0">
-                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
-                                    <h6 className="accordion-header fw-bold text-dark">Starts/Ends With</h6>
-                                </button> 
-                                <div id="startsWith" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
-                                        <span className="input-group-text">and</span>                                    
-                                        <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item border-0">
-                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
-                                    <h6 className="accordion-header fw-bold text-dark">Length</h6>
-                                </button> 
-                                <div id="length" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
-                                        <span className="input-group-text">to</span>
-                                        <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="accordion-item border-0">
-                                <button className="accordion-button border-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                    <h6 className="accordion-header fw-bold text-dark">Segment Length</h6>
-                                </button> 
-                                <div id="segmentLength" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                        <span className="input-group-text">to</span>
-                                        <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
-                                    </div>
-                                </div>
-                            </div> 
-                            <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
-                                Reset Filters
+        <div className="d-flex flex-column flex-lg-row align-items-start pt-2"> 
+            <div className="offcanvas-xxl offcanvas-start pe-2" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
+                <div className="offcanvas-header card-header">
+                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5>
+                    <button type="button" className="btn-close me-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div className="offcanvas-body p-0 m-0">
+                    <div className="accordion w-100">
+                        <div className="accordion-item border-0 rounded-0">
+                            <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
+                                <h6 className="accordion-header fw-bold text-dark">Character Set</h6>
                             </button> 
+                            <div id="charSet" className="accordion-collapse collapse show text-muted p-3 overflow-scroll" style={{height: "240px"}}>
+                                {defaultTags.map((t) =>
+                                    <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
+                                        <label htmlFor={t} className="cursor-pointer">{t}</label>
+                                        <input name="tags" className="form-check-input rounded-0" type="checkbox" id={t} value={t} onChange={onChangeTag} />
+                                    </div>
+                                )} 
+                            </div>
                         </div>
+                        <div className="accordion-item border-0 rounded-0">
+                            <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                <h6 className="accordion-header fw-bold text-dark">Starts/Ends With</h6>
+                            </button> 
+                            <div id="startsWith" className="accordion-collapse collapse show">
+                                <div className="input-group p-3">
+                                    <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
+                                    <span className="input-group-text">and</span>                                    
+                                    <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
+                                <h6 className="accordion-header fw-bold text-dark">Length</h6>
+                            </button> 
+                            <div id="length" className="accordion-collapse collapse show">
+                                <div className="input-group p-3">
+                                    <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="accordion-item border-0">
+                            <button className="accordion-button border-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                <h6 className="accordion-header fw-bold text-dark">Segment Length</h6>
+                            </button> 
+                            <div id="segmentLength" className="accordion-collapse collapse show">
+                                <div className="input-group p-3">
+                                    <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                    <span className="input-group-text">to</span>
+                                    <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                </div>
+                            </div>
+                        </div> 
+                        <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
+                            Reset Filters
+                        </button> 
                     </div>
-                </div> 
+                </div>
+            </div>
             <div className="flex-grow-1 w-100">
-                <div className="d-flex justify-content-between">
+                <div className="container-fluid d-flex justify-content-between">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
                             <img src={fileTypeCsv} alt= "" />
@@ -500,10 +495,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </button>
                     </div> 
                 </div>
-                <div className="container-fluid p-0 mt-2" id="#results">
+                <div className="container-fluid mt-2" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
-                <div className="d-flex justify-content-between mt-2">
+                <div className="container-fluid d-flex justify-content-between mt-2">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
                             <img src={fileTypeCsv} alt= "" />
@@ -531,35 +526,6 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         </>
     );
 };
- 
-  
-function getQuery() {
-    return `query Domains( $skip: Int!, $first: Int!, $orderBy: String!, $orderDirection: String!, $where: Domain_filter ) {
-        domains ( 
-            orderBy: $orderBy
-            orderDirection: $orderDirection
-            skip: $skip
-            first: $first
-            where: $where
-        )
-        {  
-            id
-            label
-            name
-            hash
-            created
-            registered
-            expires
-            owner
-            registrant,
-            length
-            extension
-            segmentLength
-            tags
-        }
-    }`;
-}
- 
  
 const FilterResults = ( { called, loading, error, data, view}) => {
     if(!called) return;
@@ -627,8 +593,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
             <span className='text-danger'>{error.message}</span>     
             </>
         );
-    } else {    
-
+    } else {   
         if(view === "list") {
             return (
                 <>
@@ -731,7 +696,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                         <div className="col-12 text-center text-warning">No Result found</div>
                     } 
                     {data.domains.map((domain) => (
-                    <div className="col mt-3" key={domain.id}>
+                    <div className="col mb-3" key={domain.id}>
                         <div className="card text-start"> 
                             <LazyLoadImage
                                 alt={domain.name} 
@@ -790,5 +755,31 @@ const FilterResults = ( { called, loading, error, data, view}) => {
     }  
 }
 
+function getQuery() {
+    return `query Domains( $skip: Int!, $first: Int!, $orderBy: String!, $orderDirection: String!, $where: Domain_filter ) {
+        domains ( 
+            orderBy: $orderBy
+            orderDirection: $orderDirection
+            skip: $skip
+            first: $first
+            where: $where
+        )
+        {  
+            id
+            label
+            name
+            hash
+            created
+            registered
+            expires
+            owner
+            registrant,
+            length
+            extension
+            segmentLength
+            tags
+        }
+    }`;
+}
  
 export default Filter;
