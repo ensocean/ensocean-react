@@ -37,8 +37,8 @@ const Navbar = () => {
                 </button> 
                 <div className="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                     <div className="offcanvas-header">
-                        <a className="text-dark text-decoration-none fs-3 fw-bold me-4 ms-2" title="EnsOcean" href="/">
-                            <img src={logo} alt="EnsOcean" className="align-text-top me-1 img-fluid" /><span className="logo">EnsOcean</span>
+                        <a className="navbar-brand" title="EnsOcean" href="/">
+                            <img src={logo} alt="EnsOcean" className="align-text-top me-1" /><span className="logo">EnsOcean</span>
                         </a>
                         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>

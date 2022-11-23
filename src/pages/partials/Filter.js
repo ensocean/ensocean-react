@@ -411,8 +411,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 <div className="offcanvas-body p-0 m-0"> 
                     <div className="accordion w-100">
                         <div className="d-block card-header d-flex flex-row justify-content-between pt-3 pb-3">
-                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5>
-                            
+                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
                             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
                         </div>
                         <div className="accordion-item border-0 rounded-0">
