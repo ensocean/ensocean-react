@@ -15,6 +15,7 @@ import heartIcon from "../assets/heart.svg";
 import exclamationTriangleFillIcon from "../assets/exclamation-triangle-fill.svg";
 import dashCircleFillIcon from "../assets/dash-circle-fill.svg";
 import etherScanIcon from "../assets/etherscan.svg";
+import parse from "html-react-parser";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -51,6 +52,13 @@ const Domain = () => {
     const { data, loading, error } = useQuery(DOMAIN_DETAILS, {
         variables: { label },
     });  
+
+    const encodeHtml = (text) => {
+        return text.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+        });
+    }
+    
  
     if(loading) {
         return (
@@ -118,7 +126,7 @@ const Domain = () => {
                         <div className="container p-3 text-white">
                             <div className='d-flex justify-content-between align-items-center'> 
                                 <div className='d-flex justify-content-start align-items-center gap-3'>
-                                    <h1 className='m-auto'>{obscureLabel(label, 20)}.{extension}</h1>
+                                    <h1 className='m-auto'>{parse(encodeHtml(obscureLabel(label, 20)))}.{extension}</h1>
                                 </div> 
                                 <div className='d-flex align-items-center gap-3'> 
                                     <CopyToClipboard text={window.location.href}
