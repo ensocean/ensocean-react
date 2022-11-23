@@ -363,7 +363,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             <div className="flex-fill"> 
                 <div className="flex-grow-1"> 
                     <div className="d-flex flex-row gap-2">
-                        <button className="btn btn-outline-light rounded-0 border position-relative d-xxl-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
+                        <button className="btn btn-outline-light rounded-0 border position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
                             <img src={funnelFill} alt= ""  />
                             {filterCount > 0 && 
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -500,10 +500,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </button>
                     </div> 
                 </div>
-                <div className="container-fluid p-0 mt-2" id="#results">
+                <div className="container-fluid p-0 mt-2 mb-2" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
-                <div className="container-fluid d-flex justify-content-between mt-2">
+                <div className="container-fluid d-flex justify-content-between p-0">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
                             <img src={fileTypeCsv} alt= "" />
@@ -616,7 +616,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                         <tbody className="text-start">
                             {data.domains.length < 1 &&
                                 <tr>
-                                    <td colSpan='6' className='p-3'><span className='text-warning'>No Result</span></td>
+                                    <td colSpan='6' className='p-3 text-center'><span className='text-warning'>No Result</span></td>
                                 </tr>
                             } 
                             {data.domains.map((domain) => (
