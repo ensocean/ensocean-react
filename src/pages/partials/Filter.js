@@ -407,13 +407,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             </div> 
         </div> 
         <div className="d-flex flex-column flex-lg-row align-items-start pt-2"> 
-            <div className="offcanvas-xxl offcanvas-start pe-2" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
-                <div className="offcanvas-header card-header">
-                    <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5>
-                    <button type="button" className="btn-close me-0" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div className="offcanvas-body p-0 m-0">
+            <div className="offcanvas-xxl offcanvas-start sticky-xxl-top" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
+                <div className="offcanvas-body p-0 m-0"> 
                     <div className="accordion w-100">
+                        <div className="d-block card-header d-flex flex-row justify-content-between pt-3 pb-3">
+                            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5>
+                            <button type="button" className="btn-close me-0 d-block d-xxl-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
                         <div className="accordion-item border-0 rounded-0">
                             <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
                                 <h6 className="accordion-header fw-bold text-dark">Character Set</h6>
@@ -693,7 +693,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                 <> 
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6">
                     {data.domains.length < 1 &&
-                        <div className="col-12 text-center text-warning">No Result found</div>
+                        <div className="col text-center text-warning">No Result found</div>
                     } 
                     {data.domains.map((domain) => (
                     <div className="col mb-3" key={domain.id}>

@@ -31,12 +31,12 @@ const Account = () => {
                     <div className="card text-start">
                     <LazyLoadImage
                         alt={address} 
-                        className="img-fluid img-thumbnail carg-img-top card-img-bottom"
+                        className="img-fluid img-thumbnail card-img-top card-img-bottom"
                         onError={(e)=> { e.target.src = notAvailable; }}
-                        placeholder={<img src={spinner} className="img-fluid img-thumbnail carg-img-top card-img-bottom" alt="" />}
+                        placeholder={<img src={spinner} className="img-fluid img-thumbnail card-img-top card-img-bottom" alt="" />}
                         placeholderSrc={spinner}
                         visibleByDefault={false}
-                        width={75} 
+                        width={125} 
                         src={notAvailable}
                         />  
                     </div>
