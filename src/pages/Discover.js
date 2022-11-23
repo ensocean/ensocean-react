@@ -94,7 +94,7 @@ const Discover = () => {
                         </li> 
                     </ul> 
                 </div>
-                <div className="card-body">
+                <div className="card-body p-2">
                     <Filter First={100} Skip={0} Tab={tab} OrderBy={orderBy} OrderDirection={orderDirection} Where={where} View="gallery" />
                 </div>
             </div>

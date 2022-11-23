@@ -407,12 +407,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             </div> 
         </div> 
         <div className="d-flex flex-column flex-lg-row align-items-start pt-2"> 
-            <div className="offcanvas-xxl offcanvas-start sticky-xxl-top" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
+            <div className="offcanvas-xxl offcanvas-start sticky-xxl-top me-3" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
                 <div className="offcanvas-body p-0 m-0"> 
                     <div className="accordion w-100">
                         <div className="d-block card-header d-flex flex-row justify-content-between pt-3 pb-3">
                             <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5>
-                            <button type="button" className="btn-close me-0 d-block d-xxl-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
                         </div>
                         <div className="accordion-item border-0 rounded-0">
                             <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
@@ -470,7 +471,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div>
             </div>
             <div className="flex-grow-1 w-100">
-                <div className="container-fluid d-flex justify-content-between">
+                <div className="container-fluid d-flex justify-content-between p-0">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
                             <img src={fileTypeCsv} alt= "" />
@@ -495,7 +496,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </button>
                     </div> 
                 </div>
-                <div className="container-fluid mt-2" id="#results">
+                <div className="container-fluid p-0 mt-2" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
                 <div className="container-fluid d-flex justify-content-between mt-2">
@@ -691,7 +692,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         } else {
             return (
                 <> 
-                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6">
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 row-cols-auto">
                     {data.domains.length < 1 &&
                         <div className="col text-center text-warning">No Result found</div>
                     } 
