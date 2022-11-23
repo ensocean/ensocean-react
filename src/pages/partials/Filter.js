@@ -463,9 +463,14 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                 </div>
                             </div>
                         </div> 
-                        <button className="btn btn-outline-primary mb-3" type="button" onClick={handleResetFilter} >
-                            Reset Filters
-                        </button> 
+                        <div className="d-flex flex-row justify-content-between p-2">
+                            <button className="btn btn-outline-primary" type="button" onClick={handleResetFilter} >
+                                Reset Filters
+                            </button>
+                            <button className="btn btn-primary" type="button" onClick={handleRefreshClick} >
+                                Done
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
