@@ -409,10 +409,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         <div className="d-flex flex-column flex-lg-row align-items-start pt-2"> 
             <div className="offcanvas-xxl offcanvas-start sticky-xxl-top me-3" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
                 <div className="offcanvas-body p-0 m-0"> 
-                    <div className="accordion w-100">
-                        <div className="d-block card-header d-flex flex-row justify-content-between pt-3 pb-3">
+                    <div className="accordion w-100 card">
+                        <div className="card-header border-0 d-flex flex-row justify-content-between p-3">
                             <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
-                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
+                            <button type="button" class="btn-close d-block d-xxl-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
                         </div>
                         <div className="accordion-item border-0 rounded-0">
                             <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
