@@ -665,11 +665,11 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                 <td className="p-3"> 
                                     {(function() {
                                         if (isPremium(domain.expires) ) {
-                                        return (<small className="text-success">Available in Premium since { getExpires(domain.expires, true)  }</small>)
+                                        return (<small className="text-success">Available in Premium</small>)
                                         } else if(isExpiring(domain.expires)) {
-                                        return (<small className="text-warning"> In grace period since {  getExpires(domain.expires, true)  }</small>)
+                                        return (<small className="text-warning"> In grace period </small>)
                                         } else if(isExpired(domain.expires)) {
-                                        return (<small className="text-success"> Available since {  getExpires(domain.expires, true)  } </small>)
+                                        return (<small className="text-success"> AVAILABLE  </small>)
                                         } else {
                                             return (<small className="text-muted">{  getExpires(domain.expires, false) } </small>)
                                         }
@@ -739,11 +739,11 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                 <small className="text-muted">
                                     {(function() {
                                         if (isPremium(domain.expires) ) {
-                                        return (<small className="text-success">Available in Premium since { getExpires(domain.expires, true)  }</small>)
+                                        return (<small className="text-success">Available in Premium</small>)
                                         } else if(isExpiring(domain.expires)) {
-                                        return (<small className="text-warning"> In grace period since {  getExpires(domain.expires, true)  }</small>)
+                                        return (<small className="text-warning"> In grace period</small>)
                                         } else if(isExpired(domain.expires)) {
-                                        return (<small className="text-success"> Available since {  getExpires(domain.expires, true)  } </small>)
+                                        return (<small className="text-success"> AVAILABLE </small>)
                                         } else {
                                             return (<small className="text-muted"> Expires {  getExpires(domain.expires, false) } </small>)
                                         }

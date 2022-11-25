@@ -125,7 +125,7 @@ const RecentExpired = () => {
                                 </Link> 
                                 <small className="float-end text-success mt-2 mt-lg-0">
                                     { isExpired(domain.expires) &&
-                                      <span className="text-success"> Available since {getExpires(domain.expires, true)} </span>
+                                      <span className="text-success"> AVAILABLE</span>
                                     } 
                                 </small>
                             </div>
