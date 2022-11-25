@@ -626,7 +626,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                         <div className="flex-shrink-0"> 
                                             <div className="card text-start">
                                                 <LazyLoadImage
-                                                    alt={domain.name} 
+                                                    alt={domain.label} 
                                                     className="img-fluid carg-img-top card-img-bottom"
                                                     onError={(e)=> { e.target.src = notAvailable; }}
                                                     placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" alt="" />}
@@ -642,9 +642,9 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                             <Link
                                             className="text-decoration-none link-dark fs-5 fw-bold" 
                                             data-bs-toggle="tooltip" 
-                                            data-bs-title={"View "+ domain.name +" on EnsOcean"}
-                                            title={"View "+ domain.name +" on EnsOcean"}
-                                            to={"/"+ encodeURIComponent(domain.name) }>
+                                            data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                            title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                            to={"/"+ encodeURIComponent(domain.label + "." + domain.extension) }>
                                                 {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
                                             </Link> 
                                             &nbsp;
@@ -679,7 +679,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                     <Link
                                     className="text-decoration-none link-dark btn btn-outline-warning" 
                                     data-bs-toggle="tooltip" 
-                                    data-bs-title={"Domains of "+ domain.name +""}
+                                    data-bs-title={"Domains of"+ domain.label + "." + domain.extension +""}
                                     title={"Domains of "+ domain.owner +""}
                                     to={"/account/"+ domain.owner }>{obscureAddress(domain.owner || "", 20)} 
                                     </Link> 
@@ -704,7 +704,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                     <div className="col mb-3" key={domain.id}>
                         <div className="card text-start"> 
                             <LazyLoadImage
-                                alt={domain.name} 
+                                alt={domain.label} 
                                 className="img-fluid card-img-top" 
                                 onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
                                 afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
@@ -716,9 +716,9 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                     <Link
                                         className="text-decoration-none link-dark" 
                                         data-bs-toggle="tooltip" 
-                                        data-bs-title={"View "+ domain.name +" on EnsOcean"}
-                                        title={"View "+ domain.name +" on EnsOcean"}
-                                        to={"/"+ encodeURIComponent(domain.name) }>
+                                        data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                        title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                        to={"/"+ encodeURIComponent(domain.label) + ".eth" }>
                                             {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
                                         </Link> 
                                         &nbsp;
