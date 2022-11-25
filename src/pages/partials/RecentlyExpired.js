@@ -20,9 +20,7 @@ const RECENTLY_EXPIRED = gql`
     expires_lte: ${getExpireCondition()}
   } ) {
     id
-    label
-    name
-    hash
+    label  
     created
     registered
     expires

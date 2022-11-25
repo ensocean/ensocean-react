@@ -18,9 +18,7 @@ const RECENTLY_REGISTERED = gql`
     label_not: null, registered_not: null
   } ) {
     id
-    label
-    name
-    hash
+    label 
     created
     registered
     expires

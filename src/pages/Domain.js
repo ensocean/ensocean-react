@@ -30,9 +30,7 @@ const DOMAIN_DETAILS = gql`
         )
         {
             id
-            label
-            name
-            hash
+            label 
             created
             registered
             expires

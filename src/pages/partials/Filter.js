@@ -771,9 +771,7 @@ function getQuery() {
         )
         {  
             id
-            label
-            name
-            hash
+            label 
             created
             registered
             expires
