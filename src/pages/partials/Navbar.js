@@ -6,10 +6,12 @@ import ConnectButton from "./ConnectButton";
 import AlertNetwork from "./AlertNetwork";
 import { useState } from "react";
 import searchIcon from "../../assets/search.svg";
+import { useAccount } from "wagmi";
 
 const Navbar = () => {  
-    const [value, setValue] = useState("");
-
+    const [value, setValue] = useState(""); 
+    const { address, isConnected } = useAccount(); 
+     
     const handleChange = (e) => {
         setValue(e.target.value);
     };
@@ -58,6 +60,10 @@ const Navbar = () => {
                             <li className="nav-item">
                                 <a className="nav-link active" href="/discover">Discover</a>
                             </li>
+                            {isConnected && 
+                            <li className="nav-item">
+                                <a className="nav-link active" href={"/account/"+ address}>My Domains</a>
+                            </li>}
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
                             <ConnectButton />

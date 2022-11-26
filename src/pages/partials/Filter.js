@@ -620,7 +620,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                 </tr>
                             } 
                             {data.domains.map((domain) => (
-                            <tr key={domain.id}>
+                            <tr key={domain.id} className="t-card">
                                 <td className="p-3">
                                     <div className="d-flex">
                                         <div className="flex-shrink-0"> 
