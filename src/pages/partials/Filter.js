@@ -29,7 +29,7 @@ let csvHeaders = [
     { label: "Label", key: "label" },
     { label: "Extension", key: "extension" },
     { label: "Token ID", key: "tokenId" },
-    { label: "Hash", key: "hash" },
+    { label: "Hash", key: "id" },
     { label: "Created", key: "created" },
     { label: "Registered", key: "registered" },
     { label: "Expires", key: "expires" },
