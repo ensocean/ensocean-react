@@ -12,6 +12,7 @@ import x2y2Icon from "../assets/x2y2.svg";
 import raribleIcon from "../assets/rarible.svg";
 import looksrareIcon from "../assets/looksrare.svg";
 import openseaIcon from "../assets/opensea2.svg";
+import listIcon from "../assets/list-white.svg";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 
@@ -57,18 +58,32 @@ const Account = () => {
                         <a target="_blank" rel="noreferrer" href={"https://etherscan.io/address/"+ address} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="View on etherscan.io" className='text-white'>
                             <img src={etherscanIcon} width={20} height={20} alt="" />
                         </a>
-                        <a target="_blank" rel="noreferrer" href={"https://x2y2.io/user/"+ address}>
-                            <img src={x2y2Icon}  width={20} height={20} alt="" />
-                        </a>
-                        <a target="_blank" rel="noreferrer" href={"https://rarible.com/user/"+ address}>
-                            <img src={raribleIcon}  width={20} height={20} alt="" />
-                        </a>
-                        <a target="_blank" rel="noreferrer" href={"https://looksrare.org/accounts/"+ address}>
-                            <img src={looksrareIcon}  width={20} height={20} alt="" />
-                        </a>
                         <a target="_blank" rel="noreferrer" href={"https://opensea.io/"+ address}>
-                            <img src={openseaIcon}  width={20} height={20} alt="" />
+                            <img src={openseaIcon}  width={24} height={24} alt="" />
                         </a>
+                        
+                        <div className="dropdown p-0">
+                            <a className="" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src={listIcon}  width={22} height={22} alt="" />
+                            </a> 
+                            <ul className="dropdown-menu">
+                                <li className="p-0">
+                                    <a className="dropdown-item" target="_blank" rel="noreferrer" href={"https://x2y2.io/user/"+ address}>
+                                        <img src={x2y2Icon}  width={20} height={20} alt="" /> X2y2
+                                    </a>
+                                </li>
+                                <li className="p-0">
+                                    <a className="dropdown-item" target="_blank" rel="noreferrer" href={"https://rarible.com/user/"+ address}>
+                                        <img src={raribleIcon}  width={20} height={20} alt="" /> Rarible
+                                    </a>
+                                </li>
+                                <li className="p-0">
+                                    <a className="dropdown-item" target="_blank" rel="noreferrer" href={"https://looksrare.org/accounts/"+ address}>
+                                        <img src={looksrareIcon}  width={20} height={20} alt="" /> Looksrare
+                                    </a>    
+                                </li>
+                            </ul>
+                        </div> 
                     </div>
                 </div>
             </div>
