@@ -102,7 +102,7 @@ const RecentRegistered = () => {
                                         data-bs-toggle="tooltip" 
                                         data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
                                         title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
-                                        to={encodeURIComponent(domain.label) + ".eth"}>
+                                        to={encodeURIComponent(domain.label)  + "."+ domain.extension }>
 
                                         {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
                                         
