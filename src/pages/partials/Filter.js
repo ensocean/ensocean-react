@@ -659,7 +659,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                                     </span>
                                                 }
                                             </Link>
-                                            <span className="float-end text-success mt-2 mt-lg-0">
+                                            <span className="float-end text-success mt-0">
                                                 {(function() {
                                                     if (isPremium(domain.expires) ) {
                                                         return (<span className="text-success fw-bold">Available in Premium</span>)
