@@ -659,17 +659,17 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                                     </span>
                                                 }
                                             </Link>
-                                            <small className="float-end text-success mt-2 mt-lg-0">
+                                            <span className="float-end text-success mt-2 mt-lg-0">
                                                 {(function() {
                                                     if (isPremium(domain.expires) ) {
-                                                        return (<small className="text-success">Available in Premium</small>)
+                                                        return (<span className="text-success fw-bold">Available in Premium</span>)
                                                     } else if(isExpiring(domain.expires)) {
-                                                        return (<small className="text-warning"> In grace period </small>)
+                                                        return (<span className="text-warning fw-bold"> In grace period </span>)
                                                     } else if(isExpired(domain.expires)) {
-                                                        return (<small className="text-success"> AVAILABLE  </small>)
+                                                        return (<span className="text-success fw-bold"> AVAILABLE  </span>)
                                                     }  
                                                 })()} 
-                                            </small>
+                                            </span>
                                         </div>
                                     </div> 
                                 </td> 
