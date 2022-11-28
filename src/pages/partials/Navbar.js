@@ -55,9 +55,6 @@ const Navbar = () => {
                         </form>
                         <ul className="navbar-nav justify-content-start align-items-canter flex-grow-1 mt-3 mt-lg-1 ">
                             <li className="nav-item">
-                                <a className="nav-link active" href="/">Home</a>
-                            </li> 
-                            <li className="nav-item">
                                 <a className="nav-link active" href="/discover">Discover</a>
                             </li> 
                         </ul>
