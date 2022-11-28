@@ -1,8 +1,9 @@
 
-import "bootstrap/dist/css/bootstrap.min.css";  
-import  "bootstrap/dist/js/bootstrap.esm.min.js"; 
-import './App.css'; 
 
+import  "bootstrap/dist/js/bootstrap.esm.min.js"; 
+import "./App.scss";
+import './App.css'; 
+ 
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";

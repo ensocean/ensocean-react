@@ -697,7 +697,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         } else {
             return (
             <> 
-                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 row-cols-auto">
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-mdl-4 row-cols-lg-5 row-cols-mlg-5 row-cols-xl-6">
                     {data.domains.length < 1 &&
                         <div className="col text-center text-warning">No Result found</div>
                     } 
