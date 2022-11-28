@@ -59,11 +59,7 @@ const Navbar = () => {
                             </li> 
                             <li className="nav-item">
                                 <a className="nav-link active" href="/discover">Discover</a>
-                            </li>
-                            {isConnected && 
-                            <li className="nav-item">
-                                <a className="nav-link active" href={"/account/"+ address}>My Domains</a>
-                            </li>}
+                            </li> 
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
                             <ConnectButton />
