@@ -1,0 +1,19 @@
+
+@import "bootstrap/scss/_functions.scss";
+@import "bootstrap/scss/_variables.scss";
+@import "bootstrap/scss/_mixins.scss";
+ 
+$grid-breakpoints: (
+    xss: 0,
+    xs: 300px,
+    sm: 576px,
+    md: 768px,
+    mdl: 992px,
+    lg: 1292px,
+    xl: 1492px,
+    xxl: 1624px
+);
+ 
+//$grid-breakpoints: map-merge($grid-breakpoints, $custom-grid-breakpoints);
+ 
+@import "bootstrap/scss/bootstrap.scss";

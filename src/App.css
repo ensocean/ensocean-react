@@ -19,7 +19,15 @@
 }
  
 td {
-  min-width: 200px;
+  min-width: 150px;
 }
  
- 
+.g-card:hover{
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+}
+
+.t-card:hover{
+  transform: scale(1);
+  box-shadow: 0 10px 20px rgba(161, 161, 161, 0.12), 0 4px 8px rgba(156, 155, 155, 0.06);
+}

@@ -18,9 +18,7 @@ const RECENTLY_REGISTERED = gql`
     label_not: null, registered_not: null
   } ) {
     id
-    label
-    name
-    hash
+    label 
     created
     registered
     expires
@@ -86,7 +84,7 @@ const RecentRegistered = () => {
                             <div className="flex-shrink-0">
                                 <div className="card text-start">
                                     <LazyLoadImage
-                                        alt={domain.name} 
+                                        alt={domain.label} 
                                         className="img-fluid card-img-top card-img-bottom"
                                         onError={(e)=> {e.target.src = notAvailable; }}
                                         placeholder={<img src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />}
@@ -102,9 +100,9 @@ const RecentRegistered = () => {
                                     <Link
                                         className="text-decoration-none link-dark fs-5 fw-bold" 
                                         data-bs-toggle="tooltip" 
-                                        data-bs-title={"View "+ domain.name +" on EnsOcean"}
-                                        title={"View "+ domain.name +" on EnsOcean"}
-                                        to={encodeURIComponent(domain.name)}>
+                                        data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                        title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                        to={encodeURIComponent(domain.label)  + "."+ domain.extension }>
 
                                         {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
                                         

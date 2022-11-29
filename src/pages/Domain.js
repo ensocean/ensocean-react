@@ -30,9 +30,7 @@ const DOMAIN_DETAILS = gql`
         )
         {
             id
-            label
-            name
-            hash
+            label 
             created
             registered
             expires
@@ -205,8 +203,8 @@ const Domain = () => {
         return (
         <> 
             <Helmet> 
-              <title>{domain.name} - EnsOcean</title>
-              <meta name="description" content="{domain.name}" />
+              <title>{domain.label} - EnsOcean</title>
+              <meta name="description" content="{domain.label}" />
             </Helmet> 
             <div className="container-fluid bg-primary mb-4">
                     <div className="container p-3 text-white">
@@ -251,7 +249,7 @@ const Domain = () => {
                             <div className="col-lg-4">   
                                 <div className="card">
                                     <LazyLoadImage
-                                    alt={domain.name} 
+                                    alt={domain.label} 
                                     className="img-fluid card-img-top"
                                     onError={(e)=> { document.getElementById(domain.label).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
                                     afterLoad={(e)=> { document.getElementById(domain.label).remove(); }}

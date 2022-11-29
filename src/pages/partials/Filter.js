@@ -1,6 +1,6 @@
 import React, {useState, useEffect } from "react"; 
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, isValidName, jsonParse, jsonStringify, obscureAddress, obscureLabel, getTokenId } from '../../helpers/String';
+import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, isValidName, jsonParse, jsonStringify, obscureAddress, obscureLabel, getTokenId, getDateString } from '../../helpers/String';
 import { useLazyQuery, gql } from '@apollo/client';
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import spinner from '../../assets/spinner.svg'
@@ -29,7 +29,7 @@ let csvHeaders = [
     { label: "Label", key: "label" },
     { label: "Extension", key: "extension" },
     { label: "Token ID", key: "tokenId" },
-    { label: "Hash", key: "hash" },
+    { label: "Hash", key: "id" },
     { label: "Created", key: "created" },
     { label: "Registered", key: "registered" },
     { label: "Expires", key: "expires" },
@@ -620,16 +620,16 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                 </tr>
                             } 
                             {data.domains.map((domain) => (
-                            <tr key={domain.id}>
+                            <tr key={domain.id} className="t-card">
                                 <td className="p-3">
                                     <div className="d-flex">
                                         <div className="flex-shrink-0"> 
                                             <div className="card text-start">
                                                 <LazyLoadImage
-                                                    alt={domain.name} 
-                                                    className="img-fluid carg-img-top card-img-bottom"
+                                                    alt={domain.label} 
+                                                    className="img-fluid card-img-top card-img-bottom"
                                                     onError={(e)=> { e.target.src = notAvailable; }}
-                                                    placeholder={<img src={spinner} className="img-fluid carg-img-top card-img-bottom" alt="" />}
+                                                    placeholder={<img src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />}
                                                     placeholderSrc={spinner}
                                                     visibleByDefault={false}
                                                     width={46}
@@ -638,48 +638,49 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                                     />  
                                             </div>
                                         </div>
-                                        <div className="flex-grow-1 ms-3 d-flex align-items-start">
+                                        <div className="flex-grow-1 ms-3 d-flex flex-column flex-xl-row justify-content-between">
                                             <Link
-                                            className="text-decoration-none link-dark fs-5 fw-bold" 
-                                            data-bs-toggle="tooltip" 
-                                            data-bs-title={"View "+ domain.name +" on EnsOcean"}
-                                            title={"View "+ domain.name +" on EnsOcean"}
-                                            to={"/"+ encodeURIComponent(domain.name) }>
-                                                {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
-                                            </Link> 
-                                            &nbsp;
-                                            { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
-                                                <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                                    <img src={exclamationTriangleFill} alt= ""  />
-                                                </span>
-                                            }
-                                            &nbsp;
-                                            { !isValidName(domain.label) && 
-                                                <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                                    <img src={dashCircleFill} alt= ""  />
-                                                </span>
-                                            }
+                                                className="text-decoration-none link-dark fs-5 fw-bold" 
+                                                data-bs-toggle="tooltip" 
+                                                data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                                title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
+                                                to={"/"+ encodeURIComponent(domain.label + "." + domain.extension) }>
+                                                    {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
+                                                { ' ' } 
+                                                { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
+                                                    <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
+                                                        <img src={exclamationTriangleFill} alt= ""  />
+                                                    </span>
+                                                }
+                                                { ' ' }
+                                                { !isValidName(domain.label) && 
+                                                    <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
+                                                        <img src={dashCircleFill} alt= ""  />
+                                                    </span>
+                                                }
+                                            </Link>
+                                            <span className="float-end text-success mt-0">
+                                                {(function() {
+                                                    if (isPremium(domain.expires) ) {
+                                                        return (<span className="text-success fw-bold">Available in Premium</span>)
+                                                    } else if(isExpiring(domain.expires)) {
+                                                        return (<span className="text-warning fw-bold"> In grace period </span>)
+                                                    } else if(isExpired(domain.expires)) {
+                                                        return (<span className="text-success fw-bold"> AVAILABLE  </span>)
+                                                    }  
+                                                })()} 
+                                            </span>
                                         </div>
                                     </div> 
                                 </td> 
                                 <td className="p-3"> 
-                                    {(function() {
-                                        if (isPremium(domain.expires) ) {
-                                        return (<small className="text-success">Available in Premium since { getExpires(domain.expires, true)  }</small>)
-                                        } else if(isExpiring(domain.expires)) {
-                                        return (<small className="text-warning"> In grace period since {  getExpires(domain.expires, true)  }</small>)
-                                        } else if(isExpired(domain.expires)) {
-                                        return (<small className="text-success"> Available since {  getExpires(domain.expires, true)  } </small>)
-                                        } else {
-                                            return (<small className="text-muted">{  getExpires(domain.expires, false) } </small>)
-                                        }
-                                    })()} 
+                                    {getExpires(domain.expires)}
                                 </td>
                                 <td className="p-3"> 
                                     <Link
                                     className="text-decoration-none link-dark btn btn-outline-warning" 
                                     data-bs-toggle="tooltip" 
-                                    data-bs-title={"Domains of "+ domain.name +""}
+                                    data-bs-title={"Domains of"+ domain.label + "." + domain.extension +""}
                                     title={"Domains of "+ domain.owner +""}
                                     to={"/account/"+ domain.owner }>{obscureAddress(domain.owner || "", 20)} 
                                     </Link> 
@@ -695,66 +696,61 @@ const FilterResults = ( { called, loading, error, data, view}) => {
             )
         } else {
             return (
-                <> 
-                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 row-cols-auto">
+            <> 
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-mdl-4 row-cols-lg-5 row-cols-mlg-5 row-cols-xl-6">
                     {data.domains.length < 1 &&
                         <div className="col text-center text-warning">No Result found</div>
                     } 
                     {data.domains.map((domain) => (
                     <div className="col mb-3" key={domain.id}>
-                        <div className="card text-start"> 
-                            <LazyLoadImage
-                                alt={domain.name} 
-                                className="img-fluid card-img-top" 
-                                onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
-                                src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                            /> 
-                            <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
-                            <div className="card-body p-2">
-                                <h6 className="card-title m-0 text-truncate">
-                                    <Link
-                                        className="text-decoration-none link-dark" 
-                                        data-bs-toggle="tooltip" 
-                                        data-bs-title={"View "+ domain.name +" on EnsOcean"}
-                                        title={"View "+ domain.name +" on EnsOcean"}
-                                        to={"/"+ encodeURIComponent(domain.name) }>
-                                            {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
-                                        </Link> 
-                                        &nbsp;
+                        <Link className="text-decoration-none link-dark fw-bold fs-5" title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"} to={"/"+ encodeURIComponent(domain.label) + "."+ domain.extension }>
+                            <div className="card text-start g-card"> 
+                                <LazyLoadImage
+                                    alt={domain.label} 
+                                    className="img-fluid card-img-top" 
+                                    onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                    afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
+                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                /> 
+                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
+                                <div className="card-body p-2">
+                                    <h6 className="card-title m-0 text-truncate fs-5 fw-bold">
+                                        {obscureLabel(domain.label, 20)}.{domain.extension}
+                                        {' '}
                                         { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                             <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                                 <img src={exclamationTriangleFill} alt= "" />
                                             </span>
                                         }
-                                        &nbsp;
+                                        {' '}
                                         { !isValidName(domain.label) && 
                                             <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
                                                 <img src={dashCircleFill} alt= ""  />
                                             </span>
                                         }
-                                </h6>
+                                    </h6>
+                                </div>
+                                <div className="card-footer bg-white p-2">
+                                    <small className="text-muted">
+                                        {(function() {
+                                            if (isPremium(domain.expires) ) {
+                                            return (<small className="text-success">Available in Premium</small>)
+                                            } else if(isExpiring(domain.expires)) {
+                                            return (<small className="text-warning"> In grace period</small>)
+                                            } else if(isExpired(domain.expires)) {
+                                            return (<small className="text-success"> AVAILABLE </small>)
+                                            } else {
+                                                return (<small className="text-muted"> Expires {  getExpires(domain.expires, false) } </small>)
+                                            }
+                                        })()} 
+                                    </small>
+                                </div>
                             </div>
-                            <div className="card-footer bg-white p-2">
-                                <small className="text-muted">
-                                    {(function() {
-                                        if (isPremium(domain.expires) ) {
-                                        return (<small className="text-success">Available in Premium since { getExpires(domain.expires, true)  }</small>)
-                                        } else if(isExpiring(domain.expires)) {
-                                        return (<small className="text-warning"> In grace period since {  getExpires(domain.expires, true)  }</small>)
-                                        } else if(isExpired(domain.expires)) {
-                                        return (<small className="text-success"> Available since {  getExpires(domain.expires, true)  } </small>)
-                                        } else {
-                                            return (<small className="text-muted"> Expires {  getExpires(domain.expires, false) } </small>)
-                                        }
-                                    })()} 
-                                </small>
-                            </div>
-                        </div>
+                        </Link>
                     </div>
                     ))}
                 </div>  
-                </>
+            </>
             ) 
         } 
     }  
@@ -771,9 +767,7 @@ function getQuery() {
         )
         {  
             id
-            label
-            name
-            hash
+            label 
             created
             registered
             expires
