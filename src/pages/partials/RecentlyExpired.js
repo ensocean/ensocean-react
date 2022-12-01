@@ -28,6 +28,7 @@ const RECENTLY_EXPIRED = gql`
     registrant,
     length
     tags
+    extension
   }
 }
 `;
@@ -104,7 +105,7 @@ const RecentExpired = () => {
                         <div className="flex-grow-1 ms-3">
                             <div className="d-flex flex-column flex-md-row justify-content-between">
                                 <Link
-                                    className="text-decoration-none link-dark fs-5 fw-bold" 
+                                    className="text-decoration-none link-dark fs-5 fw-bold text-truncate" 
                                     data-bs-toggle="tooltip" 
                                     data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
                                     title={"View "+ domain.label + "." + domain.extension +"on EnsOcean"}

@@ -777,6 +777,7 @@ function getQuery() {
             extension
             segmentLength
             tags
+            extension
         }
     }`;
 }
