@@ -2,16 +2,15 @@ import React  from "react";
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
 import {Helmet} from "react-helmet";
-import { getDateString, getLength, getSegmentLength, getTokenId, isExpired, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
+import { getDateString, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import DomainEvents from "./partials/DomainEvents";
 import spinner from '../assets/spinner.svg'
 import notAvailable from "../assets/not-available.svg";
-import shareIcon from '../assets/share.svg'
+import shareIcon from '../assets/share-white.svg'
 import clipboardIcon from "../assets/clipboard.svg";
-import heartIcon from "../assets/heart.svg";
 import exclamationTriangleFillIcon from "../assets/exclamation-triangle-fill.svg";
 import dashCircleFillIcon from "../assets/dash-circle-fill.svg";
 import etherScanIcon from "../assets/etherscan.svg";
@@ -56,8 +55,7 @@ const Domain = () => {
             return '&#'+i.charCodeAt(0)+';';
         });
     }
-    
- 
+     
     if(loading) {
         return (
             <>
@@ -124,18 +122,15 @@ const Domain = () => {
                         <div className="container p-3 text-white">
                             <div className='d-flex justify-content-between align-items-center'> 
                                 <div className='d-flex justify-content-start align-items-center gap-3'>
-                                    <h1 className='m-auto'>{parse(encodeHtml(obscureLabel(label, 20)))}.{extension}</h1>
+                                    <h1 className='m-auto fs-1 fw-bold'>{parse(encodeHtml(obscureLabel(label, 20)))}.{extension}</h1>
                                 </div> 
                                 <div className='d-flex align-items-center gap-3'> 
                                     <CopyToClipboard text={window.location.href}
                                         onCopy={() => toast.success("Link Copied") }>
                                         <span className='cursor-pointer'>
-                                            <img src={shareIcon} alt=""  />
+                                            <img src={shareIcon} width={32} height={32} alt=""  />
                                         </span>
-                                    </CopyToClipboard>
-                                    <span className='cursor-pointer text-white'>
-                                        <img src={heartIcon} alt="" />
-                                    </span> 
+                                    </CopyToClipboard> 
                                 </div> 
                             </div>
                         </div> 
@@ -144,7 +139,7 @@ const Domain = () => {
                         <div className='container'>
                             <div className="row"> 
                                 <div className="col-lg-4">
-                                    <div className="card h-100 text-start">
+                                    <div className="card">
                                         <LazyLoadImage
                                             alt={label} 
                                             className="img-fluid img-thumbnail card-img-top"
@@ -210,7 +205,7 @@ const Domain = () => {
                     <div className="container p-3 text-white">
                         <div className='d-flex justify-content-between align-items-center'> 
                             <div className='d-flex justify-content-start align-items-center gap-3 text-sm'>
-                                <h1 className='m-auto display-6'>
+                                <h1 className='m-auto fs-1 fw-bold'>
                                     {obscureLabel(domain.label, 25)}.{domain.extension || "eth"}
                                     { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
@@ -235,10 +230,7 @@ const Domain = () => {
                                     <span className='cursor-pointer' >
                                         <img src={shareIcon} width={32} alt= "" className="text-white" />
                                     </span>
-                                </CopyToClipboard>
-                                <span className='cursor-pointer text-white'>
-                                    <img src={heartIcon} width={32} alt= ""  />
-                                </span> 
+                                </CopyToClipboard> 
                             </div>  
                         </div>
                     </div> 
@@ -250,7 +242,7 @@ const Domain = () => {
                                 <div className="card">
                                     <LazyLoadImage
                                     alt={domain.label} 
-                                    className="img-fluid card-img-top"
+                                    className="img-fluid card-img-top card-img-bottom"
                                     onError={(e)=> { document.getElementById(domain.label).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
                                     afterLoad={(e)=> { document.getElementById(domain.label).remove(); }}
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
@@ -261,8 +253,14 @@ const Domain = () => {
                             <div className='col-lg-8 mt-3 mt-lg-0'>
                                 <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
                                     { isExpired(domain.expires) && 
-                                        <div className="alert alert-success">Name available for registration!</div>
+                                        <div className="alert alert-success">Available for registration!</div>
                                     }
+                                    { isPremium(domain.expires) && 
+                                        <div className="alert alert-success">Available for Premium registration!</div>
+                                    } 
+                                    { isExpiring(domain.expires) && 
+                                        <div className="alert alert-warning">About to Expire!</div>
+                                    } 
                                     { isValidName(domain.label) === false &&
                                             <div className="alert alert-danger">Malformed!</div>
                                     }

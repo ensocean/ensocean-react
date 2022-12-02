@@ -1,10 +1,7 @@
- 
- 
- 
 import { useAccount, useNetwork } from 'wagmi';
    
 function AlertNetwork() { 
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { chain } = useNetwork();
   
   const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
