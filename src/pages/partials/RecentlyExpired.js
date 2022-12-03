@@ -2,7 +2,7 @@ import React from "react";
 import { useLazyQuery, gql } from "@apollo/client";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
-import { getExpireCondition, getExpires, getTokenId, isExpired, isValidName, obscureLabel } from "../../helpers/String";
+import { getExpireCondition, getTokenId, isExpired, isValidName, obscureLabel } from "../../helpers/String";
 import spinner from '../../assets/spinner.svg'
 import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg'
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
@@ -28,6 +28,7 @@ const RECENTLY_EXPIRED = gql`
     registrant,
     length
     tags
+    extension
   }
 }
 `;
@@ -104,7 +105,7 @@ const RecentExpired = () => {
                         <div className="flex-grow-1 ms-3">
                             <div className="d-flex flex-column flex-md-row justify-content-between">
                                 <Link
-                                    className="text-decoration-none link-dark fs-5 fw-bold" 
+                                    className="text-decoration-none link-dark fs-5 fw-bold text-truncate" 
                                     data-bs-toggle="tooltip" 
                                     data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
                                     title={"View "+ domain.label + "." + domain.extension +"on EnsOcean"}

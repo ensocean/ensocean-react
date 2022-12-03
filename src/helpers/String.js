@@ -6,8 +6,7 @@ import json5 from "json5";
 
 const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
 const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
-  
-
+ 
 export const obscureAddress = (address) => {
     return address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length);
 }
@@ -71,6 +70,18 @@ export function isPremium(expires) {
 export function getDateString(timestamp) {
     return moment.unix(timestamp).toDate().toDateString();
 } 
+
+export function normalizeName (name) {
+    return namehash.normalize(name);
+}
+
+export function isValidDomain(name) {
+    try {
+      return isValidName(name) === true && name.indexOf(".") === -1;
+    } catch {
+      return false;
+    }
+}
 
 export function isValidName(name) {
     try {

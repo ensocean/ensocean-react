@@ -36,7 +36,7 @@ const DomainEvents = ({ id }) => {
 
     if (loading) return "Loading...";
     if (error) return <pre>{error.message}</pre>
-    if (data.domainEvents.length < 1) return <span>No result</span>
+    
     
     return (
         <>
@@ -62,6 +62,11 @@ const DomainEvents = ({ id }) => {
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    {data.domainEvents.length < 1 && 
+                                        <tr key="">
+                                            <td colSpan={5}>No events found</td>
+                                        </tr>
+                                    }
                                     {data.domainEvents.map((event) => (
                                         <tr key={event.id}>
                                             <td className="p-3">{event.name }</td>
