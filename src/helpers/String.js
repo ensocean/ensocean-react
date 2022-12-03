@@ -98,6 +98,25 @@ export function jsonParse(filter) {
 export function jsonStringify(filter) {
     return json5.stringify(filter, { quote: '"'})
 }
- 
+  
+export function toBN(value) {
+    return BigNumber.from(value);
+}
+
+export function toGwei(gasPrice) {
+    return utils.formatUnits(gasPrice, "gwei");
+}  
+
+export function toWei(value, decimals = 18) {
+    return utils.parseUnits(value, decimals);
+} 
+
+export function fromWei(value, decimals = 18) {
+    return utils.formatUnits(value, decimals);
+}
+
+export default function isZero(hexNumberString) {
+    return /^0x0*$/.test(hexNumberString);
+}
  
  
