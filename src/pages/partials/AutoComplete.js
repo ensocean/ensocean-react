@@ -78,31 +78,37 @@ const AutoComplete = () => {
   return (
     <AsyncTypeahead
       filterBy={()=> true}
+      isLoading={false}
+      clearButton={false}
+      defaultOpen={false}
+      useCache={false}
       id="auto_search"
       delay={200}
-      isLoading={false}
-      clearButton={false} 
+      newSelectionPrefix={""}
+      paginationText={""}
       labelKey="label"
       minLength={1}
       onSearch={handleSearch}
-      options={options}
-      defaultOpen={true}
+      options={options} 
       className="flex-grow-1"
-      useCache={true}
       promptText="Type 3 character to search"
       searchText="Search"
       emptyLabel="Type 3 character to search"
       placeholder="Search for a web3 username"
       onKeyDown={handleKeydown}
+      renderMenuItemChildren={(option)=> {
+        return (<></>)
+      }}
       renderMenu={(results, menuProps) => (
         <Menu {...menuProps} >
           {results.map((result, index) => (
-            <div className="d-flex flex-row justify-content-between p-1 ps-3 gap-1">
+            <>
+            <div key={result.id} className="d-flex flex-row justify-content-between p-2 gap-1 fs-6 fw-bold">
                 <Link to={"/"+ result.label + "."+ result.extension} option={result} position={index} className="text-truncate link-dark text-decoration-none">
                 {result.label}.{result.extension}
                 </Link>
                 {loading && 
-                    <div className="spinner-border spinner-border-sm"></div>
+                <div className="spinner-border spinner-border-sm"></div>
                 } 
                 {!loading && isValid && available &&
                 <span className="badge text-bg-success">Available</span>
@@ -117,28 +123,28 @@ const AutoComplete = () => {
                 <span className="badge text-bg-danger">Failed to load</span>
                 }
             </div>
+            {!available &&
+                <div key="clickmore" className="d-flex flex-row justify-content-center p-2 gap-1">
+                    <Link to={"/find?label="+ result.label } option={result} position={index} className="text-truncate link-dark text-decoration-none">
+                        Click to see more item...
+                    </Link>
+                </div>
+            }
+            </>
           ))}
         </Menu>
       )}
       renderInput={({ inputRef, referenceElementRef, ...inputProps }) => {
         return (
-            <form className="from-group is-loading" role="search" onSubmit={handleSubmit}>
-                <div className="input-group input-group-lg">
+            <form role="search" onSubmit={handleSubmit}>
+                <div className="input-group input-group-lg has-validation">
                     <input {...inputProps}
-                        className="form-control border-primary border-end-0"
+                        className={"form-control pe-0 " + (available && query.length > 2 ? "is-valid": "" ) + " " + (!isValid ? "is-invalid": "" ) }
                         ref={(node) => {
                         inputRef(node);
                         referenceElementRef(node);
-                        }} />
-                    <button className="btn btn-outline-primary" type="submit">
-                        {loading && 
-                            <div className="spinner-border spinner-border-sm"></div>
-                        }
-                        {!loading &&
-                        <img src={searchIcon}  alt=""  />}
-                    </button>
-                </div>
-                
+                        }} />  
+                </div> 
             </form> 
         );
       }}
