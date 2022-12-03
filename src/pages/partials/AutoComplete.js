@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate} from "react-router-dom";  
 import { Menu, AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { useLazyQuery, gql } from "@apollo/client";  
-import searchIcon from "../../assets/search.svg";
+import { useLazyQuery, gql } from "@apollo/client";
 import { isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName } from '../../helpers/String';
   
 const AutoComplete = () => {
@@ -20,6 +19,8 @@ const AutoComplete = () => {
         setQuery(q.toLowerCase()); 
          
         if(Array.from(q).length < 3) {
+            setIsValid(true);
+            setAvailable(false);  
             setActiveClass("is-search");
             return;
         } 
@@ -28,19 +29,19 @@ const AutoComplete = () => {
             q = q.substring(0, q.lastIndexOf(".eth"));
         }
  
-        if(!isValidDomain(q)) { 
+        if(!isValidDomain(q)) {  
             setIsValid(false);
             setAvailable(false);  
-            setActiveClass("is-invalid");
+            setActiveClass("is-invalid"); 
+            setOptions([ { id: q, label: q,  extension: "eth", expires: null, valid: false } ]);
             return;
         } 
-
-        setIsValid(true);
-
+ 
         const labels = [q, "0x"+ q, "the"+ q]; 
         const options = labels.map(t=> { return { id: t, label: t,  extension: "eth", expires: null, valid: isValidDomain(t) } });
+        setIsValid(true);
         setOptions(options);
- 
+
         const { data } = await searchDomains({ variables: { labels }});
   
         if( data.domains.length > 0) { 
@@ -53,24 +54,24 @@ const AutoComplete = () => {
                 }
             }); 
             setOptions(options);
-            setAvailable(false);
+            setAvailable(false); 
             setActiveClass("is-search");
-        } else { 
+        } else {  
             setAvailable(true); 
             setActiveClass("is-valid");
         }    
     };
 
     const handleSubmit = (e) => {  
-    navigateToDomain(query);
-    e.preventDefault();
-    return false;
+        navigateToDomain(query);
+        e.preventDefault();
+        return false;
     };
  
     const handleKeydown = (e) => {  
         if (e.key === "Enter") {
             navigateToDomain(e.target.value);
-            //e.preventDefault();
+            e.preventDefault();
         }
         return false;
     };
