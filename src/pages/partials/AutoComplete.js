@@ -3,7 +3,7 @@ import { Link, useNavigate} from "react-router-dom";
 import { Menu, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useLazyQuery, gql } from "@apollo/client";  
 import searchIcon from "../../assets/search.svg";
-import { isExpired, isExpiring, isPremium } from '../../helpers/String';
+import { isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName } from '../../helpers/String';
 
 const AutoComplete = () => {
   const [query, setQuery] = useState("");
@@ -24,11 +24,12 @@ const AutoComplete = () => {
         q = q.substring(0, q.lastIndexOf(".eth"));
     }
 
-    if(q.indexOf(".") !== -1) {
+    if(!isValidDomain(q)) {
         setIsValid(false);
         setOptions([{id: null, label: q, extension: "eth" }]);
         return;
     } 
+
     setIsValid(true);
     setOptions([{id: null, label: q, extension: "eth" }]);
  
@@ -47,7 +48,7 @@ const AutoComplete = () => {
     } else {
         setAvailable(true);
     }
-    
+
   };
 
   const handleSubmit = (e) => {  
@@ -65,9 +66,7 @@ const AutoComplete = () => {
   };
 
   const navigateToDomain = (domain)=> {
-    if(domain.indexOf(".") !== -1) {
-        domain = domain.replace(".", "");
-    } 
+    domain = normalizeName(domain);
     setQuery(domain);
     if(domain.lastIndexOf(".eth") !== -1)
         navigate("/"+ domain)
@@ -80,7 +79,7 @@ const AutoComplete = () => {
     <AsyncTypeahead
       filterBy={()=> true}
       id="auto_search"
-      delay={100}
+      delay={200}
       isLoading={false}
       clearButton={false} 
       labelKey="label"
@@ -98,7 +97,7 @@ const AutoComplete = () => {
       renderMenu={(results, menuProps) => (
         <Menu {...menuProps} >
           {results.map((result, index) => (
-            <div className="d-flex flex-row justify-content-between p-1 ps-3 fs-6 fw-bold gap-1">
+            <div className="d-flex flex-row justify-content-between p-1 ps-3 gap-1">
                 <Link to={"/"+ result.label + "."+ result.extension} option={result} position={index} className="text-truncate link-dark text-decoration-none">
                 {result.label}.{result.extension}
                 </Link>
@@ -126,7 +125,7 @@ const AutoComplete = () => {
             <form className="from-group is-loading" role="search" onSubmit={handleSubmit}>
                 <div className="input-group input-group-lg">
                     <input {...inputProps}
-                        className="form-control border-primary border-end-0 fs-5 fw-bold"
+                        className="form-control border-primary border-end-0"
                         ref={(node) => {
                         inputRef(node);
                         referenceElementRef(node);
