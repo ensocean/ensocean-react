@@ -33,6 +33,10 @@ export const getTokenId = (label) => {
     return tokenId;
 }
 
+export const getLabelHash = (label) => { 
+    return utils.keccak256(utils.toUtf8Bytes(label));;
+}
+
 
 export const getLength = (label) => { 
     return Array.from(label).length;
@@ -74,7 +78,7 @@ export function getDateString(timestamp) {
 export function normalizeName (name) {
     return namehash.normalize(name);
 }
-
+  
 export function isValidDomain(name) {
     try {
       return isValidName(name) === true && name.indexOf(".") === -1;
