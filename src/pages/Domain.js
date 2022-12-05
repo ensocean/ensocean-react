@@ -212,7 +212,7 @@ const Domain = () => {
             </>
         )
     } else {
-        const domain = data.domains[0]; 
+        const domain = data.domains[0];  
         return (
         <> 
             <Helmet> 
@@ -225,7 +225,7 @@ const Domain = () => {
                             <div className='d-flex justify-content-start align-items-center gap-3 text-sm'>
                                 <h1 className='m-auto fs-1 fw-bold'>
                                     {obscureLabel(domain.label || label, 25)}.{domain.extension || "eth"}
-                                    { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
+                                    { (domain.tags && (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode"))) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                             &nbsp;
                                             <img src={exclamationTriangleFillIcon} alt= "" />
