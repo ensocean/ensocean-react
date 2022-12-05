@@ -47,7 +47,6 @@ const DOMAIN_DETAILS = gql`
 const Domain = () => { 
     const { label, extension } = useParams();  
     const id = getLabelHash(label);
-    console.log(id)
     const { data, loading, error } = useQuery(DOMAIN_DETAILS, {
         variables: { id },
     });  
@@ -152,13 +151,13 @@ const Domain = () => {
                                     <div className="card">
                                         <LazyLoadImage
                                             alt={label} 
-                                            className="img-fluid img-thumbnail card-img-top"
+                                            className="img-fluid card-img-top card-img-bottom"
                                             onError={(e)=> { document.getElementById("img_"+ label).remove();  e.target.src = notAvailable; }}
                                             afterLoad={(e)=> { document.getElementById("img_"+ label).remove(); }}
                                             placeholderSrc={spinner}
                                             src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
                                         />  
-                                        <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top " alt=""  />
+                                        <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top card-img-bottom" alt=""  />
                                     </div>
                                 </div>
                                 <div className='col-lg-8 mt-3 mt-lg-0'>
@@ -181,14 +180,14 @@ const Domain = () => {
                                             <li className='list-group-item border-0 p-0 pb-3'>
                                                 <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>-</span>
                                             </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'> 
-                                                <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end'>{obscureLabel(getTokenId(label), 25)}</span>
+                                            <li className='list-group-item border-0 p-0 pb-3'>  
                                                 <CopyToClipboard text={getTokenId(label)}
                                                     onCopy={() => toast.success("TokenId Copied") }>
-                                                    <span className="cursor-pointer">
+                                                    <span className="cursor-pointer float-end">
                                                         <img src={clipboardIcon} alt="" />
                                                     </span>
                                                 </CopyToClipboard> 
+                                                <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureLabel(getTokenId(label), 25)}</span>
                                             </li>
                                             <li className='list-group-item border-0 p-0 pb-3'>
                                                 <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{getLength(label)}</span>
