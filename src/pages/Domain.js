@@ -298,7 +298,7 @@ const Domain = () => {
                                             <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(domain.id, 25)}</span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Tags </span> {domain.tags && <span className='float-end'>domain.tags.join(", ") </span>}
+                                            <span className='fw-bold fs-6 text-muted'>Tags </span> {domain.tags && <span className='float-end'>{domain.tags.join(", ")}</span>}
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
                                             <CopyToClipboard text={getTokenId(domain.label || label)}
@@ -310,10 +310,10 @@ const Domain = () => {
                                             <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureAddress(getTokenId(domain.label || label), 25)}</span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{domain.length}</span>
+                                            <span className='fw-bold fs-6 text-muted'>Length </span> {domain.label && <span className='float-end'>{domain.length}</span>}
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Segment Length </span> <span className='float-end'>{domain.segmentLength}</span>
+                                            <span className='fw-bold fs-6 text-muted'>Segment Length </span>  {domain.label &&<span className='float-end'>{domain.segmentLength}</span>}
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
                                             <span className='fw-bold fs-6 text-muted'>Created Date </span> <span className='float-end'>{getDateString(domain.created)}</span>
