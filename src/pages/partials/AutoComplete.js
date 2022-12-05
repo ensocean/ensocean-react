@@ -50,7 +50,7 @@ const AutoComplete = () => {
             items = items.map(item => { 
                 let domain = data.domains.filter(n=> n.id === item.id)[0];
                 if(domain) {
-                    return { id: domain.id, label: domain.label,  extension: domain.extension, expires: domain.expires, available: false, valid: isValidDomain(domain.label) }
+                    return { id: domain.id, label: domain.label || item.label,  extension: domain.extension, expires: domain.expires, available: false, valid: isValidDomain(domain.label) }
                 } else {
                     return { id: item.id, label: item.label,  extension: "eth", expires: null, available: true, valid: isValidDomain(item.label) }
                 }

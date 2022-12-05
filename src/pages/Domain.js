@@ -216,29 +216,29 @@ const Domain = () => {
         return (
         <> 
             <Helmet> 
-              <title>{domain.label} - EnsOcean</title>
-              <meta name="description" content="{domain.label}" />
+              <title>{domain.label || label} - EnsOcean</title>
+              <meta name="description" content="{domain.label || label}" />
             </Helmet> 
             <div className="container-fluid bg-primary mb-4">
                     <div className="container p-3 text-white">
                         <div className='d-flex justify-content-between align-items-center'> 
                             <div className='d-flex justify-content-start align-items-center gap-3 text-sm'>
                                 <h1 className='m-auto fs-1 fw-bold'>
-                                    {obscureLabel(domain.label, 25)}.{domain.extension || "eth"}
+                                    {obscureLabel(domain.label || label, 25)}.{domain.extension || "eth"}
                                     { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
                                             &nbsp;
                                             <img src={exclamationTriangleFillIcon} alt= "" />
                                         </span>
                                     } 
-                                    { !isValidName(domain.label) && 
+                                    { !isValidName(domain.label || label) && 
                                         <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
                                             &nbsp;
                                             <img src={dashCircleFillIcon} alt= "" />
                                         </span>
                                     }
                                 </h1>
-                                <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
+                                <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
                                     <img src={etherScanIcon} alt= "" />
                                 </a>
                             </div> 
@@ -259,13 +259,13 @@ const Domain = () => {
                             <div className="col-lg-4">   
                                 <div className="card">
                                     <LazyLoadImage
-                                    alt={domain.label} 
+                                    alt={domain.label || label} 
                                     className="img-fluid card-img-top card-img-bottom"
-                                    onError={(e)=> { document.getElementById(domain.label).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById(domain.label).remove(); }}
-                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
+                                    onError={(e)=> { document.getElementById(domain.label || label).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                    afterLoad={(e)=> { document.getElementById(domain.label || label).remove(); }}
+                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label)) }
                                     />  
-                                    <img id={domain.label} src={spinner} className="img-fluid card-img-top " alt=""  />
+                                    <img id={domain.label || label} src={spinner} className="img-fluid card-img-top " alt=""  />
                                 </div>
                             </div>
                             <div className='col-lg-8 mt-3 mt-lg-0'>
@@ -279,7 +279,7 @@ const Domain = () => {
                                     { isExpiring(domain.expires) && 
                                         <div className="alert alert-warning">About to Expire!</div>
                                     } 
-                                    { isValidName(domain.label) === false &&
+                                    { isValidName(domain.label || label) === false &&
                                             <div className="alert alert-danger">Malformed!</div>
                                     }
                                     <h5 className="card-title fs-4">Details</h5>
@@ -301,13 +301,13 @@ const Domain = () => {
                                             <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>{domain.tags.join(", ")}</span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
-                                            <CopyToClipboard text={getTokenId(domain.label)}
+                                            <CopyToClipboard text={getTokenId(domain.label || label)}
                                                 onCopy={() => toast.success("TokenId Copied") }>
                                                 <span className="cursor-pointer float-end">
                                                     <img src={clipboardIcon} alt="" />
                                                 </span>
                                             </CopyToClipboard> 
-                                            <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureAddress(getTokenId(domain.label), 25)}</span>
+                                            <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureAddress(getTokenId(domain.label || label), 25)}</span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
                                             <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{domain.length}</span>
