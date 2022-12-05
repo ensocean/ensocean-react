@@ -2,7 +2,7 @@ import React  from "react";
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
 import {Helmet} from "react-helmet";
-import { getDateString, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
+import { getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -21,10 +21,10 @@ const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
 const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
 
 const DOMAIN_DETAILS = gql`
-    query Domains( $label: String! ) {
+    query Domains( $id: String! ) {
         domains ( 
             where: {
-                label: $label
+                id: $id
             }
         )
         {
@@ -46,8 +46,10 @@ const DOMAIN_DETAILS = gql`
  
 const Domain = () => { 
     const { label, extension } = useParams();  
+    const id = getLabelHash(label);
+    console.log(id)
     const { data, loading, error } = useQuery(DOMAIN_DETAILS, {
-        variables: { label },
+        variables: { id },
     });  
 
     const encodeHtml = (text) => {
@@ -122,7 +124,15 @@ const Domain = () => {
                         <div className="container p-3 text-white">
                             <div className='d-flex justify-content-between align-items-center'> 
                                 <div className='d-flex justify-content-start align-items-center gap-3'>
-                                    <h1 className='m-auto fs-1 fw-bold'>{parse(encodeHtml(obscureLabel(label, 20)))}.{extension}</h1>
+                                    <h1 className='m-auto fs-1 fw-bold'>
+                                        {parse(encodeHtml(obscureLabel(label, 20)))}.{extension}
+                                        { !isValidName(label) && 
+                                            <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
+                                                &nbsp;
+                                                <img src={dashCircleFillIcon} alt= "" />
+                                            </span>
+                                        }
+                                    </h1>
                                 </div> 
                                 <div className='d-flex align-items-center gap-3'> 
                                     <CopyToClipboard text={window.location.href}
@@ -158,6 +168,15 @@ const Domain = () => {
                                         <ul className='list-group list-group-flush'>
                                             <li className='list-group-item border-0 p-0 pb-3'>
                                                 <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>-</span>
+                                            </li>
+                                            <li className='list-group-item border-0 p-0 pb-3'>
+                                                <CopyToClipboard text={getLabelHash(label)}
+                                                    onCopy={() => toast.success("TokenId Copied") }>
+                                                    <span className="cursor-pointer float-end">
+                                                        <img src={clipboardIcon} alt="" />
+                                                    </span>
+                                                </CopyToClipboard> 
+                                                <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(getLabelHash(label), 25)}</span>
                                             </li>
                                             <li className='list-group-item border-0 p-0 pb-3'>
                                                 <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>-</span>
@@ -269,6 +288,15 @@ const Domain = () => {
                                     <ul className='list-group list-group-flush'>
                                         <li className='list-group-item border-0 p-0 pb-3'>
                                             <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'><Link to={"/account/"+ encodeURIComponent( domain.owner ) }>{obscureAddress(domain.owner)}</Link> </span>
+                                        </li>
+                                        <li className='list-group-item border-0 p-0 pb-3'>
+                                            <CopyToClipboard text={domain.hash}
+                                                onCopy={() => toast.success("TokenId Copied") }>
+                                                <span className="cursor-pointer float-end">
+                                                    <img src={clipboardIcon} alt="" />
+                                                </span>
+                                            </CopyToClipboard> 
+                                            <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(domain.id, 25)}</span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
                                             <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>{domain.tags.join(", ")}</span>

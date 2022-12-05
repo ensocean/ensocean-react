@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate} from "react-router-dom";  
 import { Menu, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useLazyQuery, gql } from "@apollo/client";
-import { isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName } from '../../helpers/String';
+import { getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName } from '../../helpers/String';
   
 const AutoComplete = () => {
     const [query, setQuery] = useState("");
@@ -14,11 +14,11 @@ const AutoComplete = () => {
     const navigate = useNavigate(); 
      
     const handleSearch = async (q) => {
-       
+        q = q.toLowerCase().trim();
         setOptions([]);
-        setQuery(q.toLowerCase()); 
+        setQuery(q); 
          
-        if(Array.from(q).length < 3) {
+        if(getLength(q) < 3) {
             setIsValid(true);
             setAvailable(false);  
             setActiveClass("is-search");
@@ -116,9 +116,7 @@ const AutoComplete = () => {
                     {(function(){
                         if(loading) {
                             return (<div className="spinner-border spinner-border-sm"></div>)
-                        } else if(error) {
-                            return (<span className="badge text-bg-danger">{error}</span> )
-                        } else if(!result.valid) {
+                        }  else if(!result.valid) {
                             return (<span className="badge text-bg-danger">Invalid</span> )
                         } else {
                             if(!result.available) {
@@ -138,14 +136,12 @@ const AutoComplete = () => {
                     })()} 
                 </div> 
                 ))}
+                {error && <span className="badge text-bg-danger">There was a problem. Please try again.</span>}
                 {query.length < 3 && <div className="d-flex flex-row justify-content-center p-2 gap-1">Type 3 characters to search</div>}
-                {!available && isValid && query.length > 2 &&
-                    <div className="d-flex flex-row justify-content-center p-2 gap-1">
-                        <Link to={"/find?label="+ query } className="text-truncate link-dark text-decoration-none">
-                            Click to see more domains...
-                        </Link>
-                    </div>
-                }
+                {!available && isValid && getLength(query) > 2 && 
+                    <div className="d-flex flex-row justify-content-between p-2 ps-3 pe-3 gap-1 fs-6 fw-bold">
+                        <Link to={"/find?label="+ query } className="text-truncate link-dark text-decoration-none text-center mx-auto"> Click to see more domains... </Link>
+                </div>}
             </Menu> 
             </>
             )}
