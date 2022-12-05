@@ -289,7 +289,7 @@ const Domain = () => {
                                             <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'><Link to={"/account/"+ encodeURIComponent( domain.owner ) }>{obscureAddress(domain.owner)}</Link> </span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
-                                            <CopyToClipboard text={domain.hash}
+                                            <CopyToClipboard text={domain.id}
                                                 onCopy={() => toast.success("TokenId Copied") }>
                                                 <span className="cursor-pointer float-end">
                                                     <img src={clipboardIcon} alt="" />

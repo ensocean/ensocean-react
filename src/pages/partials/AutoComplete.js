@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate} from "react-router-dom";  
 import { Menu, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName } from '../../helpers/String';
+import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName } from '../../helpers/String';
   
 const AutoComplete = () => {
     const [query, setQuery] = useState("");
@@ -33,16 +33,17 @@ const AutoComplete = () => {
             setIsValid(false);
             setAvailable(false);  
             setActiveClass("is-invalid"); 
-            setOptions([ { id: q, label: q,  extension: "eth", expires: null, valid: false } ]);
+            setOptions([ { id: getLabelHash(q), label: q,  extension: "eth", expires: null, valid: false } ]);
             return;
         } 
  
         const labels = [q, "0x"+ q, "the"+ q]; 
-        const options = labels.map(t=> { return { id: t, label: t,  extension: "eth", expires: null, valid: isValidDomain(t) } });
+        const ids = [getLabelHash(q), getLabelHash("0x"+ q), getLabelHash("the"+ q)]; 
+        const options = labels.map(t=> { return { id: getLabelHash(t), label: t,  extension: "eth", expires: null, valid: isValidDomain(t) } });
         setIsValid(true);
         setOptions(options);
 
-        const { data } = await searchDomains({ variables: { labels }});
+        const { data } = await searchDomains({ variables: { ids }});
   
         if( data.domains.length > 0) { 
             const options = labels.map(label => { 
@@ -50,7 +51,7 @@ const AutoComplete = () => {
                 if(domain) {
                     return { id: domain.id, label: domain.label,  extension: domain.extension, expires: domain.expires, available: false, valid: isValidDomain(domain.label) }
                 } else {
-                    return { id: label, label: label,  extension: "eth", expires: null, available: true, valid: isValidDomain(label) }
+                    return { id: getLabelHash(label), label: label,  extension: "eth", expires: null, available: true, valid: isValidDomain(label) }
                 }
             }); 
             setOptions(options);
@@ -165,10 +166,10 @@ const AutoComplete = () => {
 
 
 const DOMAIN_DETAILS = gql`
-    query Domains( $labels: [String] ) {
+    query Domains( $ids: [String] ) {
         domains ( 
             where: {
-                label_in: $labels
+                id_in: $ids
             }
         )
         {
