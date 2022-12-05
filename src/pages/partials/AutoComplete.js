@@ -33,28 +33,29 @@ const AutoComplete = () => {
             setIsValid(false);
             setAvailable(false);  
             setActiveClass("is-invalid"); 
-            setOptions([ { id: getLabelHash(q), label: q,  extension: "eth", expires: null, valid: false } ]);
+            setOptions([ { id: getLabelHash(q), label: q,  extension: "eth", expires: null, available: false, valid: false } ]);
             return;
         } 
- 
-        const labels = [q, "0x"+ q, "the"+ q]; 
-        const ids = [getLabelHash(q), getLabelHash("0x"+ q), getLabelHash("the"+ q)]; 
-        const options = labels.map(t=> { return { id: getLabelHash(t), label: t,  extension: "eth", expires: null, valid: isValidDomain(t) } });
+  
+        let items = [ { id: getLabelHash(q), label: q, extension: "eth", expires: null, available: false, valid: isValidDomain(q) }, 
+                         { id: getLabelHash("0x"+ q), label: "0x"+ q, extension: "eth", expires: null, available: false, valid: isValidDomain("0x"+ q) }, 
+                         { id: getLabelHash("the"+ q), label: "the"+ q, extension: "eth", expires: null, available: false, valid: isValidDomain("the"+ q) }]; 
+        const labels = items.map(t=> t.id);
         setIsValid(true);
-        setOptions(options);
+        setOptions(items);
 
-        const { data } = await searchDomains({ variables: { ids }});
+        const { data } = await searchDomains({ variables: { labels }});
   
         if( data.domains.length > 0) { 
-            const options = labels.map(label => { 
-                let domain = data.domains.filter(n=> n.label === label)[0];
+            items = items.map(item => { 
+                let domain = data.domains.filter(n=> n.id === item.id)[0];
                 if(domain) {
                     return { id: domain.id, label: domain.label,  extension: domain.extension, expires: domain.expires, available: false, valid: isValidDomain(domain.label) }
                 } else {
-                    return { id: getLabelHash(label), label: label,  extension: "eth", expires: null, available: true, valid: isValidDomain(label) }
+                    return { id: item.id, label: item.label,  extension: "eth", expires: null, available: true, valid: isValidDomain(item.label) }
                 }
             }); 
-            setOptions(options);
+            setOptions(items);
             setAvailable(false); 
             setActiveClass("is-search");
         } else {  
@@ -166,10 +167,10 @@ const AutoComplete = () => {
 
 
 const DOMAIN_DETAILS = gql`
-    query Domains( $ids: [String] ) {
+    query Domains( $labels: [String] ) {
         domains ( 
             where: {
-                id_in: $ids
+                id_in: $labels
             }
         )
         {
