@@ -2,7 +2,8 @@ import logo from "../../assets/icon.png";
 import ConnectButton from "./ConnectButton";
 import AutoComplete from "./AutoComplete";
 
-const Navbar = () => {   
+const Navbar = ({showSearch}) => {   
+    
     return (
         <> 
         <nav id="navbar" className="navbar navbar-expand-lg">
@@ -22,10 +23,15 @@ const Navbar = () => {
                         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">
-                        <AutoComplete /> 
+                        {showSearch === true && 
+                            <AutoComplete /> 
+                        }
                         <ul className="navbar-nav justify-content-start align-items-canter flex-grow-1 mt-3 mt-lg-1 ">
                             <li className="nav-item">
-                                <a className="nav-link active" href="/discover">Discover</a>
+                                <a className="nav-link active" href="/find">Find</a>
+                            </li> 
+                            <li className="nav-item">
+                                <a className="nav-link active" href="/discover">Browse</a>
                             </li> 
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">

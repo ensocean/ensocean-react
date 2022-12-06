@@ -4,12 +4,12 @@ import Footer from "../partials/Footer";
 import Navbar from "../partials/Navbar"; 
 import AlertNetwork from "../../components/AlertNetwork";
 
-const Home = () => { 
+const Find = () => { 
   return (
     <>
       <AlertNetwork /> 
       <div className="container">
-        <Navbar showSearch={true} />
+        <Navbar showSearch={false} />
       </div>
       <Outlet />
       <Footer />
@@ -17,4 +17,4 @@ const Home = () => {
   )
 };
 
-export default Home;
+export default Find;

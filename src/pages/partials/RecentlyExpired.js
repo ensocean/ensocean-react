@@ -1,18 +1,12 @@
 import React from "react"; 
 import { useLazyQuery, gql } from "@apollo/client";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
-import { getExpireCondition, getTokenId, isExpired, isValidName, obscureLabel } from "../../helpers/String";
-import spinner from '../../assets/spinner.svg'
-import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg'
-import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
-import dashCircleFill from "../../assets/dash-circle-fill.svg";
-import notAvailable from "../../assets/not-available.svg";
+import { getExpireCondition } from "../../helpers/String";
+import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg' 
 import refreshIcon from "../../assets/arrow-repeat.svg";
-
-const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
-const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
-
+import ImageSmall from "../../components/ImageSmall";
+import DomainLink from "../../components/DomainLink";
+  
 const RECENTLY_EXPIRED = gql`
 {
   domains (first: 10, orderBy: expires, orderDirection: desc, where: {  
@@ -90,46 +84,11 @@ const RecentExpired = () => {
                       <div className="d-flex">
                         <div className="flex-shrink-0">
                           <div className="card text-start">
-                              <LazyLoadImage
-                                  alt={domain.label} 
-                                  className="img-fluid card-img-top card-img-bottom"
-                                  onError={(e)=> { e.target.src = notAvailable; }}
-                                  placeholder={<img src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />}
-                                  placeholderSrc={spinner}
-                                  width={46}
-                                  height={46}
-                                  src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                /> 
+                              <ImageSmall domain={domain} />
                             </div>
                         </div>
                         <div className="flex-grow-1 ms-3">
-                            <div className="d-flex flex-column flex-md-row justify-content-between">
-                                <Link
-                                    className="text-decoration-none link-dark fs-5 fw-bold text-truncate" 
-                                    data-bs-toggle="tooltip" 
-                                    data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
-                                    title={"View "+ domain.label + "." + domain.extension +"on EnsOcean"}
-                                    to={encodeURIComponent(domain.label)  + "."+ domain.extension }>
-                                    {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
-                                    { ' ' }
-                                    { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
-                                          <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                              <img src={exclamationTriangleFill} alt= "" />
-                                          </span>
-                                      }
-                                      &nbsp;
-                                      { !isValidName(domain.label) && 
-                                          <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                              <img src={dashCircleFill} alt= ""  />
-                                          </span>
-                                      }
-                                </Link> 
-                                <small className="float-end text-success mt-2 mt-lg-0">
-                                    { isExpired(domain.expires) &&
-                                      <span className="text-success"> AVAILABLE</span>
-                                    } 
-                                </small>
-                            </div>
+                          <DomainLink domain={domain} />
                         </div>
                       </div> 
                   </li>
