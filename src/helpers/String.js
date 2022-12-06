@@ -37,6 +37,9 @@ export const getLabelHash = (label) => {
     return utils.keccak256(utils.toUtf8Bytes(label));;
 }
 
+export const isAscii = (label) => {
+    return /^[\x00-\x7F]*$/g.test(label) == true;
+}
 
 export const getLength = (label) => { 
     return Array.from(label).length;
@@ -52,6 +55,7 @@ export function getTimeAgo(timestamp) {
 }
 
 export function getExpires(expires, suffix = false) {
+    if(expires === null) return "-";
     return moment.unix(expires).add(GRACE_PERIOD + PREMIUM_PERIOD, "days").fromNow(suffix)
 }
 

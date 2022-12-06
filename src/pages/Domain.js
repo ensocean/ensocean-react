@@ -261,11 +261,11 @@ const Domain = () => {
                                     <LazyLoadImage
                                     alt={domain.label || label} 
                                     className="img-fluid card-img-top card-img-bottom"
-                                    onError={(e)=> { document.getElementById(domain.label || label).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById(domain.label || label).remove(); }}
+                                    onError={(e)=> { document.getElementById("img_"+ domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                                    afterLoad={(e)=> { document.getElementById("img_"+ domain.id).remove(); }}
                                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label)) }
                                     />  
-                                    <img id={domain.label || label} src={spinner} className="img-fluid card-img-top " alt=""  />
+                                    <img id={"img_"+ domain.id} src={spinner} className="img-fluid card-img-top " alt=""  />
                                 </div>
                             </div>
                             <div className='col-lg-8 mt-3 mt-lg-0'>

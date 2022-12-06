@@ -76,6 +76,7 @@ const wagmiClient = createClient({
   connectors,
   provider
 });
+ 
 
 export default function App () {  
   return ( 
@@ -91,16 +92,17 @@ export default function App () {
                 <Route path="/" element={<Layouts.Home />}>
                   <Route path="/:label.:extension" element={<Domain />} />
                 </Route>
+                <Route path="/find" element={<Layouts.Find />}>
+                  <Route path="/find" element={<Find />} />
+                </Route>
                 <Route path="/" element={<Layouts.Page />}>
                   <Route index element={<Home />} />
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/faq" element={<Faq />} />
                   <Route path="/discover" forceRefresh={true} element={<Discover />} />
-                  <Route path="/find" element={<Find />} />
                   <Route path="/404" element={<NotFound />} /> 
-                  <Route path="/account/:address" element={<Account />} />
-                  
+                  <Route path="/account/:address" element={<Account />} /> 
                   <Route path="*" element={<Navigate replace={true} to="/404" />} />
                 </Route> 
               </Routes>

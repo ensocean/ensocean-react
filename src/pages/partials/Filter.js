@@ -18,6 +18,9 @@ import sortDown from "../../assets/sort-down.svg";
 import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../../assets/dash-circle-fill.svg";
 import notAvailable from "../../assets/not-available.svg";
+import ImageSmall from "../../components/ImageSmall";
+import DomainLink from "../../components/DomainLink";
+import OwnerLink from "../../components/OwnerLink";
   
 const DEBOUNCE_INTERVAL = 500;
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
@@ -625,51 +628,11 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                     <div className="d-flex">
                                         <div className="flex-shrink-0"> 
                                             <div className="card text-start">
-                                                <LazyLoadImage
-                                                    alt={domain.label} 
-                                                    className="img-fluid card-img-top card-img-bottom"
-                                                    onError={(e)=> { e.target.src = notAvailable; }}
-                                                    placeholder={<img src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />}
-                                                    placeholderSrc={spinner}
-                                                    visibleByDefault={false}
-                                                    width={46}
-                                                    height={46}
-                                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                                    />  
+                                                <ImageSmall domain={domain} />
                                             </div>
                                         </div>
-                                        <div className="flex-grow-1 ms-3 d-flex flex-column flex-xl-row justify-content-between">
-                                            <Link
-                                                className="text-decoration-none link-dark fs-5 fw-bold" 
-                                                data-bs-toggle="tooltip" 
-                                                data-bs-title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
-                                                title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"}
-                                                to={"/"+ encodeURIComponent(domain.label + "." + domain.extension) }>
-                                                    {obscureLabel(domain.label, 20)}.{domain.extension || "eth"}
-                                                { ' ' } 
-                                                { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
-                                                    <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                                        <img src={exclamationTriangleFill} alt= ""  />
-                                                    </span>
-                                                }
-                                                { ' ' }
-                                                { !isValidName(domain.label) && 
-                                                    <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                                        <img src={dashCircleFill} alt= ""  />
-                                                    </span>
-                                                }
-                                            </Link>
-                                            <span className="float-end text-success mt-0">
-                                                {(function() {
-                                                    if (isPremium(domain.expires) ) {
-                                                        return (<span className="text-success fw-bold">Available in Premium</span>)
-                                                    } else if(isExpiring(domain.expires)) {
-                                                        return (<span className="text-warning fw-bold"> In grace period </span>)
-                                                    } else if(isExpired(domain.expires)) {
-                                                        return (<span className="text-success fw-bold"> AVAILABLE  </span>)
-                                                    }  
-                                                })()} 
-                                            </span>
+                                        <div className="flex-grow-1 ms-3">
+                                            <DomainLink domain={domain} />
                                         </div>
                                     </div> 
                                 </td> 
@@ -677,13 +640,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                     {getExpires(domain.expires)}
                                 </td>
                                 <td className="p-3"> 
-                                    <Link
-                                    className="text-decoration-none link-dark btn btn-outline-warning" 
-                                    data-bs-toggle="tooltip" 
-                                    data-bs-title={"Domains of"+ domain.label + "." + domain.extension +""}
-                                    title={"Domains of "+ domain.owner +""}
-                                    to={"/account/"+ domain.owner }>{obscureAddress(domain.owner || "", 20)} 
-                                    </Link> 
+                                    <OwnerLink domain={domain} />
                                 </td>
                                 <td className="p-3">{getTimeAgo(domain.created)}</td>
                                 <td className="p-3">{getTimeAgo(domain.registered)}</td> 
