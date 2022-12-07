@@ -2,7 +2,7 @@ import React  from "react";
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
 import {Helmet} from "react-helmet";
-import { getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
+import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -119,6 +119,11 @@ const Domain = () => {
     } else if(data.domains.length < 1) {  
         return ( 
             <>
+                <Helmet> 
+                    <title>{label}.{extension} - EnsOcean</title>
+                    <meta name="description" content={label +"."+ extension +" is available right now. Claim Now."} />
+                </Helmet> 
+
                 <div className="container-fluid bg-primary mb-4">
                         <div className="container p-3 text-white">
                             <div className='d-flex justify-content-between align-items-center'> 
@@ -208,7 +213,7 @@ const Domain = () => {
                                 </div>
                             </div>
                         </div> 
-                    </div>
+                </div>
             </>
         )
     } else {
@@ -216,8 +221,19 @@ const Domain = () => {
         return (
         <> 
             <Helmet> 
-              <title>{domain.label || label} - EnsOcean</title>
-              <meta name="description" content="{domain.label || label}" />
+              <title>{domain.label || label}.{domain.extension} - EnsOcean</title>
+              {!isExpiring(domain.expires) && !isExpired(domain.expires) && !isPremium(domain.expires) &&
+                <meta name="description" content={(domain.label || label) +"."+ (domain.extension) +" was registered "+ getDateSimple(domain.registered) +". The web3 name length is "+ domain.length +" and tagged with "+ domain.tags.join(", ")} />
+              }
+              {isExpiring(domain.expires) &&
+                <meta name="description" content={(domain.label || label) +"."+ (domain.extension) +" was registered "+ getDateSimple(domain.registered) +" but is about to expire. Add to your favorites to claim it in the future. "} />
+              }
+              {isExpired(domain.expires) &&
+                <meta name="description" content={(domain.label || label) +"."+ (domain.extension) +" was registered "+ getDateSimple(domain.registered) +" but is available right now. Claim Now."} />
+              }
+              {isPremium(domain.expires) &&
+                <meta name="description" content={(domain.label || label) +"."+ (domain.extension) +" was registered "+ getDateSimple(domain.registered) +" but is premium right now. Claim Now."} />
+              }
             </Helmet> 
             <div className="container-fluid bg-primary mb-4">
                     <div className="container p-3 text-white">

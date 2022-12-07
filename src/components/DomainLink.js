@@ -12,7 +12,7 @@ function DomainLink({domain, label}) {
             <Link
                 className="text-decoration-none link-dark fs-5 fw-bold text-truncate"
                 title={"View "+ domain.label || label + "." + domain.extension +"on EnsOcean"}
-                to={encodeURIComponent(domain.label)  + "."+ domain.extension }
+                to={"/"+ encodeURIComponent(domain.label)  + "."+ domain.extension }
                 >
                 
                 {obscureLabel(domain.label || label, 20)}.{domain.extension || "eth"}

@@ -12,6 +12,8 @@ let where = { label_not: null };
 let pageTitle = "Browse";
 let orderBy = "created";
 let orderDirection = "desc";
+let metaTitle = "Browse Ethereum Name Service (ENS) Domains";
+let metaDescription = "Browse Ethereum Name Service (ENS) domains. Explore dropped domains. Find your web3 domain name idea. ";
 
 const Discover = () => { 
     const location = useLocation();
@@ -20,6 +22,8 @@ const Discover = () => {
     const tab = query.get("tab");
   
     if(tab === "expired") {  
+        metaTitle = "Dropped ENS Web3 Domains"
+        metaDescription = "View all expired ENS domains. Catch and claim again for yourself easily."
         pageTitle = "Recently Expired";
         orderBy = "expires";
         orderDirection = "desc";
@@ -28,6 +32,8 @@ const Discover = () => {
             expires_lte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix() 
         }
     } else if(tab === "expiring") {  
+        metaTitle = "About To Expire Web3 Domains"
+        metaDescription = "View all expiring ENS domains. Add them to your favorites and claim it for yourself in the future."
         pageTitle = "Expiring Soon";
         orderBy = "expires";
         orderDirection = "asc";
@@ -37,6 +43,8 @@ const Discover = () => {
             expires_gte: moment().add(-PREMIUM_PERIOD, "days").utc().unix()
         };
     } else if(tab === "premium") { 
+        metaTitle = "Premium Web3 Domains"
+        metaDescription = "View all premium ENS domains. Claim it for yourself with an extra payment."
         pageTitle = "Premium Right Now";
         orderBy = "expires";
         orderDirection = "asc";
@@ -46,6 +54,8 @@ const Discover = () => {
             expires_gte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix()
         }
     } else if(tab === "registered") { 
+        metaTitle = "Registered Web3 Domains"
+        metaDescription = "View all registered ENS domains. See who is claiming which domains."
         pageTitle = "Recently Registered";
         orderBy = "registered";
         orderDirection = "desc";
@@ -54,6 +64,8 @@ const Discover = () => {
             registered_not: null
         }
     } else {
+        metaTitle = "Browse Web3 Domains"
+        metaDescription = "View all ENS domains. Find your web3 domain name idea."
         pageTitle = "Browse";
         orderBy = "created";
         orderDirection = "desc";
@@ -65,8 +77,8 @@ const Discover = () => {
     return (
         <>
         <Helmet> 
-            <title>Browse Ethereum Name Service (ENS) Domains - EnsOcean</title>
-            <meta name="description" content="Browse Ethereum Name Service (ENS) domains easily. Find your web3 domain name idea. " />
+            <title>{metaTitle} - EnsOcean</title>
+            <meta name="description" content={metaDescription} />
         </Helmet>
         <div className="container-fluid bg-primary">
             <div className="container text-center p-3 text-white">

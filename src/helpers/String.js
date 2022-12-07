@@ -79,6 +79,10 @@ export function getDateString(timestamp) {
     return moment.unix(timestamp).toDate().toDateString();
 } 
 
+export function getDateSimple(timestamp) {
+    return moment.unix(timestamp).format("L");
+}
+
 export function normalizeName (name) {
     return namehash.normalize(name);
 }

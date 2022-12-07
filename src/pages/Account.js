@@ -23,7 +23,7 @@ const Account = () => {
       <>
       <Helmet> 
           <title>{address} - EnsOcean</title>
-          <meta name="description" content="" />
+          <meta name="description" content={"See which ENS domains does the account ("+ address +") have."} />
       </Helmet>
       <div className="container-fluid bg-primary">
         <div className="container-fluid container-fluid p-0 pt-4 pb-4 text-white">
