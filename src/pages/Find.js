@@ -18,6 +18,8 @@ const GET_DOMAINS = gql`
             label
             extension
             expires
+            registered
+            created
         }
     }
 `;
@@ -84,7 +86,7 @@ const Find = () => {
         <>  
         <Helmet> 
               <title>Find Your Web3 Name - EnsOcean</title>
-              <meta name="description" content="Find your next Ethereum Name Service (ENS) domain rapidly. Browse expired domains or get suggestions to find out." />
+              <meta name="description" content="Find your next Ethereum Name Service (ENS) domain easily. Catch expired domains or get suggestions to find out." />
         </Helmet>
         <div className="container-fluid bg-primary">
             <div className="container text-center p-3 text-white">
