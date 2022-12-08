@@ -16,13 +16,59 @@ const contract = new ethers.Contract(ENS_CONTROLLER_ADDRESS, EnsControllerAbi, p
  //   this.setState({ available: res });
 //});  
 
-const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS;
-const BULK_CONTROLLER_ADDRESS = process.env.REACT_APP_BULK_CONTROLLER_ADDRESS;
-const { data, isLoading, isError } = useContractRead({
-    addressOrName: BULK_CONTROLLER_ADDRESS,
-    contractInterface: bulkControllerAbi,
-    functionName: "bulkAvailable",
-    args: [ENS_CONTROLLER_ADDRESS, [q]]
-});
-import { useContract, useContractRead } from 'wagmi';
-import bulkControllerAbi from "../../abis/BulkEthRegistrarController.json";
+
+
+
+<div className="row">
+            <div className="col-lg-12 pt-3">
+              <div className="card">
+                <div className="card-header d-flex justify-content-between">
+                  <h6 className='fs-5 m-1'>Suggestions</h6>
+                </div>
+                <ol className="list-group list-group-flush placeholder-glow">
+                  { loading && 
+                    <>
+                        {[...Array(10)].map((x, i) =>
+                        <li key={i} className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex">
+                            <span className="placeholder col-4"></span>
+                            <span className="placeholder col-2"></span>
+                        </li>
+                        )}
+                    </>     
+                  }
+
+                  { !loading && error && 
+                      <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
+                  }
+
+                  { !loading && !error && options && options.length < 1 &&
+                      <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-muted'>No Result</span></li>
+                  }
+
+                  { !options &&
+                      <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-muted'>Type 3 characters or more</span></li>
+                  }
+
+                  {!loading && !error && options && options.length > 0 && 
+                      <>
+                        {options.map((domain) => (
+                          <li key={domain.id} className="list-group-item list-group-item-action p-3">
+                              <div className="d-flex">
+                                <div className="flex-shrink-0">
+                                  <div className="card text-start">
+                                     <ImageSmall domain={domain} />
+                                    </div>
+                                </div>
+                                <div className="flex-grow-1 ms-3">
+                                    <DomainLink domain={domain} />
+                                </div>
+                              </div> 
+                          </li>
+                        ))}  
+                      </>
+                  }
+                   
+                </ol> 
+              </div>
+            </div>
+          </div> 

@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "add": "^2.0.6",
     "autoprefixer": "^10.4.13",
     "bootstrap": "^5.2.2",
     "buffer": "^6.0.3",
@@ -26,9 +27,11 @@
     "postcss": "^8.4.19",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
+    "react-bootstrap-icons": "^1.10.2",
     "react-bootstrap-typeahead": "^6.0.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-csv": "^2.2.2",
+    "react-delay-input": "^4.1.0",
     "react-dom": "^18.2.0",
     "react-ga": "^3.3.1",
     "react-ga4": "^1.4.1",
@@ -41,9 +44,11 @@
     "react-time-ago": "^7.2.1",
     "react-timeago": "^7.1.0",
     "react-toastify": "^9.1.1",
+    "react-use-cart": "^1.13.0",
     "tailwindcss": "^3.2.4",
     "wagmi": "0.6.8",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yarn": "^1.22.19"
   },
   "resolutions": {
     "ethereumjs-abi": "https://registry.npmjs.org/ethereumjs-abi/-/ethereumjs-abi-0.6.8.tgz"

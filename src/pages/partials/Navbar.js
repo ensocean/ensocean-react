@@ -1,6 +1,7 @@
 import logo from "../../assets/icon.png";
 import ConnectButton from "./ConnectButton";
 import AutoComplete from "./AutoComplete";
+import BasketButton from "../../components/BasketButton";
 
 const Navbar = ({showSearch}) => {   
     
@@ -26,15 +27,16 @@ const Navbar = ({showSearch}) => {
                         {showSearch === true && 
                             <AutoComplete /> 
                         }
-                        <ul className="navbar-nav justify-content-start align-items-canter flex-grow-1 mt-3 mt-lg-1 ">
+                        <ul className="navbar-nav justify-content-start align-items-center flex-grow-1">
                             <li className="nav-item">
-                                <a className="nav-link active" href="/find">Find</a>
+                                <a className="nav-link fw-bold" href="/find">Find</a>
                             </li> 
                             <li className="nav-item">
-                                <a className="nav-link active" href="/discover">Browse</a>
+                                <a className="nav-link fw-bold" href="/discover">Browse</a>
                             </li> 
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                            <BasketButton />
                             <ConnectButton />
                         </div>
                     </div>

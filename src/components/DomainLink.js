@@ -5,7 +5,7 @@ import exclamationTriangleFill from "../assets/exclamation-triangle-fill.svg";
 import dashCircleFill from "../assets/dash-circle-fill.svg";
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
-function DomainLink({domain, label}) {  
+function DomainLink({domain, label, showAvability = true}) {  
   
    return (
         <div className="d-flex flex-column flex-md-row justify-content-between"> 
@@ -37,10 +37,10 @@ function DomainLink({domain, label}) {
                     </OverlayTrigger>
                 } 
             </Link>   
- 
-            {(function() {
+                
+            {showAvability && (function() {
                 if (isPremium(domain.expires) ) {
-                    return (<span className="float-end text-success mt-2 mt-lg-0 fw-bold"> Available in Premium</span>)
+                    return (<span className="float-end text-success mt-2 mt-lg-0 fw-bold"> Premium Available </span>)
                 } else if(isExpiring(domain.expires)) {
                     return (<span className="float-end text-warning mt-2 mt-lg-0"> In grace period </span>)
                 } else if(isExpired(domain.expires)) {

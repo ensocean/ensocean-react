@@ -17,9 +17,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
+import Register from "./pages/Register";
 import NotFound from "./pages/Notfound";    
 import Layouts from "./pages/layouts";    
- 
+import { CartProvider } from "react-use-cart";
+
 import '@rainbow-me/rainbowkit/styles.css';
 
 import { 
@@ -76,41 +78,45 @@ const wagmiClient = createClient({
   connectors,
   provider
 });
- 
-
+  
 export default function App () {  
   return ( 
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
-        <ApolloProvider client={client}> 
-          <React.StrictMode>
-            <BrowserRouter forceRefresh={true}>
-              <Routes>  
-                <Route path="/" element={<Layouts.Home />}>
-                  <Route index element={<Home />}  />
-                </Route>
-                <Route path="/" element={<Layouts.Home />}>
-                  <Route path="/:label.:extension" element={<Domain />} />
-                </Route>
-                <Route path="/find" element={<Layouts.Find />}>
-                  <Route path="/find" element={<Find />} />
-                </Route>
-                <Route path="/" element={<Layouts.Page />}>
-                  <Route index element={<Home />} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="/terms" element={<Terms />} />
-                  <Route path="/faq" element={<Faq />} />
-                  <Route path="/discover" forceRefresh={true} element={<Discover />} />
-                  <Route path="/404" element={<NotFound />} /> 
-                  <Route path="/account/:address" element={<Account />} /> 
-                  <Route path="*" element={<Navigate replace={true} to="/404" />} />
-                </Route> 
-              </Routes>
-            </BrowserRouter>
-            <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
-          </React.StrictMode>
-        </ApolloProvider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <CartProvider>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider chains={chains}>
+          <ApolloProvider client={client}> 
+            <React.StrictMode>
+              <BrowserRouter forceRefresh={true}>
+                <Routes>  
+                  <Route path="/" element={<Layouts.Home />}>
+                    <Route index element={<Home />}  />
+                  </Route>
+                  <Route path="/" element={<Layouts.Home />}>
+                    <Route path="/:label.:extension" element={<Domain />} />
+                  </Route>
+                  <Route path="/find" element={<Layouts.Find />}>
+                    <Route path="/find" element={<Find />} />
+                  </Route>
+                  <Route path="/register" element={<Layouts.Find />}>
+                    <Route path="/register" element={<Register />} />
+                  </Route>
+                  <Route path="/" element={<Layouts.Page />}>
+                    <Route index element={<Home />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/faq" element={<Faq />} />
+                    <Route path="/discover" forceRefresh={true} element={<Discover />} />
+                    <Route path="/404" element={<NotFound />} /> 
+                    <Route path="/account/:address" element={<Account />} /> 
+                    <Route path="*" element={<Navigate replace={true} to="/404" />} />
+                  </Route> 
+                </Routes>
+              </BrowserRouter>
+              <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
+            </React.StrictMode>
+          </ApolloProvider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </CartProvider>
   );
 }
