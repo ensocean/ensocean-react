@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect }  from "react";
 import { useLocation, Link, useNavigate} from "react-router-dom";  
 import {Helmet} from "react-helmet";
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getTokenId, obscureLabel, isNonAscii} from '../helpers/String';
+import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getTokenId, obscureLabel, isNonAscii, getDateSimple, obscureAddress, getExpires, getDateString} from '../helpers/String';
 import ImageSmall from "../components/ImageSmall";
 import DomainLink from "../components/DomainLink";
+import AddToCartButton from "../components/AddToCartButton";
  
 const GET_DOMAINS = gql`
     query Domains( $labels: [String] ) {
@@ -20,6 +21,8 @@ const GET_DOMAINS = gql`
             expires
             registered
             created
+            owner
+            registrant
         }
     }
 `;
@@ -28,23 +31,31 @@ const Find = () => {
     const location = useLocation(); 
     const navigate = useNavigate(); 
     const input = useRef();
-    const [query, setQuery] = useState(null);
-    const [options, setOptions] = useState([]);
+    const [query, setQuery] = useState(null); 
+    const [domain, setDomain] = useState(null); 
+    const [options, setOptions] = useState(null); 
     const [available, setAvailable] = useState(false);
     const [isValid, setIsValid] = useState(true);
-    const [getDomains, { data, loading, error }] = useLazyQuery(GET_DOMAINS); 
-    
+    const [activeClass, setActiveClass] = useState("is-search");
+    const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS); 
+     
+     
     useEffect(()=> {
       const search = new URLSearchParams(location.search);
       let q = search.get("q") || "";
+      handleSearch(q); 
+    }, [location]);
+
+    const handleSearch = async (q) => {
+       
+      q = q.toLowerCase().trim(); 
       setQuery(q); 
-      q = q.toLowerCase().trim();
-      setOptions([]);
-      setQuery(q); 
+      setActiveClass("is-search");
        
       if(getLength(q) < 3) {
           setIsValid(false);
           setAvailable(false);
+          setActiveClass("is-search");
           return;
       } 
 
@@ -55,33 +66,92 @@ const Find = () => {
       if(!isValidDomain(q)) {  
           setIsValid(false);
           setAvailable(false);  
-          setOptions([ { id: getLabelHash(q), label: q,  extension: "eth", expires: null, available: false, valid: false } ]);
+          setActiveClass("is-invalid");
           return;
       } 
 
-      let items = [ { id: getLabelHash(q), label: q, extension: "eth", expires: null, available: false, valid: isValidDomain(q) }]; 
-      const labels = items.map(t=> t.id);
+      let options = [ { id: getLabelHash(q), label: q, extension: "eth", expires: null, price: 0, available: false, valid: isValidDomain(q) }]; 
+      const labels = options.map(t=> t.id);
 
-      getDomains({ variables: { labels }});
+      const { data } = await getDomains({ variables: { labels }});
+      
+      if(data && data.domains.length > 0) {
+        options = options.map(item => { 
+          let domain = data.domains.filter(n=> n.id === item.id)[0];
+          if(domain) {
+              return { 
+                      id: domain.id, label: domain.label || item.label, 
+                      extension: domain.extension, 
+                      expires: domain.expires, 
+                      registered: domain.registered, 
+                      registrant: domain.registrant, 
+                      owner: domain.owner, 
+                      available: false, 
+                      price: 0, 
+                      valid: isValidDomain(domain.label || item.label),
+                      duration: 1,
+                      durationPeriod: "year"
+                    }
+              
+          } else {
+              return { 
+                      id: item.id, 
+                      label: item.label,  
+                      extension: "eth", 
+                      expires: null, 
+                      registered: null, 
+                      registrant: null, 
+                      owner: null, 
+                      available: true, 
+                      price: 0, 
+                      valid: isValidDomain(item.label),
+                      duration: 1,
+                      durationPeriod: "year"
+                    }
+          }
+        }); 
+ 
+        setOptions(options)
+        let domain = options[0];
 
-    }, [location])
+        if(isExpired(domain.expires)) {
+          setAvailable(true);
+          setActiveClass("is-search");
+        } else if(isExpiring(domain.expires)) {
+          setAvailable(false);
+          setActiveClass("has-warning");
+        }else if(isPremium(domain.expires)) {
+          setAvailable(true);
+          setActiveClass("is-valid");
+        } else {
+          setAvailable(false);
+          setActiveClass("is-search");
+        }
+        
+      } else {
+        setOptions(options);
+        setAvailable(true);
+        setActiveClass("is-valid");
+      }
+    }
 
     const handleSubmit = async (e) => { 
-      e.preventDefault(); 
-      navigateToDomain(input.current.value); 
+      e.preventDefault();  
+      if(!isValidName(input.current.value)) {
+        setActiveClass("is-invalid");
+        return;
+      }
+      const domain = normalizeName(input.current.value);
+      navigate("/find?q="+ domain);
       return false;
     }
 
-    const navigateToDomain = (domain)=> {
-        domain = normalizeName(domain);
-        setQuery(domain);
-        if(domain.lastIndexOf(".eth") !== -1)
-            navigate("/"+ domain)
-        else if( domain.lastIndexOf(".eth") === -1) {
-            navigate("/find?q="+ domain);
-        }
-    }
-
+    const handleChange = (e) => {   
+      e.preventDefault(); 
+      setActiveClass("is-search");
+      return false;
+    };
+  
     return (
         <>  
         <Helmet> 
@@ -97,70 +167,63 @@ const Find = () => {
           <div className="row">
             <div className="col-lg-12 pt-3">
                 <form onSubmit={handleSubmit}>
-                  <div className="input-group input-group-lg">
-                    <input ref={input} className="form-control" name="q" defaultValue={query} placeholder="Search for a Web3 username" />
-                    <button className="btn btn-outline-primary">Search</button>
+                  <div className="input-group input-group-lg form-group has-validation">
+                    <input ref={input} className={"form-control "+ activeClass} name="q" onChange={handleChange} defaultValue={query} placeholder="Search for a Web3 username" />
                   </div>
                 </form>
              </div>
           </div>
           <div className="row">
-            <div className="col-lg-12 pt-3">
-              
-            </div>
+            <div className="col-lg-12 pt-3"> 
+              {loading && 
+               <div className={"d-flex flex-row justify-content-between placeholder-glow"}>
+                  <div className="flex-shrink-0"> 
+                  {<span className="placeholder" style={{ width: 125, height: 125 }}></span>}
+                  </div>
+                  <div className="flex-grow-1 ms-3">
+                    <div className="dflex flex-column">
+                      <div>
+                      <span className="placeholder col-12"></span>
+                      </div>
+                      <div>
+                      <span className="placeholder col-6"></span>
+                      </div>
+                    </div>
+                  </div>
+               </div>
+              }
+              {!query && 
+                <span className="text-muted">Type 3 charcters or more to search.</span>}
+              {!loading && query && options && options.length > 0 &&        
+                <div className={"d-flex flex-row justify-content-between placeholder-glow "+ (available || isExpired(options[0].expires) || isPremium(options[0].expires) ? "border-success" : "") }>
+                  <div className="flex-shrink-0">  
+                    <div className="card">
+                      <ImageSmall width={125} height={125} domain={options[0]} />
+                    </div>
+                  </div>
+                  <div className="flex-grow-1 ms-3">
+                    <div className="dflex flex-column">
+                      <div>  
+                        <DomainLink domain={options[0]} />
+                      </div> 
+                      {(available || (isExpired(options[0].expires) || isPremium(options[0].expires))) && 
+                      <div className="d-flex flex-column flex-md-row align-content-end gap-3 mt-3"> 
+                        <AddToCartButton domain={options[0]} />
+                      </div>}
+                      {!available && options && !isExpired(options[0].expires) && !isPremium(options[0].expires) && 
+                      <div className="mt-3 text-muted"> 
+                          <strong>Registered</strong>: {getDateString(options[0].registered)}
+                          <br /> 
+                          <strong>Registrant</strong>: <Link className="link-dark" to={"/account/"+ options[0].registrant}>{obscureAddress(options[0].registrant)}</Link>
+                          <br />
+                          <strong>Expires</strong>: {getExpires(options[0].expires)}
+                      </div>}
+                    </div>
+                  </div>
+                </div>  
+              }
+            </div> 
           </div>
-          <div className="row">
-            <div className="col-lg-12 pt-3">
-              <div className="card">
-                <div className="card-header d-flex justify-content-between">
-                  <h6 className='fs-5 m-1'>Suggestions</h6>
-                </div>
-                <ol className="list-group list-group-flush placeholder-glow">
-                  { loading && 
-                    <>
-                        {[...Array(10)].map((x, i) =>
-                        <li key={i} className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex">
-                            <span className="placeholder col-4"></span>
-                            <span className="placeholder col-2"></span>
-                        </li>
-                        )}
-                    </>     
-                  }
-
-                  { !loading && error && 
-                      <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-danger'>{error.message}</span></li>
-                  }
-
-                  { !loading && !error && data && data.domains.length < 1 &&
-                      <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-muted'>No Result</span></li>
-                  }
-
-                  { !data &&
-                      <li className="list-group-item p-3 fs-5 placeholder-glow justify-content-between d-flex"><span className='text-muted'>Type 3 characters or more</span></li>
-                  }
-
-                  { !loading && !error && data && data.domains.length > 0 &&
-                    <> 
-                        {data.domains.map((domain) => (
-                        <li key={domain.id} className="list-group-item list-group-item-action p-3">
-                            <div className="d-flex">
-                              <div className="flex-shrink-0">
-                                <div className="card text-start">
-                                   <ImageSmall domain={domain} />
-                                  </div>
-                              </div>
-                              <div className="flex-grow-1 ms-3">
-                                  <DomainLink domain={domain} />
-                              </div>
-                            </div> 
-                        </li>
-                      ))}
-                    </>
-                  }  
-                </ol> 
-              </div>
-            </div>
-          </div> 
         </div>
       </>
     );

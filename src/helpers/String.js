@@ -7,6 +7,8 @@ import json5 from "json5";
 const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
 const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
  
+export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
 export const obscureAddress = (address) => {
     return address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length);
 }
@@ -102,7 +104,21 @@ export function isValidName(name) {
       return false;
     }
 }
-  
+
+export function getDurationSeconds(n, period) {
+    if(period === "day") {
+        return Number(n) * 24 * 60 * 60;
+    } else if(period === "week") {
+        return Number(n) * 7 * 24 * 60 * 60;
+    } else if(period === "month") {
+        return Number(n) * 30 * 24 * 60 * 60;
+    } else if(period === "year") {
+        return Number(n) * 12 * 30 * 24 * 60 * 60;
+    } else {
+        return 1 * 12 * 30 * 24 * 60 * 60;
+    }
+}
+   
 export function jsonParse(filter) {
     return json5.parse(filter, {quote: '"'});;
 }
