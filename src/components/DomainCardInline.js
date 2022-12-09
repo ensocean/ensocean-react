@@ -19,7 +19,6 @@ function DomainCardInline({domain, showBadge = true, showRegistered=false, showN
             </div>
             <div className="flex-grow-1 ms-3 d-flex flex-column gap-2">
                 <DomainLink domain={domain} showBadge={showBadge} showRegistered={showRegistered} showNotAvailable={showNotAvailable} showAddToCartButton={showAddToCartButton} showExpires={showExpires} />
-                <DomainStatus domain={domain} showExpires={true} /> 
             </div>
         </div> 
     )

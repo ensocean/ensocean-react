@@ -74,7 +74,7 @@ const RecentRegistered = () => {
                 <> 
                 {data.domains.map((domain) => (
                     <li key={domain.id} className="list-group-item list-group-item-action p-3">
-                        <DomainCardInline domain={domain}  showBadge={false} showRegistered={true} />
+                        <DomainCardInline domain={domain}  showBadge={true} showRegistered={true} />
                     </li>
                 ))}
                 </>
