@@ -13,7 +13,7 @@ function DomainStatus({domain, label = "", loading = false, showBadge=true, show
                 {!loading && !isValidName(domain.label) && <span className="text-danger fw-boldr">Invalid</span>}
                 {!loading && isValidName(domain.label) && isPremium(domain.expires) && 
                     <>
-                        <span className="fw-bold text-success"> Premium Available </span>
+                        <span className="fw-bold text-success"> Premium </span>
                         {showAddToCartButton && <AddToCartSmallButton domain={domain} />}
                     </>
                     }

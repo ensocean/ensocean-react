@@ -53,6 +53,7 @@ export const getSegmentLength = (label) => {
 
 
 export function getTimeAgo(timestamp) {
+    if(timestamp === null) return "-";
     return  moment.unix(timestamp).fromNow()
 }
 
@@ -78,15 +79,16 @@ export function isPremium(expires) {
 }
 
 export function isAvailable(expires) {
-    console.log(expires);
     return isExpired(expires) || isPremium(expires);
 }
 
 export function getDateString(timestamp) {
+    if(timestamp === null) return "-";
     return moment.unix(timestamp).toDate().toDateString();
 } 
 
 export function getDateSimple(timestamp) {
+    if(timestamp === null) return "-";
     return moment.unix(timestamp).format("L");
 }
 
