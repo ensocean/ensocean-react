@@ -38,7 +38,7 @@ function DomainLink({domain, label, loading = false, showBadge = true, showRegis
                     </OverlayTrigger>
                 } 
             </Link>
-            <div className='d-flex flex-row justify-content-between gap-3 mt-2 mt-lg-0'>
+            <div className='d-flex flex-row justify-content-between align-items-center gap-3 mt-2 mt-lg-0'>
                 <DomainStatus loading={loading} domain={domain} showBadge={showBadge} showRegistered={showRegistered} showAddToCartButton={showAddToCartButton} showNotAvailable={showNotAvailable} />
             </div>
         </div> 

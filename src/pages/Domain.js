@@ -14,9 +14,8 @@ import clipboardIcon from "../assets/clipboard.svg";
 import dashCircleFillIcon from "../assets/dash-circle-fill.svg";
 import etherScanIcon from "../assets/etherscan.svg";
 import parse from "html-react-parser";
-import DomainLabel from "../components/DomainLabel";
-import AddToCartButton from "../components/AddToCartButton";
-import ViewYourCartButton from "../components/ViewYourCartButton";
+import DomainLabel from "../components/DomainLabel"; 
+import OwnerLink from "../components/OwnerLink";
 import AlertDomain from "../components/AlertDomain";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
@@ -286,7 +285,9 @@ const Domain = () => {
                                     <hr />
                                     <ul className='list-group list-group-flush'>
                                         <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'><Link to={"/account/"+ encodeURIComponent( domain.owner ) }>{obscureAddress(domain.owner)}</Link> </span>
+                                            <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>
+                                                <OwnerLink domain={domain} />
+                                            </span>
                                         </li>
                                         <li className='list-group-item border-0 p-0 pb-3'>
                                             <CopyToClipboard text={domain.id}

@@ -8,9 +8,9 @@ const Navbar = ({showSearch}) => {
     
     return (
         <> 
-        <nav id="navbar" className="navbar navbar-expand-lg">
-            <div className="container-fluid p-1">
-                <a className="navbar-brand" title="EnsOcean" href="/">
+        <nav id="navbar" className="navbar navbar-expand-lg ">
+            <div className="container-fluid p-0">
+                <a className="navbar-brand me-1" title="EnsOcean" href="/">
                     <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
                     EnsOcean
                 </a>
