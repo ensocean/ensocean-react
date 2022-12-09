@@ -9,7 +9,7 @@ import DomainStatus from './DomainStatus';
 function DomainLink({domain, label, loading = false, showBadge = true, showRegistered=false, showNotAvailable=false, showAddToCartButton=false}) {  
    
     return (
-        <div className="d-flex flex-column flex-md-row justify-content-between"> 
+        <div className="d-flex flex-column flex-md-row justify-content-between gap-1"> 
             <Link
                 className="text-decoration-none link-dark fs-5 fw-bold text-truncate"
                 title={"View "+ domain.label || label + "." + domain.extension +"on EnsOcean"}
@@ -38,7 +38,7 @@ function DomainLink({domain, label, loading = false, showBadge = true, showRegis
                     </OverlayTrigger>
                 } 
             </Link>
-            <div className='d-flex flex-row justify-content-between align-items-center gap-3 mt-2 mt-lg-0'>
+            <div className='d-flex flex-row justify-content-between align-items-center gap-3'>
                 <DomainStatus loading={loading} domain={domain} showBadge={showBadge} showRegistered={showRegistered} showAddToCartButton={showAddToCartButton} showNotAvailable={showNotAvailable} />
             </div>
         </div> 

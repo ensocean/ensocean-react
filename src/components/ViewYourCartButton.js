@@ -6,7 +6,7 @@ function ViewYourCartButton({domain}) {
       
     if(inCart(domain.id)) {
         return (
-            <Link className="btn btn-outline-primary rounded-4" to="/register">
+            <Link className="btn btn-outline-primary" to="/register">
                 View Your Cart
             </Link>
         )   

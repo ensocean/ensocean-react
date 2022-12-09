@@ -11,7 +11,7 @@ function BasketButton({width, height, smallButton = false}) {
     const { isEmpty, totalUniqueItems } = useCart();
       
     return (
-        <OverlayTrigger placement="top"  overlay={<Tooltip>View Your Cart</Tooltip>} >
+        <OverlayTrigger placement="bottom"  overlay={<Tooltip>View Your Cart</Tooltip>} >
             <Link className={"btn btn-default position-relative "+ (smallButton ? "btn-sm": "") }  to="/register">
                 <img src={isEmpty ? bagIcon: bagFillIcon} width={width || 28} height={height || 28 } />
                 {totalUniqueItems > 0 && 

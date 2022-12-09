@@ -43,16 +43,6 @@ function ClaimNowButtonSmall({domain}) {
             </button> 
             </>
         )   
-    } else {
-        return (
-            <button className={showRemove ? "btn btn-sm btn-outline-danger ps-2": "btn btn-sm btn-outline-success ps-2"}
-                onMouseOverCapture={handleMouseOver} 
-                onMouseOutCapture={handleMouseOut}
-                onClick={(e)=> { removeItem(_domain.id);  }}>
-                {showRemove && <span><X /> Remove From Cart</span>}
-                {!showRemove && <span><Check2 /> Added To Cart</span>}
-            </button>
-        )
     }   
 }
 
