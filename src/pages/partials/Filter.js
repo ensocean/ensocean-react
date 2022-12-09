@@ -21,6 +21,7 @@ import notAvailable from "../../assets/not-available.svg";
 import ImageSmall from "../../components/ImageSmall";
 import DomainLink from "../../components/DomainLink";
 import OwnerLink from "../../components/OwnerLink";
+import DomainCardInline from "../../components/DomainCardInline";
   
 const DEBOUNCE_INTERVAL = 500;
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
@@ -621,16 +622,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             {data.domains.map((domain) => (
                             <tr key={domain.id} className="t-card">
                                 <td className="p-3">
-                                    <div className="d-flex">
-                                        <div className="flex-shrink-0"> 
-                                            <div className="card text-start">
-                                                <ImageSmall domain={domain} />
-                                            </div>
-                                        </div>
-                                        <div className="flex-grow-1 ms-3">
-                                            <DomainLink domain={domain} />
-                                        </div>
-                                    </div> 
+                                    <DomainCardInline domain={domain} showRegistered={false} showNotAvailable={false} />
                                 </td> 
                                 <td className="p-3"> 
                                     {getExpires(domain.expires)}

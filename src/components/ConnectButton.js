@@ -12,15 +12,16 @@ import {
   useSwitchNetwork
 } from 'wagmi';
  
-import { obscureAddress, obscureLabel, obscureName } from '../../helpers/String';
+import { obscureAddress, obscureLabel, obscureName } from '../helpers/String';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { Spinner } from 'react-bootstrap';
 
 
 window.Buffer = require("buffer").Buffer;
  
-function ConnectButton() { 
+function ConnectButton({props}) { 
   const { address, connector, isConnected } = useAccount()
   const { data: ensAvatar } = useEnsAvatar({ address })
   const { data: ensName } = useEnsName({ address })
@@ -52,19 +53,17 @@ function ConnectButton() {
   if (isConnected) {
     return ( 
       <> 
-        <a className='btn btn-outline-default' href={"/account/"+ address}>
-          { ensName ? obscureName(ensName, 20) : obscureAddress(address) } 
-        </a>  
-        { SUPPORTED_CHAIN_ID !== chain?.id ? <button className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
-          {'Wrong Network'} {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && ' (switching)'}
-        </button> : <button className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>}
+        { SUPPORTED_CHAIN_ID !== chain?.id ? <button {...props} className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+          {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
+          <span> Wrong Network</span>
+        </button> : <button {...props} className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>}
       </> 
     ) 
 
   } else { 
     return (
       <> 
-        <button className='btn btn-primary' onClick={handleConnect}>Connect Wallet</button>
+        <button {...props} className='btn btn-primary' onClick={handleConnect}>Connect Wallet</button>
       </>
     )
   } 

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { getExpireCondition } from "../../helpers/String";
 import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg' 
 import refreshIcon from "../../assets/arrow-repeat.svg";
-import ImageSmall from "../../components/ImageSmall";
+import DomainCardInline from "../../components/DomainCardInline";
 import DomainLink from "../../components/DomainLink";
   
 const RECENTLY_EXPIRED = gql`
@@ -81,16 +81,7 @@ const RecentExpired = () => {
               <> 
                   {data.domains.map((domain) => (
                   <li key={domain.id} className="list-group-item list-group-item-action p-3">
-                      <div className="d-flex">
-                        <div className="flex-shrink-0">
-                          <div className="card text-start">
-                              <ImageSmall domain={domain} />
-                            </div>
-                        </div>
-                        <div className="flex-grow-1 ms-3">
-                          <DomainLink domain={domain} />
-                        </div>
-                      </div> 
+                      <DomainCardInline domain={domain} showAddToCartButton={true} />
                   </li>
                 ))}
               </>
