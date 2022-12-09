@@ -77,6 +77,11 @@ export function isPremium(expires) {
     return moment.unix(expires).utc().diff(moment(), "seconds") <= -(GRACE_PERIOD * 24 * 60 * 60) && moment.unix(expires).diff(moment(), "seconds") >= -((GRACE_PERIOD + PREMIUM_PERIOD) * 24 * 60 * 60)  ;
 }
 
+export function isAvailable(expires) {
+    console.log(expires);
+    return isExpired(expires) || isPremium(expires);
+}
+
 export function getDateString(timestamp) {
     return moment.unix(timestamp).toDate().toDateString();
 } 

@@ -30,11 +30,9 @@ const RECENTLY_EXPIRED = gql`
 
 const RecentExpired = () => {
 
-    const [getExpired, { called, loading, error, data, refetch }] = useLazyQuery(RECENTLY_EXPIRED,
-      {
-        variables: {  },
+    const [getExpired, { called, loading, error, data, refetch }] = useLazyQuery(RECENTLY_EXPIRED, { 
         notifyOnNetworkStatusChange: true
-      });
+    });
  
     if(!called) getExpired();
   

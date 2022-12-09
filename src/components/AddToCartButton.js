@@ -3,9 +3,16 @@
 import React, {useState, useEffect} from "react";
 import { useCart } from "react-use-cart";
 import { Check2, X } from "react-bootstrap-icons";
+import { toast } from "react-toastify";
+
+const MAX_CART_ITEM_COUNT = Number(process.env.REACT_APP_MAX_CART_ITEM_COUNT);
 
 function AddToCartButton({domain}) {   
-    const { addItem, removeItem, inCart } = useCart();
+    var _domain = JSON.parse(JSON.stringify(domain));
+    _domain.price = 0;
+    Object.preventExtensions(_domain);
+
+    const { addItem, removeItem, inCart, totalUniqueItems } = useCart();
     const [showRemove, setShowRemove] = useState(false);
    
     const handleMouseOver = (e) => {
@@ -16,19 +23,31 @@ function AddToCartButton({domain}) {
         setShowRemove(false);
     }
 
-    if(!inCart(domain.id)) {
+    const addToCart = () => {
+        if(totalUniqueItems >= MAX_CART_ITEM_COUNT)
+        {
+            toast.error("Exced Max. Item Count");     
+            return;
+        }
+        addItem(_domain);  
+        toast.success("Added to cart"); 
+    }
+
+    if(!inCart(_domain.id)) {
         return (
+            <> 
             <button className="btn btn-success rounded-4" 
-                onClick={(e)=> { addItem(domain); }}>
+                onClick={(e)=> { addToCart(_domain) }}>
                     Add To Cart
             </button> 
+            </>
         )   
     } else {
         return (
             <button className={showRemove ? "btn btn-danger rounded-4": "btn btn-success rounded-4"}
                 onMouseOverCapture={handleMouseOver} 
                 onMouseOutCapture={handleMouseOut}
-                onClick={(e)=> { removeItem(domain.id);  }}>
+                onClick={(e)=> { removeItem(_domain.id);  }}>
                 {showRemove && <span><X /> Remove From Cart</span>}
                 {!showRemove && <span><Check2 /> Added To Cart</span>}
             </button>
