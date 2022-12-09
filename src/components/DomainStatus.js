@@ -8,7 +8,7 @@ function DomainStatus({domain, label = "", loading = false, showBadge=true, show
     
     if(showBadge) {
         return ( 
-            <div className="d-flex flex-row justify-content-between gap-2"> 
+            <>
                 {loading && <div className="spinner-border spinner-border-sm"></div>}
                 {!loading && !isValidName(domain.label) && <span className="text-danger fw-boldr">Invalid</span>}
                 {!loading && isValidName(domain.label) && isPremium(domain.expires) && 
@@ -27,7 +27,7 @@ function DomainStatus({domain, label = "", loading = false, showBadge=true, show
                 {showNotAvailable && isValidName(domain.label) &&  !isExpiring(domain.expires) && !isAvailable(domain.expires) && <strong className="float-end text-muted mt-2 mt-lg-0"> Not Available </strong>}
                 {showRegistered && isValidName(domain.label) && !isExpiring(domain.expires) && !isAvailable(domain.expires) && <span className="float-end text-muted mt-2 mt-lg-0">{getTimeAgo(domain.registered)}</span>}
                 {showExpires && isValidName(domain.label) && !isExpiring(domain.expires) && !isAvailable(domain.expires) && <small className="text-muted"> Expires {  getExpires(domain.expires, false) } </small>}
-            </div>
+                </>
         )
     } else {
         return (<></>)
