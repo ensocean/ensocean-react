@@ -199,16 +199,30 @@ const Find = () => {
               {!query && <span className="text-muted">Type 3 charcters or more to search.</span>}
               {!loading && query && options && options.length > 0 &&    
               <>
-                { isAvailable(options[0]) && 
-                  <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-3"> 
+                {!isAvailable(options[0].expires) && 
+                  <div className="d-flex flex-column align-items-center justify-content-center gap-2 p-2">
+                    <span className="text-muted fs-4 fw-bold">
+                    😭 Not Available
+                    </span>
+                    <div className="text-muted fs-6 text-center">
+                      This name was last registered on {getDateString(options[0].registered)} and expires {getExpires(options[0].expires)}
+                    </div>
+                  </div>
+                }
+                { isAvailable(options[0].expires) && 
+                  <>
+                  <div className="d-flex flex-row align-items-center justify-content-center">
+                    <span className="text-success fs-4 fw-bold">
+                    🥳 Available
+                    </span>
+                  </div>
+                  <div className="d-flex flex-row justify-content-center gap-3 mt-3"> 
                       <AddToCartButton domain={options[0]} />
                       {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
                       {inCart(options[0].id) && <ViewYourCartButton domain={options[0]} />}
                   </div> 
+                  </>
                 }
-                <div className="d-flex flex-column justify-content-center">
-                  <DomainCardInline domain={options[0]} imageWidth={100} imageHeight={100} showNotAvailable={true} showExpires={true} />
-                </div> 
               </>    
                 
               }

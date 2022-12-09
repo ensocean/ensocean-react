@@ -9,7 +9,7 @@ import DomainStatus from './DomainStatus';
 function DomainLink({domain, label, loading = false, showBadge = true, showRegistered=false, showNotAvailable=false, showAddToCartButton=false}) {  
    
     return (
-        <div className="d-flex flex-column flex-md-row justify-content-between gap-1"> 
+        <div className="d-flex flex-row justify-content-between align-items-center gap-1"> 
             <Link
                 className="text-decoration-none link-dark fs-5 fw-bold text-truncate"
                 title={"View "+ domain.label || label + "." + domain.extension +"on EnsOcean"}
