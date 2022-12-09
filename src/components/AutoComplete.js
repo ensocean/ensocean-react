@@ -170,7 +170,7 @@ const AutoComplete = () => {
                                 <DomainLink domain={domain} loading={loading} showNotAvailable={true} />
                             </div>
                             <div className='d-flex flex-row justify-content-center align-items-center pb-2 gap-2'>
-                                {available && <ClaimNowButton domain={domain} /> }
+                                {available && <ClaimNowButton loading={loading} domain={domain} /> }
                             </div>
                         </div>
                         </>

@@ -22,10 +22,9 @@ import ImageSmall from "../../components/ImageSmall";
 import DomainLink from "../../components/DomainLink";
 import OwnerLink from "../../components/OwnerLink";
 import DomainCardInline from "../../components/DomainCardInline";
+import DomainCard from "../../components/DomainCard";
   
-const DEBOUNCE_INTERVAL = 500;
-const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
-const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
+const DEBOUNCE_INTERVAL = 500; 
  
 let timeout;
 
@@ -622,7 +621,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             {data.domains.map((domain) => (
                             <tr key={domain.id} className="t-card">
                                 <td className="p-3">
-                                    <DomainCardInline domain={domain} showRegistered={false} showNotAvailable={false} />
+                                    <DomainCardInline domain={domain} showRegistered={false} showNotAvailable={false} showAddToCartButton={true} />
                                 </td> 
                                 <td className="p-3"> 
                                     {getExpires(domain.expires)}
@@ -648,50 +647,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                     } 
                     {data.domains.map((domain) => (
                     <div className="col mb-3" key={domain.id}>
-                        <Link className="text-decoration-none link-dark fw-bold fs-5" title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"} to={"/"+ encodeURIComponent(domain.label) + "."+ domain.extension }>
-                            <div className="card text-start g-card"> 
-                                <LazyLoadImage
-                                    alt={domain.label} 
-                                    className="img-fluid card-img-top" 
-                                    onError={(e)=> { document.getElementById(domain.id)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById(domain.id)?.remove(); }}
-                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label)) }
-                                /> 
-                                <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
-                                <div className="card-body p-2">
-                                    <h6 className="card-title m-0 text-truncate fs-5 fw-bold">
-                                        {obscureLabel(domain.label, 20)}.{domain.extension}
-                                        {' '}
-                                        { (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode")) && 
-                                            <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                                <img src={exclamationTriangleFill} alt= "" />
-                                            </span>
-                                        }
-                                        {' '}
-                                        { !isValidName(domain.label) && 
-                                            <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                                <img src={dashCircleFill} alt= ""  />
-                                            </span>
-                                        }
-                                    </h6>
-                                </div>
-                                <div className="card-footer bg-white p-2">
-                                    <small className="text-muted">
-                                        {(function() {
-                                            if (isPremium(domain.expires) ) {
-                                            return (<small className="text-success">Available in Premium</small>)
-                                            } else if(isExpiring(domain.expires)) {
-                                            return (<small className="text-warning"> In grace period</small>)
-                                            } else if(isExpired(domain.expires)) {
-                                            return (<small className="text-success"> AVAILABLE </small>)
-                                            } else {
-                                                return (<small className="text-muted"> Expires {  getExpires(domain.expires, false) } </small>)
-                                            }
-                                        })()} 
-                                    </small>
-                                </div>
-                            </div>
-                        </Link>
+                        <DomainCard domain={domain} />
                     </div>
                     ))}
                 </div>  

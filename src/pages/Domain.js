@@ -10,11 +10,14 @@ import DomainEvents from "./partials/DomainEvents";
 import spinner from '../assets/spinner.svg'
 import notAvailable from "../assets/not-available.svg";
 import shareIcon from '../assets/share-white.svg'
-import clipboardIcon from "../assets/clipboard.svg";
-import exclamationTriangleFillIcon from "../assets/exclamation-triangle-fill.svg";
+import clipboardIcon from "../assets/clipboard.svg"; 
 import dashCircleFillIcon from "../assets/dash-circle-fill.svg";
 import etherScanIcon from "../assets/etherscan.svg";
 import parse from "html-react-parser";
+import DomainLabel from "../components/DomainLabel";
+import AddToCartButton from "../components/AddToCartButton";
+import ViewYourCartButton from "../components/ViewYourCartButton";
+import AlertDomain from "../components/AlertDomain";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -240,19 +243,7 @@ const Domain = () => {
                         <div className='d-flex justify-content-between align-items-center'> 
                             <div className='d-flex justify-content-start align-items-center gap-3 text-sm'>
                                 <h1 className='m-auto fs-1 fw-bold'>
-                                    {obscureLabel(domain.label || label, 25)}.{domain.extension || "eth"}
-                                    { (domain.tags && (domain.tags.includes("include-unicode") || domain.tags.includes("only-unicode"))) && 
-                                        <span data-bs-toogle="tooltip" data-bs-title="Include unicode characters">
-                                            &nbsp;
-                                            <img src={exclamationTriangleFillIcon} alt= "" />
-                                        </span>
-                                    } 
-                                    { !isValidName(domain.label || label) && 
-                                        <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                            &nbsp;
-                                            <img src={dashCircleFillIcon} alt= "" />
-                                        </span>
-                                    }
+                                    <DomainLabel domain={domain} /> 
                                 </h1>
                                 <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
                                     <img src={etherScanIcon} alt= "" />
@@ -271,6 +262,11 @@ const Domain = () => {
                 </div>
                 <div className='container-fluid'>
                     <div className='container'>
+                        <div className="row">
+                            <div className="col-lg-12">
+                               <AlertDomain domain={domain} />
+                            </div>
+                        </div>
                         <div className="row"> 
                             <div className="col-lg-4">   
                                 <div className="card">
@@ -286,18 +282,6 @@ const Domain = () => {
                             </div>
                             <div className='col-lg-8 mt-3 mt-lg-0'>
                                 <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
-                                    { isExpired(domain.expires) && 
-                                        <div className="alert alert-success">Available for registration!</div>
-                                    }
-                                    { isPremium(domain.expires) && 
-                                        <div className="alert alert-success">Available for Premium registration!</div>
-                                    } 
-                                    { isExpiring(domain.expires) && 
-                                        <div className="alert alert-warning">About to Expire!</div>
-                                    } 
-                                    { isValidName(domain.label || label) === false &&
-                                            <div className="alert alert-danger">Malformed!</div>
-                                    }
                                     <h5 className="card-title fs-4">Details</h5>
                                     <hr />
                                     <ul className='list-group list-group-flush'>

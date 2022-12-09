@@ -16,7 +16,7 @@ import { obscureAddress, obscureLabel, obscureName } from '../helpers/String';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
+import { OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 
 
 window.Buffer = require("buffer").Buffer;
@@ -53,10 +53,14 @@ function ConnectButton({props}) {
   if (isConnected) {
     return ( 
       <> 
-        { SUPPORTED_CHAIN_ID !== chain?.id ? <button {...props} className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
-          {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
-          <span> Wrong Network</span>
-        </button> : <button {...props} className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>}
+        { SUPPORTED_CHAIN_ID !== chain?.id ? 
+          <OverlayTrigger placement="top"  overlay={<Tooltip>Click to Change Network</Tooltip>} >
+            <button {...props} className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+              {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
+              <span> Wrong Network</span>
+            </button> 
+          </OverlayTrigger>
+        : <button {...props} className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>}
       </> 
     ) 
 

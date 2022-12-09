@@ -9,6 +9,7 @@ import AddToCartButton from "../components/AddToCartButton";
 import ClaimNowButton from "../components/ClaimNowButton";
 import { useCart } from "react-use-cart";
 import ViewYourCartButton from "../components/ViewYourCartButton";
+import DomainCardInline from "../components/DomainCardInline";
 
 const GET_DOMAINS = gql`
     query Domains( $labels: [String] ) {
@@ -197,32 +198,9 @@ const Find = () => {
               }
               {!query && <span className="text-muted">Type 3 charcters or more to search.</span>}
               {!loading && query && options && options.length > 0 &&        
-                <div className={"d-flex flex-row justify-content-between placeholder-glow "+ (available || isExpired(options[0].expires) || isPremium(options[0].expires) ? "border-success" : "") }>
-                  <div className="flex-shrink-0">  
-                    <div className="card">
-                      <ImageSmall width={75} height={75} domain={options[0]} />
-                    </div>
-                  </div>
-                  <div className="flex-grow-1 ms-3">
-                    <div className="dflex flex-column">
-                      <div>  
-                        <DomainLink domain={options[0]} />
-                      </div> 
-                      {(available || (isExpired(options[0].expires) || isPremium(options[0].expires))) && 
-                      <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-3"> 
-                        <AddToCartButton domain={options[0]} />
-                        {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
-                        {inCart(options[0].id) && <ViewYourCartButton domain={options[0]} />}
-                      </div>
-                      }
-                      {!available && options && !isExpired(options[0].expires) && !isPremium(options[0].expires) && 
-                      <div className="mt-3 text-muted">  
-                          Expires {getExpires(options[0].expires)}
-                      </div>
-                      }
-                    </div>
-                  </div>
-                </div>  
+                <div className="d-flex flex-column justify-content-center">
+                  <DomainCardInline domain={options[0]} imageWidth={100} imageHeight={100} />
+                </div>
               }
             </div> 
           </div>
