@@ -1,10 +1,10 @@
-
-
 import React, {useState, useEffect} from "react";
 import { useCart } from "react-use-cart";
 import { Check2, X } from "react-bootstrap-icons";
+import { useNavigate } from "react-router-dom";
 
-function AddToCartButton({domain}) {   
+function ClaimNowButton({domain}) {   
+    const navigate = useNavigate(); 
     const { addItem, removeItem, inCart } = useCart();
     const [showRemove, setShowRemove] = useState(false);
    
@@ -18,14 +18,14 @@ function AddToCartButton({domain}) {
 
     if(!inCart(domain.id)) {
         return (
-            <button className="btn btn-success rounded-4" 
-                onClick={(e)=> { addItem(domain); }}>
-                    Add To Cart
+            <button className="btn btn-outline-success rounded-4" 
+                onClick={(e)=> { addItem(domain); navigate("/register") }}>
+                    Claim Now
             </button> 
         )   
     } else {
         return (
-            <button className={showRemove ? "btn btn-danger rounded-4": "btn btn-success rounded-4"}
+            <button className={showRemove ? "btn btn-outline-danger rounded-4 ps-2": "btn btn-outline-success rounded-4 ps-2"}
                 onMouseOverCapture={handleMouseOver} 
                 onMouseOutCapture={handleMouseOut}
                 onClick={(e)=> { removeItem(domain.id);  }}>
@@ -36,5 +36,5 @@ function AddToCartButton({domain}) {
     }   
 }
 
-export default AddToCartButton;
+export default ClaimNowButton;
 

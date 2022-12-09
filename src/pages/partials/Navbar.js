@@ -1,7 +1,8 @@
 import logo from "../../assets/icon.png";
 import ConnectButton from "./ConnectButton";
-import AutoComplete from "./AutoComplete";
+import AutoComplete from "../../components/AutoComplete";
 import BasketButton from "../../components/BasketButton";
+import { Twitter, Mailbox2 } from "react-bootstrap-icons";
 
 const Navbar = ({showSearch}) => {   
     
@@ -17,7 +18,7 @@ const Navbar = ({showSearch}) => {
                     <span className="navbar-toggler-icon"></span>
                 </button> 
                 <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                    <div className="offcanvas-header">
+                    <div className="offcanvas-header pb-0">
                         <a className="navbar-brand" title="EnsOcean" href="/">
                             <img src={logo} alt="EnsOcean" className="align-text-top me-1" /><span className="logo">EnsOcean</span>
                         </a>
@@ -27,7 +28,7 @@ const Navbar = ({showSearch}) => {
                         {showSearch === true && 
                             <AutoComplete /> 
                         }
-                        <ul className="navbar-nav justify-content-start align-items-center flex-grow-1">
+                        <ul className="navbar-nav justify-content-start align-items-lg-center flex-grow-1">
                             <li className="nav-item">
                                 <a className="nav-link fw-bold" href="/find">Find</a>
                             </li> 
@@ -35,11 +36,11 @@ const Navbar = ({showSearch}) => {
                                 <a className="nav-link fw-bold" href="/discover">Browse</a>
                             </li> 
                         </ul>
-                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
                             <BasketButton />
                             <ConnectButton />
-                        </div>
-                    </div>
+                        </div> 
+                    </div> 
                 </div>
             </div>
         </nav> 

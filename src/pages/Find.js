@@ -6,7 +6,9 @@ import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomai
 import ImageSmall from "../components/ImageSmall";
 import DomainLink from "../components/DomainLink";
 import AddToCartButton from "../components/AddToCartButton";
- 
+import ClaimNowButton from "../components/ClaimNowButton";
+import { useCart } from "react-use-cart";
+
 const GET_DOMAINS = gql`
     query Domains( $labels: [String] ) {
         domains ( 
@@ -38,7 +40,7 @@ const Find = () => {
     const [isValid, setIsValid] = useState(true);
     const [activeClass, setActiveClass] = useState("is-search");
     const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS); 
-     
+    const { addItem, removeItem, inCart } = useCart();
      
     useEffect(()=> {
       const search = new URLSearchParams(location.search);
@@ -178,7 +180,7 @@ const Find = () => {
               {loading && 
                <div className={"d-flex flex-row justify-content-between placeholder-glow"}>
                   <div className="flex-shrink-0"> 
-                  {<span className="placeholder" style={{ width: 125, height: 125 }}></span>}
+                  {<span className="placeholder" style={{ width: 75, height: 75 }}></span>}
                   </div>
                   <div className="flex-grow-1 ms-3">
                     <div className="dflex flex-column">
@@ -192,13 +194,12 @@ const Find = () => {
                   </div>
                </div>
               }
-              {!query && 
-                <span className="text-muted">Type 3 charcters or more to search.</span>}
+              {!query && <span className="text-muted">Type 3 charcters or more to search.</span>}
               {!loading && query && options && options.length > 0 &&        
                 <div className={"d-flex flex-row justify-content-between placeholder-glow "+ (available || isExpired(options[0].expires) || isPremium(options[0].expires) ? "border-success" : "") }>
                   <div className="flex-shrink-0">  
                     <div className="card">
-                      <ImageSmall width={125} height={125} domain={options[0]} />
+                      <ImageSmall width={75} height={75} domain={options[0]} />
                     </div>
                   </div>
                   <div className="flex-grow-1 ms-3">
@@ -207,17 +208,16 @@ const Find = () => {
                         <DomainLink domain={options[0]} />
                       </div> 
                       {(available || (isExpired(options[0].expires) || isPremium(options[0].expires))) && 
-                      <div className="d-flex flex-column flex-md-row align-content-end gap-3 mt-3"> 
+                      <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-3"> 
                         <AddToCartButton domain={options[0]} />
-                      </div>}
+                        {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
+                      </div>
+                      }
                       {!available && options && !isExpired(options[0].expires) && !isPremium(options[0].expires) && 
-                      <div className="mt-3 text-muted"> 
-                          <strong>Registered</strong>: {getDateString(options[0].registered)}
-                          <br /> 
-                          <strong>Registrant</strong>: <Link className="link-dark" to={"/account/"+ options[0].registrant}>{obscureAddress(options[0].registrant)}</Link>
-                          <br />
-                          <strong>Expires</strong>: {getExpires(options[0].expires)}
-                      </div>}
+                      <div className="mt-3 text-muted">  
+                          Expires {getExpires(options[0].expires)}
+                      </div>
+                      }
                     </div>
                   </div>
                 </div>  
