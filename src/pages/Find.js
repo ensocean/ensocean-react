@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect }  from "react";
 import { useLocation, Link, useNavigate} from "react-router-dom";  
 import {Helmet} from "react-helmet";
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getTokenId, obscureLabel, isNonAscii, getDateSimple, obscureAddress, getExpires, getDateString} from '../helpers/String';
+import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getTokenId, obscureLabel, isNonAscii, getDateSimple, obscureAddress, getExpires, getDateString, isAvailable} from '../helpers/String';
 import ImageSmall from "../components/ImageSmall";
 import DomainLink from "../components/DomainLink";
 import AddToCartButton from "../components/AddToCartButton";
@@ -197,10 +197,20 @@ const Find = () => {
                </div>
               }
               {!query && <span className="text-muted">Type 3 charcters or more to search.</span>}
-              {!loading && query && options && options.length > 0 &&        
+              {!loading && query && options && options.length > 0 &&    
+              <>
+                { isAvailable(options[0]) && 
+                  <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-3"> 
+                      <AddToCartButton domain={options[0]} />
+                      {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
+                      {inCart(options[0].id) && <ViewYourCartButton domain={options[0]} />}
+                  </div> 
+                }
                 <div className="d-flex flex-column justify-content-center">
-                  <DomainCardInline domain={options[0]} imageWidth={100} imageHeight={100} />
-                </div>
+                  <DomainCardInline domain={options[0]} imageWidth={100} imageHeight={100} showNotAvailable={true} showExpires={true} />
+                </div> 
+              </>    
+                
               }
             </div> 
           </div>
