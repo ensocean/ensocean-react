@@ -8,7 +8,7 @@ const Home = () => {
   return (
     <>
       <AlertNetwork /> 
-      <div className="container">
+      <div className="container-fluid">
         <Navbar showSearch={true} />
       </div>
       <Outlet />

@@ -8,7 +8,7 @@ const Find = () => {
   return (
     <>
       <AlertNetwork /> 
-      <div className="container">
+      <div className="container-fluid">
         <Navbar showSearch={false} />
       </div>
       <Outlet />
