@@ -8,6 +8,7 @@ import DomainLink from "../components/DomainLink";
 import AddToCartButton from "../components/AddToCartButton";
 import ClaimNowButton from "../components/ClaimNowButton";
 import { useCart } from "react-use-cart";
+import ViewYourCartButton from "../components/ViewYourCartButton";
 
 const GET_DOMAINS = gql`
     query Domains( $labels: [String] ) {
@@ -211,6 +212,7 @@ const Find = () => {
                       <div className="d-flex flex-column flex-md-row justify-content-center gap-3 mt-3"> 
                         <AddToCartButton domain={options[0]} />
                         {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
+                        {inCart(options[0].id) && <ViewYourCartButton domain={options[0]} />}
                       </div>
                       }
                       {!available && options && !isExpired(options[0].expires) && !isPremium(options[0].expires) && 

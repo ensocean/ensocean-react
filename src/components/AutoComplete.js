@@ -7,6 +7,8 @@ import { useCart } from "react-use-cart";
 import { Check2 } from "react-bootstrap-icons";
 import AddToCartButton from './AddToCartButton';
 import ClaimNowButton from './ClaimNowButton';
+import DomainLink from './DomainLink';
+import ViewYourCartButton from './ViewYourCartButton';
 
 const AutoComplete = () => {
     const [query, setQuery] = useState("");
@@ -164,33 +166,10 @@ const AutoComplete = () => {
                     {domains.map((domain, index) => (
                         <>
                         <div className='d-flex flex-column'>
-                            <div key={domain.id} className="d-flex flex-row justify-content-between p-2 ps-3 pe-3 gap-1 fs-5 fw-bold">
-                                <Link to={"/"+ domain.label + "."+ domain.extension} option={domain} position={index} className="text-truncate link-dark text-decoration-none">
-                                {domain.label}.{domain.extension}
-                                </Link> 
-                                {(function(){
-                                    if(loading) {
-                                        return (<div className="spinner-border spinner-border-sm"></div>)
-                                    }  else if(!domain.valid) {
-                                        return (<span className="badge text-bg-danger">Invalid</span> )
-                                    } else {
-                                        if(!domain.available) {
-                                            if (isPremium(domain.expires) ) { 
-                                                return (<span className="badge text-bg-success">Premium</span>)
-                                            } else if(isExpiring(domain.expires)) {
-                                                return (<span className="badge text-bg-warning">Grace Period</span>)
-                                            } else if(isExpired(domain.expires)) { 
-                                                return (<span className="badge text-bg-success">Available</span>)
-                                            } else {
-                                                return (<span className="badge text-bg-secondary">Not Available</span>)
-                                            }
-                                        } else {
-                                            return (<span className="badge text-bg-success">Available</span>)
-                                        }
-                                    } 
-                                })()} 
+                            <div key={domain.id} className="p-2 ps-3 pe-3">
+                                <DomainLink domain={domain} loading={loading} showNotAvailable={true} />
                             </div>
-                            <div className='d-flex flex-row justify-content-center align-items-center'>
+                            <div className='d-flex flex-row justify-content-center align-items-center pb-2 gap-2'>
                                 {available && <ClaimNowButton domain={domain} /> }
                             </div>
                         </div>

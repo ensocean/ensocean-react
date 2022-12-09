@@ -14,7 +14,7 @@ const Home = () => {
         <Carousel />
         <div className="container">
           <div className="row gap-3 gap-lg-0 gap-md-3 gap-sm-3">
-            <div className="col-lg-12 mb-4 d-block d-lg-none">
+            <div className="col-lg-12 mb-1 d-block d-lg-none">
                 <AutoComplete />
             </div>
             <div className="col-lg-6">

@@ -94,10 +94,10 @@ export default function App () {
                   <Route path="/" element={<Layouts.Home />}>
                     <Route path="/:label.:extension" element={<Domain />} />
                   </Route>
-                  <Route path="/find" element={<Layouts.Find />}>
+                  <Route path="/find" element={<Layouts.Page />}>
                     <Route path="/find" element={<Find />} />
                   </Route>
-                  <Route path="/register" element={<Layouts.Find />}>
+                  <Route path="/register" element={<Layouts.Page />}>
                     <Route path="/register" element={<Register />} />
                   </Route>
                   <Route path="/" element={<Layouts.Page />}>
