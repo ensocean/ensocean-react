@@ -21,7 +21,7 @@ import { OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 
 window.Buffer = require("buffer").Buffer;
  
-function ConnectButton({props}) { 
+function ConnectButton({smallButton = false}) { 
   const { address, connector, isConnected } = useAccount()
   const { data: ensAvatar } = useEnsAvatar({ address })
   const { data: ensName } = useEnsName({ address })
@@ -55,19 +55,19 @@ function ConnectButton({props}) {
       <> 
         { SUPPORTED_CHAIN_ID !== chain?.id ? 
           <OverlayTrigger placement="top"  overlay={<Tooltip>Click to Change Network</Tooltip>} >
-            <button {...props} className='btn btn-danger' disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+            <button className={"btn btn-danger " + (smallButton ? "btn-sm": "") } disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
               {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
               <span> Wrong Network</span>
             </button> 
           </OverlayTrigger>
-        : <button {...props} className='btn btn-primary' onClick={handleDisconnect}>Disconnect</button>}
+        : <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleDisconnect}>Disconnect</button>}
       </> 
     ) 
 
   } else { 
     return (
       <> 
-        <button {...props} className='btn btn-primary' onClick={handleConnect}>Connect Wallet</button>
+        <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleConnect}>Connect Wallet</button>
       </>
     )
   } 
