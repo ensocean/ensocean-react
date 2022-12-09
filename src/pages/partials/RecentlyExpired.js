@@ -32,9 +32,8 @@ const RecentExpired = () => {
 
     const [getExpired, { called, loading, error, data, refetch }] = useLazyQuery(RECENTLY_EXPIRED,
       {
-        variables: {  },
-        notifyOnNetworkStatusChange: true
-    });
+        variables: {  }
+      });
  
     if(!called) getExpired();
   

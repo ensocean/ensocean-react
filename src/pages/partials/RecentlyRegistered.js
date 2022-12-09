@@ -27,8 +27,7 @@ const RECENTLY_REGISTERED = gql`
 
 const RecentRegistered = () => {
     const [getRegistered, { called, loading, error, data, refetch}] = useLazyQuery(RECENTLY_REGISTERED, {
-        variables: {  },
-        notifyOnNetworkStatusChange: true
+        variables: {  }
     });
     
     if(!called) getRegistered();
