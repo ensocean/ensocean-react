@@ -37,23 +37,13 @@ function ClaimNowButton({loading, domain}) {
     if(!inCart(_domain.id)) {
         return ( 
             <> 
-            <button disabled={loading ? "disabled": ""} className="btn btn-outline-success rounded-4" 
+            <button disabled={loading ? "disabled": ""} className="btn btn-outline-success" 
                 onClick={(e)=> { addToCart(_domain) }}>
                     Claim Now
             </button> 
             </>
         )   
-    } else {
-        return (
-            <button disabled={loading ? "disabled": ""} className={showRemove ? "btn btn-outline-danger rounded-4 ps-2": "btn btn-outline-success rounded-4 ps-2"}
-                onMouseOverCapture={handleMouseOver} 
-                onMouseOutCapture={handleMouseOut}
-                onClick={(e)=> { removeItem(_domain.id);  }}>
-                {showRemove && <span><X /> Remove From Cart</span>}
-                {!showRemove && <span><Check2 /> Added To Cart</span>}
-            </button>
-        )
-    }   
+    }
 }
 
 export default ClaimNowButton;

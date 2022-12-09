@@ -165,12 +165,14 @@ const AutoComplete = () => {
                 <Menu {...menuProps} >
                     {domains.map((domain, index) => (
                         <>
-                        <div className='d-flex flex-column'>
-                            <div key={domain.id} className="p-2 ps-3 pe-3">
-                                <DomainLink domain={domain} loading={loading} showNotAvailable={true} />
+                        <div className="d-flex flex-column gap-2">
+                            <div key={domain.id} className='ps-3 pe-3'> 
+                                <DomainLink domain={domain} loading={loading} showNotAvailable={true} /> 
                             </div>
-                            <div className='d-flex flex-row justify-content-center align-items-center pb-2 gap-2'>
+                            <div className="d-flex flex-row justify-content-center align-items-center gap-2">
+                                {available && <AddToCartButton loading={loading} domain={domain} /> }
                                 {available && <ClaimNowButton loading={loading} domain={domain} /> }
+                                {available && <ViewYourCartButton loading={loading} domain={domain} /> }
                             </div>
                         </div>
                         </>
@@ -178,10 +180,10 @@ const AutoComplete = () => {
                     {error && <span className="badge text-bg-danger">There was a problem. Please try again.</span>}
                     {query.length < 3 && <div className="d-flex flex-row justify-content-center p-2 gap-1">Type 3 characters to search</div>}
                     {!loading && !available && isValid && getLength(query) > 2 && 
-                        <div className="d-flex flex-row justify-content-between p-2 ps-3 pe-3 gap-1">
-                            <Link to={"/find?q="+ query } className="text-truncate text-decoration-none text-center mx-auto"> 
-                                Click to see more domains
-                            </Link>
+                    <div className="d-flex flex-row justify-content-between ps-3 pe-3 gap-1">
+                        <Link to={"/find?q="+ query } className="btn btn-sm btn-outline-warning text-truncate text-decoration-none text-center mx-auto"> 
+                            Click here to see more domains
+                        </Link>
                     </div>}
                 </Menu>  
             )}

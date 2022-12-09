@@ -36,7 +36,7 @@ function AddToCartButton({domain}) {
     if(!inCart(_domain.id)) {
         return (
             <> 
-            <button className="btn btn-success rounded-4" 
+            <button className="btn btn-success" 
                 onClick={(e)=> { addToCart(_domain) }}>
                     Add To Cart
             </button> 
@@ -44,7 +44,7 @@ function AddToCartButton({domain}) {
         )   
     } else {
         return (
-            <button className={showRemove ? "btn btn-danger rounded-4": "btn btn-success rounded-4"}
+            <button className={showRemove ? "btn btn-danger": "btn btn-success"}
                 onMouseOverCapture={handleMouseOver} 
                 onMouseOutCapture={handleMouseOut}
                 onClick={(e)=> { removeItem(_domain.id);  }}>
