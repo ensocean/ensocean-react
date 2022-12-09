@@ -25,7 +25,7 @@ function DomainStatus({domain, label = "", loading = false, showBadge=true, show
                     </>
                 }
                 {showNotAvailable && !isAvailable(domain.expires) && <strong className="float-end text-muted mt-2 mt-lg-0"> Not Available </strong>}
-                {showRegistered && <span className="float-end text-muted mt-2 mt-lg-0">{getTimeAgo(domain.registered)}</span>}
+                {showRegistered && !isExpiring(domain.expires) && !isAvailable(domain.expires) && <span className="float-end text-muted mt-2 mt-lg-0">{getTimeAgo(domain.registered)}</span>}
                 {showExpires && !isExpiring(domain.expires) && !isAvailable(domain.expires) && <small className="text-muted"> Expires {  getExpires(domain.expires, false) } </small>}
             </> 
         )
