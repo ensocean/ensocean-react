@@ -67,7 +67,9 @@ function ConnectButton({smallButton = false}) {
   } else { 
     return (
       <> 
-        <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleConnect}>Connect Wallet</button>
+        <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleConnect}>
+          {smallButton ? <span>Connect</span>: <span>Connect Wallet</span>}
+          </button>
       </>
     )
   } 
