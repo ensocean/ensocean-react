@@ -188,7 +188,7 @@ const AutoComplete = () => {
             renderInput={({ inputRef, referenceElementRef, ...inputProps }) => {
                 return (
                     <form role="search" onSubmit={handleSubmit}>
-                        <div className="input-group input-group-lg form-group has-validation ">
+                        <div className="input-group input-group-lg form-group has-validation">
                             <input {...inputProps} 
                                 className={"form-control pe-2 border-primary " + activeClass }
                                 ref={(node) => {
