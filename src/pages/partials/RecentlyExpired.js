@@ -91,9 +91,9 @@ const RecentExpired = () => {
                             </div>
                         </div>
                         <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
-                          <div className="d-flex flex-row justify-content-between">
+                          <div className="d-flex flex-row justify-content-between gap-2">
                             <DomainLink domain={domain} /> 
-                            <div className="d-flex flex-row gap-1">
+                            <div className="d-flex flex-row gap-2">
                               <AddToCartSmallButton domain={domain} /> 
                               <AddToFavoritesSmallButton domain={domain} /> 
                             </div>
