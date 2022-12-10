@@ -5,10 +5,9 @@ import AddToCartButton from './AddToCartButton';
 import AddToCartSmallButton from './AddToCartSmallButton';
 
 function DomainStatus({domain, label = "", loading = false, showBadge=true, showNotAvailable=false, showRegistered=false, showExpires=false}) {  
-    
     if(showBadge) {
         return ( 
-            <div className='d-flex flex-row justify-content-start gap-3'>
+            <div className='d-flex flex-row justify-content-start align-items-center gap-3'>
                 {loading && <div className="spinner-border spinner-border-sm"></div>}
                 {!loading && !isValidName(domain.label) && <span className="text-danger fw-boldr">Invalid</span>}
                 {!loading && isValidName(domain.label) && isPremium(domain.expires) && 

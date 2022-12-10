@@ -167,7 +167,7 @@ const AutoComplete = () => {
                 <Menu {...menuProps} >
                     {domains.map((domain, index) => (
                         <>
-                        <div key={domain.id} className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2">
+                        <div key={domain.id} className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
                           <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-2 text-truncate">
                               <DomainLink domain={domain} />
                               <DomainStatus loading={loading} domain={domain} showBadge={true} showNotAvailable={true} />
