@@ -5,6 +5,8 @@ import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg'
 import DomainLink from "../../components/DomainLink";
 import ImageSmall from "../../components/ImageSmall"; 
 import DomainCardInline from "../../components/DomainCardInline";
+import DomainStatus from "../../components/DomainStatus";
+import AddToFavoritesSmallButton from "../../components/AddToFavoritesSmallButton";
  
 const RECENTLY_REGISTERED = gql`
 {
@@ -73,8 +75,25 @@ const RecentRegistered = () => {
             { !loading && !error && data && data.domains.length > 0 &&
                 <> 
                 {data.domains.map((domain) => (
-                    <li key={domain.id} className="list-group-item list-group-item-action p-3">
-                        <DomainCardInline domain={domain}  showBadge={true} showRegistered={true} />
+                    <li key={domain.id} className="list-group-item list-group-item-action p-3"> 
+                         <div className="d-flex align-items-center">
+                          <div className="flex-shrink-0">
+                              <div className="card">
+                                  <ImageSmall domain={domain} width={48} height={48} />
+                              </div>
+                          </div>
+                          <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
+                            <div className="d-flex flex-row justify-content-between gap-2">
+                              <DomainLink domain={domain} /> 
+                              <div className="d-flex flex-row gap-2"> 
+                                <AddToFavoritesSmallButton domain={domain} /> 
+                              </div>
+                            </div> 
+                            <div className="d-flex flex-row justify-content-start">
+                                <DomainStatus loading={loading} domain={domain} showBadge={true} showRegistered={true} />
+                            </div>  
+                          </div>
+                        </div>  
                     </li>
                 ))}
                 </>

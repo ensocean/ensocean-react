@@ -23,6 +23,9 @@ import DomainLink from "../../components/DomainLink";
 import OwnerLink from "../../components/OwnerLink";
 import DomainCardInline from "../../components/DomainCardInline";
 import DomainCard from "../../components/DomainCard";
+import DomainStatus from "../../components/DomainStatus";
+import AddToCartButton from "../../components/AddToCartButton";
+import AddToCartSmallButton from "../../components/AddToCartSmallButton";
   
 const DEBOUNCE_INTERVAL = 500; 
  
@@ -621,7 +624,22 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             {data.domains.map((domain) => (
                             <tr key={domain.id} className="t-card">
                                 <td className="p-3">
-                                    <DomainCardInline domain={domain} showRegistered={false} showNotAvailable={false} showAddToCartButton={true} />
+                                    <div className="d-flex flex-column gap-2">
+                                        <div className="d-flex flex-row align-items-top">
+                                            <div className="flex-shrink-0">
+                                                <div className="card text-start">
+                                                    <ImageSmall domain={domain} width={32} height={32} />
+                                                </div>
+                                            </div>
+                                            <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between align-items-top gap-2 ms-2 text-truncate">
+                                                <DomainLink domain={domain} />
+                                                <DomainStatus loading={false} domain={domain} showBadge={true} />
+                                            </div>
+                                        </div>
+                                        <div className="d-flex flex-row justify-content-end align-items-end">
+                                            <AddToCartSmallButton domain={domain} />
+                                        </div>
+                                    </div>
                                 </td> 
                                 <td className="p-3"> 
                                     {getExpires(domain.expires)}

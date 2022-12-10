@@ -6,6 +6,11 @@ import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg'
 import refreshIcon from "../../assets/arrow-repeat.svg";
 import DomainCardInline from "../../components/DomainCardInline";
 import DomainLink from "../../components/DomainLink";
+import ImageSmall from "../../components/ImageSmall";
+import DomainStatus from "../../components/DomainStatus";
+import AddToCartSmallButton from "../../components/AddToCartSmallButton";
+import AddToCartButton from "../../components/AddToCartButton";
+import AddToFavoritesSmallButton from "../../components/AddToFavoritesSmallButton";
   
 const RECENTLY_EXPIRED = gql`
 {
@@ -79,7 +84,25 @@ const RecentExpired = () => {
               <> 
                   {data.domains.map((domain) => (
                   <li key={domain.id} className="list-group-item list-group-item-action p-3">
-                      <DomainCardInline domain={domain} showAddToCartButton={true} />
+                      <div className="d-flex align-items-center">
+                        <div className="flex-shrink-0">
+                            <div className="card">
+                                <ImageSmall domain={domain} width={48} height={48} />
+                            </div>
+                        </div>
+                        <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
+                          <div className="d-flex flex-row justify-content-between gap-2">
+                            <DomainLink domain={domain} /> 
+                            <div className="d-flex flex-row gap-2">
+                              <AddToCartSmallButton domain={domain} /> 
+                              <AddToFavoritesSmallButton domain={domain} /> 
+                            </div>
+                          </div> 
+                          <div className="d-flex flex-row justify-content-start">
+                              <DomainStatus loading={loading} domain={domain} showBadge={true}  showAddToCartButton={true} />
+                          </div>  
+                        </div>
+                      </div>  
                   </li>
                 ))}
               </>

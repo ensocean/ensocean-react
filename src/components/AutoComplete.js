@@ -9,6 +9,8 @@ import AddToCartButton from './AddToCartButton';
 import ClaimNowButton from './ClaimNowButton';
 import DomainLink from './DomainLink';
 import ViewYourCartButton from './ViewYourCartButton';
+import ImageSmall from './ImageSmall';
+import DomainStatus from './DomainStatus';
 
 const AutoComplete = () => {
     const [query, setQuery] = useState("");
@@ -165,15 +167,16 @@ const AutoComplete = () => {
                 <Menu {...menuProps} >
                     {domains.map((domain, index) => (
                         <>
-                        <div className="d-flex flex-column gap-2">
-                            <div key={domain.id} className='ps-3 pe-3'> 
-                                <DomainLink domain={domain} loading={loading} showNotAvailable={true} /> 
-                            </div>
-                            <div className="d-flex flex-row justify-content-center align-items-center gap-2">
-                                {available && <AddToCartButton loading={loading} domain={domain} /> }
-                                {available && <ClaimNowButton loading={loading} domain={domain} /> }
-                                {available && <ViewYourCartButton loading={loading} domain={domain} /> }
-                            </div>
+                        <div key={domain.id} className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
+                          <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-2 text-truncate">
+                              <DomainLink domain={domain} />
+                              <DomainStatus loading={loading} domain={domain} showBadge={true} showNotAvailable={true} />
+                          </div> 
+                        </div> 
+                        <div className="d-flex flex-row justify-content-center align-items-center gap-2">
+                            {available && <AddToCartButton loading={loading} domain={domain} /> }
+                            {available && <ClaimNowButton loading={loading} domain={domain} /> }
+                            {available && <ViewYourCartButton loading={loading} domain={domain} /> }
                         </div>
                         </>
                     ))}
