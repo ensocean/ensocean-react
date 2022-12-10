@@ -17,10 +17,11 @@ function DomainCardInline({domain, showBadge = true, showRegistered=false, showN
                     <ImageSmall domain={domain} width={imageWidth} height={imageHeight} />
                 </div>
             </div>
-            <div className="flex-grow-1 ms-3 d-flex flex-column gap-2">
-                <DomainLink domain={domain} showBadge={showBadge} showRegistered={showRegistered} showNotAvailable={showNotAvailable} showAddToCartButton={showAddToCartButton} showExpires={showExpires} />
+            <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-3 text-truncate">
+                <DomainLink domain={domain} />
+                <DomainStatus loading={false} domain={domain} showBadge={showBadge} showRegistered={showRegistered} showAddToCartButton={showAddToCartButton} showNotAvailable={showNotAvailable} showExpires={showExpires} />
             </div>
-        </div> 
+        </div>
     )
 }
 

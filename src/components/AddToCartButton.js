@@ -4,6 +4,7 @@ import React, {useState, useEffect} from "react";
 import { useCart } from "react-use-cart";
 import { Check2, X } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
+import { isAvailable, isValidName } from "../helpers/String";
 
 const MAX_CART_ITEM_COUNT = Number(process.env.REACT_APP_MAX_CART_ITEM_COUNT);
 
@@ -36,10 +37,12 @@ function AddToCartButton({domain}) {
     if(!inCart(_domain.id)) {
         return (
             <> 
-            <button className="btn btn-success" 
-                onClick={(e)=> { addToCart(_domain) }}>
-                    Add To Cart
-            </button> 
+            {isValidName(domain.label) && isAvailable(domain.expires) && 
+                <button className="btn btn-success" 
+                    onClick={(e)=> { addToCart(_domain) }}>
+                        Add To Cart
+                </button> 
+            }
             </>
         )   
     } else {

@@ -5,6 +5,7 @@ import { useCart } from "react-use-cart";
 import { Check2, X, Cart4, ThreeDotsVertical } from "react-bootstrap-icons";
 import { Dropdown, DropdownButton, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { isAvailable, isValidName } from "../helpers/String";
 
 const MAX_CART_ITEM_COUNT = Number(process.env.REACT_APP_MAX_CART_ITEM_COUNT);
 
@@ -38,12 +39,14 @@ function AddToCartSmallButton({domain}) {
     if(!inCart(_domain.id)) {
         return (
             <>   
+             {isValidName(domain.label) && isAvailable(domain.expires) && 
                 <OverlayTrigger placement="top"  overlay={<Tooltip>Add To Cart </Tooltip>} >
                     <button className="btn btn-outline-success btn-sm" 
                         onClick={(e)=> { addToCart(_domain) }}>
                         <Cart4 />
                     </button>  
                 </OverlayTrigger>  
+            }
             </>
         )   
     } else {

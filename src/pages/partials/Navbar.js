@@ -1,11 +1,13 @@
 import logo from "../../assets/icon.png";
 import ConnectButton from "../../components/ConnectButton";
 import AutoComplete from "../../components/AutoComplete";
-import BasketButton from "../../components/BasketButton";
-import { Twitter, Mailbox2 } from "react-bootstrap-icons";
+import BasketButton from "../../components/BasketButton"; 
+import { useAccount } from 'wagmi';
+import { Link } from "react-router-dom";
 
 const Navbar = ({showSearch}) => {   
-    
+    const { isConnected, address } = useAccount();   
+
     return (
         <> 
         <nav id="navbar" className="navbar navbar-expand-lg ">
@@ -41,6 +43,13 @@ const Navbar = ({showSearch}) => {
                             <li className="nav-item">
                                 <a className="nav-link fw-bold" href="/discover">Browse</a>
                             </li> 
+                            {isConnected && 
+                                <li className="nav-item">
+                                    <a className="nav-link fw-bold" title={"My Portfolio"} href={"/account/"+ address }> 
+                                        My Domains
+                                    </a> 
+                                </li>
+                            }
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
                             <BasketButton />
