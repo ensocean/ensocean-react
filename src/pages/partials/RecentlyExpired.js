@@ -11,6 +11,7 @@ import DomainStatus from "../../components/DomainStatus";
 import AddToCartSmallButton from "../../components/AddToCartSmallButton";
 import AddToCartButton from "../../components/AddToCartButton";
 import AddToFavoritesSmallButton from "../../components/AddToFavoritesSmallButton";
+import { CartProvider } from "react-use-cart";
   
 const RECENTLY_EXPIRED = gql`
 {
@@ -95,7 +96,9 @@ const RecentExpired = () => {
                             <DomainLink domain={domain} /> 
                             <div className="d-flex flex-row gap-2">
                               <AddToCartSmallButton domain={domain} /> 
-                              <AddToFavoritesSmallButton domain={domain} /> 
+                              <CartProvider id="ensocean_favorites" key="ensocean_favorites">
+                                <AddToFavoritesSmallButton domain={domain} /> 
+                              </CartProvider>
                             </div>
                           </div> 
                           <div className="d-flex flex-row justify-content-start">

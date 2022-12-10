@@ -44,11 +44,12 @@ const AutoComplete = () => {
         q = q.toLowerCase().trim();
         setOptions([]);
         setQuery(q);
-         
+        setActiveClass("is-search");
+        
         if(getLength(q) < 3) {
             setIsValid(false);
             setAvailable(false);  
-            setActiveClass("is-search");
+            
             return;
         } 
 
@@ -168,26 +169,29 @@ const AutoComplete = () => {
                     {domains.map((domain, index) => (
                         <>
                         <div key={domain.id} className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
-                          <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-2 text-truncate">
-                              <DomainLink domain={domain} />
-                              <DomainStatus loading={loading} domain={domain} showBadge={true} showNotAvailable={true} />
+                          <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
+                              {loading &&  <><div className='placeholder w-50'></div> <div className='placeholder w-25'></div></>}
+                              {!loading &&  <DomainLink domain={domain} />}
+                              <div className='d-flex flex-row justify-content-center'>
+                              {!loading && <DomainStatus domain={domain} showBadge={true} showNotAvailable={true} />}
+                              </div>
                           </div> 
                         </div> 
                         <div className="d-flex flex-row justify-content-center align-items-center gap-2">
-                            {available && <AddToCartButton loading={loading} domain={domain} /> }
-                            {available && <ClaimNowButton loading={loading} domain={domain} /> }
-                            {available && <ViewYourCartButton loading={loading} domain={domain} /> }
+                            {!loading && available && <AddToCartButton domain={domain} /> }
+                            {!loading && available && <ClaimNowButton domain={domain} /> }
+                            {!loading && available && <ViewYourCartButton domain={domain} /> }
                         </div>
                         </>
                     ))}
                     {error && <span className="badge text-bg-danger">There was a problem. Please try again.</span>}
                     {query.length < 3 && <div className="d-flex flex-row justify-content-center p-2 gap-1">Type 3 characters to search</div>}
                     {!loading && !available && isValid && getLength(query) > 2 && 
-                    <div className="d-flex flex-row justify-content-between ps-3 pe-3 gap-1">
-                        <Link to={"/find?q="+ query } className="btn btn-sm btn-outline-warning text-truncate text-decoration-none text-center mx-auto"> 
-                            Click here to see more domains
-                        </Link>
-                    </div>}
+                        <div className="d-flex flex-row justify-content-between ps-3 pe-3 gap-1">
+                            <Link to={"/find?q="+ query } className="btn btn-sm btn-outline-warning text-truncate text-decoration-none text-center mx-auto"> 
+                                Click here to see more domains
+                            </Link>
+                        </div>}
                 </Menu>  
             )}
             renderInput={({ inputRef, referenceElementRef, ...inputProps }) => {

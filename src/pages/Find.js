@@ -181,9 +181,6 @@ const Find = () => {
             <div className="col-lg-12 pt-3"> 
               {loading && 
                <div className={"d-flex flex-row justify-content-between placeholder-glow"}>
-                  <div className="flex-shrink-0"> 
-                  {<span className="placeholder" style={{ width: 75, height: 75 }}></span>}
-                  </div>
                   <div className="flex-grow-1 ms-3">
                     <div className="dflex flex-column">
                       <div>

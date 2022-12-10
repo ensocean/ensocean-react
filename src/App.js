@@ -80,43 +80,43 @@ const wagmiClient = createClient({
 });
   
 export default function App () {  
-  return ( 
-    <CartProvider>
-      <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>
-          <ApolloProvider client={client}> 
-            <React.StrictMode>
-              <BrowserRouter forceRefresh={true}>
-                <Routes>  
-                  <Route path="/" element={<Layouts.Home />}>
-                    <Route index element={<Home />}  />
-                  </Route>
-                  <Route path="/" element={<Layouts.Home />}>
-                    <Route path="/:label.:extension" element={<Domain />} />
-                  </Route>
-                  <Route path="/find" element={<Layouts.Page />}>
-                    <Route path="/find" element={<Find />} />
-                  </Route>
-                  <Route path="/register" element={<Layouts.Page />}>
-                    <Route path="/register" element={<Register />} />
-                  </Route>
-                  <Route path="/" element={<Layouts.Page />}>
-                    <Route index element={<Home />} />
-                    <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/terms" element={<Terms />} />
-                    <Route path="/faq" element={<Faq />} />
-                    <Route path="/discover" forceRefresh={true} element={<Discover />} />
-                    <Route path="/404" element={<NotFound />} /> 
-                    <Route path="/account/:address" element={<Account />} /> 
-                    <Route path="*" element={<Navigate replace={true} to="/404" />} />
-                  </Route> 
-                </Routes>
-              </BrowserRouter>
-              <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
-            </React.StrictMode>
-          </ApolloProvider>
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </CartProvider>
+  return (  
+      <CartProvider id="ensocean_bulkregister_cart">
+        <WagmiConfig client={wagmiClient}>
+          <RainbowKitProvider chains={chains}>
+            <ApolloProvider client={client}> 
+              <React.StrictMode>
+                <BrowserRouter forceRefresh={true}>
+                  <Routes>  
+                    <Route path="/" element={<Layouts.Home />}>
+                      <Route index element={<Home />}  />
+                    </Route>
+                    <Route path="/" element={<Layouts.Home />}>
+                      <Route path="/:label.:extension" element={<Domain />} />
+                    </Route>
+                    <Route path="/find" element={<Layouts.Page />}>
+                      <Route path="/find" element={<Find />} />
+                    </Route>
+                    <Route path="/register" element={<Layouts.Page />}>
+                      <Route path="/register" element={<Register />} />
+                    </Route>
+                    <Route path="/" element={<Layouts.Page />}>
+                      <Route index element={<Home />} />
+                      <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/terms" element={<Terms />} />
+                      <Route path="/faq" element={<Faq />} />
+                      <Route path="/discover" forceRefresh={true} element={<Discover />} />
+                      <Route path="/404" element={<NotFound />} /> 
+                      <Route path="/account/:address" element={<Account />} /> 
+                      <Route path="*" element={<Navigate replace={true} to="/404" />} />
+                    </Route> 
+                  </Routes>
+                </BrowserRouter>
+                <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
+              </React.StrictMode>
+            </ApolloProvider>
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </CartProvider> 
   );
 }
