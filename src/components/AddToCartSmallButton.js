@@ -42,9 +42,9 @@ function AddToCartSmallButton({domain}) {
              {isValidName(domain.label) && isAvailable(domain.expires) && 
 
                 <OverlayTrigger placement="top"  overlay={<Tooltip>Add To Cart </Tooltip>} >
-                    <button className="btn btn-outline-success btn-sm" 
+                    <button className="btn btn-default btn-sm" 
                         onClick={(e)=> { addToCart(_domain) }}>
-                        <Cart4 />
+                        <Cart4 width={20} height={20} />
                     </button>  
                 </OverlayTrigger>   
             }
@@ -54,12 +54,12 @@ function AddToCartSmallButton({domain}) {
         return (
             <> 
              <OverlayTrigger placement="top"  overlay={<Tooltip>Remove From Cart </Tooltip>} >
-                <button className={showRemove ? "btn btn-sm btn-outline-danger": "btn btn-sm btn-success"}
+                <button className={showRemove ? "btn btn-default btn-sm": "btn btn-default btn-sm text-success"}
                     onMouseOverCapture={handleMouseOver} 
                     onMouseOutCapture={handleMouseOut}
                     onClick={(e)=> { removeItem(_domain.id); toast.success("Removed from cart") }}>
-                    {showRemove && <span><X /> </span>} 
-                    {!showRemove && <span><Check2 /> </span>}
+                    {showRemove && <span><X width={20} height={20} /> </span>} 
+                    {!showRemove && <span><Check2 width={20} height={20} /> </span>}
                 </button> 
             </OverlayTrigger>  
             </>
