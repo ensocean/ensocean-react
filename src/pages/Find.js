@@ -122,6 +122,7 @@ const Find = () => {
 
         if(isExpired(domain.expires)) {
           setAvailable(true); 
+          setActiveClass("is-valid");
         } else if(isExpiring(domain.expires)) {
           setAvailable(false);
           setActiveClass("has-warning");
