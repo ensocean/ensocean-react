@@ -16,9 +16,32 @@ import AddToFavoritesSmallButton from "./AddToFavoritesSmallButton";
 import { CartProvider } from "react-use-cart";
 
 
-function DomainCard({domain, label}) { 
-    return (
-        
+function DomainCard({domain, label, loading}) { 
+    if(loading) {
+        return (
+            <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 placeholder-glow">
+                {[...Array(12)].map((x, i) =>
+                    <div className="col mb-3" key={i}>
+                        <div className="card h-100 text-start">
+                            <div className="card-body p-0"> 
+                                <span className="placeholder w-100" style={{minWidth: 200, minHeight: 167 }}></span>
+                                <p className="card-text"> </p>
+                            </div>
+                            <div className="card-footer bg-white p-2 placeholder-wave">
+                                <h6 className="card-title m-0 fw-bold">
+                                    <span className="placeholder w-75"></span>
+                                </h6>
+                                <small className="text-muted placeholder-wave">
+                                    <span className="placeholder w-50"></span>
+                                </small>
+                            </div>
+                        </div>
+                    </div> 
+                )}
+            </div>  
+        )
+    } else {
+        return ( 
             <div className="card g-card">  
                 <div className="card-body p-0">
                     <Link className="text-decoration-none link-dark fw-bold fs-5" title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"} to={"/"+ encodeURIComponent(domain.label) + "."+ domain.extension }>
@@ -42,7 +65,9 @@ function DomainCard({domain, label}) {
                     </CartProvider>
                 </div>
             </div> 
-    )
+        )
+    }
+    
 }
 
 export default DomainCard;
