@@ -365,7 +365,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             <div className="flex-fill"> 
                 <div className="flex-grow-1"> 
                     <div className="d-flex flex-row gap-2">
-                        <button className="btn btn-outline-light rounded-0 border position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
+                        <button className="btn btn-outline-light rounded-0 border position-relative d-block d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
                             <img src={funnelFill} alt= ""  />
                             {filterCount > 0 && 
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -408,13 +408,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div>
             </div> 
         </div> 
-        <div className="d-flex flex-column flex-lg-row align-items-start pt-2"> 
-            <div className="offcanvas-xxl offcanvas-start sticky-xxl-top me-3" data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
-                <div className="offcanvas-body p-0 m-0"> 
+        <div className="d-flex flex-row align-items-start pt-2"> 
+            <div className="offcanvas-lg offcanvas-start sticky-xxl-top me-3" style={{ minWidth: 320 }} data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
+                <div className="offcanvas-body p-0 m-0 overflow-scroll" style={{height:600}}> 
                     <div className="accordion w-100 card">
                         <div className="card-header border-0 d-flex flex-row justify-content-between p-3">
                             <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
-                            <button type="button" class="btn-close d-block d-xxl-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
+                            <button type="button" class="btn-close d-block d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
                         </div>
                         <div className="accordion-item border-0 rounded-0">
                             <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
@@ -476,7 +476,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </div>
                 </div>
             </div>
-            <div className="flex-grow-1 w-100">
+            <div className="flex-grow-1">
                 <div className="container-fluid d-flex justify-content-between p-0">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
@@ -538,7 +538,6 @@ const FilterResults = ( { called, loading, error, data, view}) => {
     if(!called) return;
  
     if (loading)  {
-
         if(view === "list") {
             return ( 
             <>
@@ -570,28 +569,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                 )
         } else {
             return (
-                <>
-                <div className="row g-2 placeholder-glow">
-                    {[...Array(12)].map((x, i) =>
-                    <div className="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" key={i}>
-                        <div className="card h-100 text-start">
-                            <div className="card-body p-0"> 
-                                <span className="placeholder w-100" style={{minHeight: "167px"}}></span>
-                                <p className="card-text"> </p>
-                            </div>
-                            <div className="card-footer bg-white p-2 placeholder-wave">
-                                <h6 className="card-title m-0 fw-bold">
-                                    <span className="placeholder w-75"></span>
-                                </h6>
-                                <small className="text-muted placeholder-wave">
-                                    <span className="placeholder w-50"></span>
-                                </small>
-                            </div>
-                        </div>
-                    </div> 
-                    )}
-                </div>  
-                </>
+                 <DomainCard loading={loading} />
             )
         } 
     } else if (error) {
@@ -624,22 +602,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             {data.domains.map((domain) => (
                             <tr key={domain.id} className="t-card">
                                 <td className="p-3">
-                                    <div className="d-flex flex-column gap-2">
-                                        <div className="d-flex flex-row align-items-top">
-                                            <div className="flex-shrink-0">
-                                                <div className="card text-start">
-                                                    <ImageSmall domain={domain} width={32} height={32} />
-                                                </div>
-                                            </div>
-                                            <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between align-items-top gap-2 ms-2 text-truncate">
-                                                <DomainLink domain={domain} />
-                                                <DomainStatus loading={false} domain={domain} showBadge={true} />
-                                            </div>
-                                        </div>
-                                        <div className="d-flex flex-row justify-content-end align-items-end">
-                                            <AddToCartSmallButton domain={domain} />
-                                        </div>
-                                    </div>
+                                    <DomainCardInline domain={domain} />
                                 </td> 
                                 <td className="p-3"> 
                                     {getExpires(domain.expires)}
@@ -659,7 +622,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         } else {
             return (
             <> 
-                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-mdl-4 row-cols-lg-5 row-cols-mlg-5 row-cols-xl-6">
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
                     {data.domains.length < 1 &&
                         <div className="col text-center text-warning">No Result found</div>
                     } 

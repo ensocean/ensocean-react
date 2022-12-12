@@ -4,12 +4,18 @@ import React, {useState, useEffect} from "react";
 import { useCart } from "react-use-cart";
 import { Check2, X } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
-import { isAvailable, isValidName } from "../helpers/String";
+import { getLabelHash, isAvailable, isValidName } from "../helpers/String";
 
 const MAX_CART_ITEM_COUNT = Number(process.env.REACT_APP_MAX_CART_ITEM_COUNT);
 
-function AddToCartButton({domain}) {   
-    var _domain = JSON.parse(JSON.stringify(domain));
+function AddToCartButton({domain, label}) {   
+    let tempDomain = domain;
+
+    if(domain === undefined) { 
+        tempDomain = { id: getLabelHash(label), label: label, extension: "eth", price: 0, expires: null, registered: null, owner: null };
+    }
+
+    var _domain = JSON.parse(JSON.stringify(tempDomain));
     _domain.price = 0;
     Object.preventExtensions(_domain);
 
@@ -37,7 +43,7 @@ function AddToCartButton({domain}) {
     if(!inCart(_domain.id)) {
         return (
             <> 
-            {isValidName(domain.label) && isAvailable(domain.expires) && 
+            {isValidName(_domain.label) && isAvailable(_domain.expires) && 
                 <button className="btn btn-success" 
                     onClick={(e)=> { addToCart(_domain) }}>
                         Add To Cart

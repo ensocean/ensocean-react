@@ -49,8 +49,7 @@ export const getLength = (label) => {
 
 export const getSegmentLength = (label) => { 
     return label.length;
-}
-
+} 
 
 export function getTimeAgo(timestamp) {
     if(timestamp === null) return "-";
@@ -79,7 +78,7 @@ export function isPremium(expires) {
 }
 
 export function isAvailable(expires) {
-    return isExpired(expires) || isPremium(expires);
+    return expires === null || isExpired(expires) || isPremium(expires);
 }
 
 export function getDateString(timestamp) {

@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 const Account = () => {
     const { address } = useParams();  
     let where = { label_not: null, owner_starts_with_nocase: address }; 
+ 
     return (
       <>
       <Helmet> 

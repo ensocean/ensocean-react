@@ -17,6 +17,7 @@ import CopyToClipboard from 'react-copy-to-clipboard';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
+import { Exclamation, ExclamationCircle } from 'react-bootstrap-icons';
 
 
 window.Buffer = require("buffer").Buffer;
@@ -54,10 +55,10 @@ function ConnectButton({smallButton = false}) {
     return ( 
       <> 
         { SUPPORTED_CHAIN_ID !== chain?.id ? 
-          <OverlayTrigger placement="top"  overlay={<Tooltip>Click to Change Network</Tooltip>} >
+          <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
             <button className={"btn btn-danger " + (smallButton ? "btn-sm": "") } disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
               {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
-              <span> Wrong Network</span>
+              {smallButton ? <ExclamationCircle /> : <span> Wrong Network</span> } 
             </button> 
           </OverlayTrigger>
         : <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleDisconnect}>Disconnect</button>}

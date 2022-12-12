@@ -7,7 +7,6 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import DomainStatus from './DomainStatus';
 
 function DomainLink({domain, label}) {  
-   
     return ( 
         <Link className="text-decoration-none link-dark fs-5 fw-bold text-truncate p-0 lh-0"
             title={"View "+ domain.label || label + "." + domain.extension +"on EnsOcean"}
@@ -36,7 +35,7 @@ function DomainLink({domain, label}) {
                 </OverlayTrigger>
             } 
         </Link>
-    ) 
+    )
 }
 
 export default DomainLink;

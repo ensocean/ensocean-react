@@ -9,11 +9,11 @@ function DomainLabel({domain, label}) {
    
     return (
         <> 
-            {obscureLabel(domain.label || label, 20)}.{domain.extension || "eth"}
+            {obscureLabel(domain?.label || label, 35)}.{domain?.extension || "eth"}
         
             { ' ' }
                 
-            { !isAscii(domain.label || label) && 
+            { !isAscii(domain?.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Include non-ascii characters</Tooltip>}>
                     <span>
                         <img src={exclamationTriangleFill} alt= "" />
@@ -23,7 +23,7 @@ function DomainLabel({domain, label}) {
                 
             { ' ' }
 
-            { !isValidName(domain.label || label) && 
+            { !isValidName(domain?.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Malformed domain</Tooltip>}>
                     <span>
                         <img src={dashCircleFill} alt= ""  />

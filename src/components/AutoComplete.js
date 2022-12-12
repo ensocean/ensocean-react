@@ -11,6 +11,7 @@ import DomainLink from './DomainLink';
 import ViewYourCartButton from './ViewYourCartButton';
 import ImageSmall from './ImageSmall';
 import DomainStatus from './DomainStatus';
+import { Spinner } from 'react-bootstrap';
 
 const AutoComplete = () => {
     const [query, setQuery] = useState("");
@@ -170,10 +171,10 @@ const AutoComplete = () => {
                         <>
                         <div key={domain.id} className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
                           <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
-                              {loading &&  <><div className='placeholder w-50'></div> <div className='placeholder w-25'></div></>}
-                              {!loading &&  <DomainLink domain={domain} />}
+                              <DomainLink domain={domain} />
                               <div className='d-flex flex-row justify-content-center'>
-                              {!loading && <DomainStatus domain={domain} showBadge={true} showNotAvailable={true} />}
+                                {loading && <Spinner animation="border" variant="dark" size="sm" /> }
+                                {!loading && <DomainStatus domain={domain} showBadge={true} showNotAvailable={true} />}
                               </div>
                           </div> 
                         </div> 
@@ -186,12 +187,6 @@ const AutoComplete = () => {
                     ))}
                     {error && <span className="badge text-bg-danger">There was a problem. Please try again.</span>}
                     {query.length < 3 && <div className="d-flex flex-row justify-content-center p-2 gap-1">Type 3 characters to search</div>}
-                    {!loading && !available && isValid && getLength(query) > 2 && 
-                        <div className="d-flex flex-row justify-content-between ps-3 pe-3 gap-1">
-                            <Link to={"/find?q="+ query } className="btn btn-sm btn-outline-warning text-truncate text-decoration-none text-center mx-auto"> 
-                                Click here to see more domains
-                            </Link>
-                        </div>}
                 </Menu>  
             )}
             renderInput={({ inputRef, referenceElementRef, ...inputProps }) => {

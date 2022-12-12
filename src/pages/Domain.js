@@ -17,6 +17,8 @@ import parse from "html-react-parser";
 import DomainLabel from "../components/DomainLabel"; 
 import OwnerLink from "../components/OwnerLink";
 import AlertDomain from "../components/AlertDomain";
+import DomainImage from "../components/DomainImage";
+import DomainLink from "../components/DomainLink";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -124,97 +126,86 @@ const Domain = () => {
                 <Helmet> 
                     <title>{label}.{extension} - EnsOcean</title>
                     <meta name="description" content={label +"."+ extension +" is available right now. Claim Now."} />
-                </Helmet> 
-
+                </Helmet>  
                 <div className="container-fluid bg-primary mb-4">
-                        <div className="container p-3 text-white">
-                            <div className='d-flex justify-content-between align-items-center'> 
-                                <div className='d-flex justify-content-start align-items-center gap-3'>
-                                    <h1 className='m-auto fs-1 fw-bold'>
-                                        {parse(encodeHtml(obscureLabel(label, 20)))}.{extension}
-                                        { !isValidName(label) && 
-                                            <span data-bs-toogle="tooltip" data-bs-title="This domain is malformed!">
-                                                &nbsp;
-                                                <img src={dashCircleFillIcon} alt= "" />
+                    <div className="container p-3 text-white">
+                        <div className='d-flex justify-content-between align-items-center'> 
+                            <div className='d-flex justify-content-start align-items-center gap-3 text-truncate'>
+                                <h1 className='m-auto fs-1 fw-bold text-truncate pe-3'>
+                                   <DomainLabel label={label} />
+                                </h1>
+                            </div> 
+                            <div className='d-flex align-items-center gap-3'> 
+                                <CopyToClipboard text={window.location.href}
+                                    onCopy={() => toast.success("Link Copied") }>
+                                    <span className='cursor-pointer'>
+                                        <img src={shareIcon} width={32} height={32} alt=""  />
+                                    </span>
+                                </CopyToClipboard> 
+                            </div> 
+                        </div>
+                    </div> 
+                </div>
+                <div className='container-fluid'> 
+                    <div className='container'>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                <AlertDomain label={label} />
+                            </div>
+                        </div>
+                        <div className="row"> 
+                            <div className="col-lg-4">
+                                <div className="card">
+                                    <DomainImage label={label} />
+                                </div>
+                            </div>
+                            <div className='col-lg-8 mt-3 mt-lg-0'>
+                                <h5 className="card-title fs-4">Details</h5>
+                                <hr />
+                                <ul className='list-group list-group-flush'>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>-</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <CopyToClipboard text={getLabelHash(label)}
+                                            onCopy={() => toast.success("TokenId Copied") }>
+                                            <span className="cursor-pointer float-end">
+                                                <img src={clipboardIcon} alt="" />
                                             </span>
-                                        }
-                                    </h1>
-                                </div> 
-                                <div className='d-flex align-items-center gap-3'> 
-                                    <CopyToClipboard text={window.location.href}
-                                        onCopy={() => toast.success("Link Copied") }>
-                                        <span className='cursor-pointer'>
-                                            <img src={shareIcon} width={32} height={32} alt=""  />
-                                        </span>
-                                    </CopyToClipboard> 
-                                </div> 
+                                        </CopyToClipboard> 
+                                        <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(getLabelHash(label), 25)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>-</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>  
+                                        <CopyToClipboard text={getTokenId(label)}
+                                            onCopy={() => toast.success("TokenId Copied") }>
+                                            <span className="cursor-pointer float-end">
+                                                <img src={clipboardIcon} alt="" />
+                                            </span>
+                                        </CopyToClipboard> 
+                                        <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureLabel(getTokenId(label), 25)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{getLength(label)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Segment Length </span> <span className='float-end'>{getSegmentLength(label)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Created Date </span> <span className='float-end'>-</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Registered Date </span> <span className='float-end'>-</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Expires Date </span> <span className='float-end'>-</span>
+                                    </li>
+                                </ul> 
                             </div>
-                        </div> 
-                    </div>
-                    <div className='container-fluid'> 
-                        <div className='container'>
-                            <div className="row"> 
-                                <div className="col-lg-4">
-                                    <div className="card">
-                                        <LazyLoadImage
-                                            alt={label} 
-                                            className="img-fluid card-img-top card-img-bottom"
-                                            onError={(e)=> { document.getElementById("img_"+ label).remove();  e.target.src = notAvailable; }}
-                                            afterLoad={(e)=> { document.getElementById("img_"+ label).remove(); }}
-                                            placeholderSrc={spinner}
-                                            src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label)) }
-                                        />  
-                                        <img id={"img_"+ label} src={spinner} className="img-fluid card-img-top card-img-bottom" alt=""  />
-                                    </div>
-                                </div>
-                                <div className='col-lg-8 mt-3 mt-lg-0'>
-                                        <div className="alert alert-success">Name available for registration!</div>
-                                        <h5 className="card-title fs-4">Details</h5>
-                                        <hr />
-                                        <ul className='list-group list-group-flush'>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>-</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <CopyToClipboard text={getLabelHash(label)}
-                                                    onCopy={() => toast.success("TokenId Copied") }>
-                                                    <span className="cursor-pointer float-end">
-                                                        <img src={clipboardIcon} alt="" />
-                                                    </span>
-                                                </CopyToClipboard> 
-                                                <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(getLabelHash(label), 25)}</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <span className='fw-bold fs-6 text-muted'>Tags </span> <span className='float-end'>-</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>  
-                                                <CopyToClipboard text={getTokenId(label)}
-                                                    onCopy={() => toast.success("TokenId Copied") }>
-                                                    <span className="cursor-pointer float-end">
-                                                        <img src={clipboardIcon} alt="" />
-                                                    </span>
-                                                </CopyToClipboard> 
-                                                <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureLabel(getTokenId(label), 25)}</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <span className='fw-bold fs-6 text-muted'>Length </span> <span className='float-end'>{getLength(label)}</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <span className='fw-bold fs-6 text-muted'>Segment Length </span> <span className='float-end'>{getSegmentLength(label)}</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <span className='fw-bold fs-6 text-muted'>Created Date </span> <span className='float-end'>-</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <span className='fw-bold fs-6 text-muted'>Registered Date </span> <span className='float-end'>-</span>
-                                            </li>
-                                            <li className='list-group-item border-0 p-0 pb-3'>
-                                                <span className='fw-bold fs-6 text-muted'>Expires Date </span> <span className='float-end'>-</span>
-                                            </li>
-                                        </ul> 
-                                </div>
-                            </div>
-                        </div> 
+                        </div>
+                    </div> 
                 </div>
             </>
         )
@@ -240,15 +231,15 @@ const Domain = () => {
             <div className="container-fluid bg-primary mb-4">
                     <div className="container p-3 text-white">
                         <div className='d-flex justify-content-between align-items-center'> 
-                            <div className='d-flex justify-content-start align-items-center gap-3 text-sm'>
-                                <h1 className='m-auto fs-1 fw-bold'>
+                            <div className='d-flex justify-content-start align-items-center gap-3 text-truncate'>
+                                <h1 className='m-auto fs-1 fw-bold text-truncate pe-3'>
                                     <DomainLabel domain={domain} /> 
                                 </h1>
-                                <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
-                                    <img src={etherScanIcon} alt= "" />
-                                </a>
                             </div> 
                             <div className='d-flex align-items-center gap-3'> 
+                                <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
+                                    <img src={etherScanIcon} width={32} height={32}  alt= "" />
+                                </a>
                                 <CopyToClipboard text={window.location.href}
                                     onCopy={ () => toast.success("Link Copied") }>
                                     <span className='cursor-pointer' >
@@ -258,84 +249,77 @@ const Domain = () => {
                             </div>  
                         </div>
                     </div> 
-                </div>
-                <div className='container-fluid'>
-                    <div className='container'>
-                        <div className="row">
-                            <div className="col-lg-12">
-                               <AlertDomain domain={domain} />
+            </div>
+            <div className='container-fluid'>
+                <div className='container'>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <AlertDomain domain={domain} />
+                        </div>
+                    </div>
+                    <div className="row"> 
+                        <div className="col-lg-4">   
+                            <div className="card">
+                                <DomainImage domain={domain} />
                             </div>
                         </div>
-                        <div className="row"> 
-                            <div className="col-lg-4">   
-                                <div className="card">
-                                    <LazyLoadImage
-                                    alt={domain.label || label} 
-                                    className="img-fluid card-img-top card-img-bottom"
-                                    onError={(e)=> { document.getElementById("img_"+ domain.id).remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                                    afterLoad={(e)=> { document.getElementById("img_"+ domain.id).remove(); }}
-                                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label)) }
-                                    />  
-                                    <img id={"img_"+ domain.id} src={spinner} className="img-fluid card-img-top " alt=""  />
-                                </div>
-                            </div>
-                            <div className='col-lg-8 mt-3 mt-lg-0'>
-                                <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
-                                    <h5 className="card-title fs-4">Details</h5>
-                                    <hr />
-                                    <ul className='list-group list-group-flush'>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>
-                                                <OwnerLink domain={domain} />
+                        <div className='col-lg-8 mt-3 mt-lg-0'>
+                            <div className="card-body m-0 m-lg-1 m-md-1 m-sm-0"> 
+                                <h5 className="card-title fs-4">Details</h5>
+                                <hr />
+                                <ul className='list-group list-group-flush'>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>
+                                            <OwnerLink domain={domain} />
+                                        </span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <CopyToClipboard text={domain.id}
+                                            onCopy={() => toast.success("TokenId Copied") }>
+                                            <span className="cursor-pointer float-end">
+                                                <img src={clipboardIcon} alt="" />
                                             </span>
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <CopyToClipboard text={domain.id}
-                                                onCopy={() => toast.success("TokenId Copied") }>
-                                                <span className="cursor-pointer float-end">
-                                                    <img src={clipboardIcon} alt="" />
-                                                </span>
-                                            </CopyToClipboard> 
-                                            <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(domain.id, 25)}</span>
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Tags </span> {domain.tags && <span className='float-end'>{domain.tags.join(", ")}</span>}
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <CopyToClipboard text={getTokenId(domain.label || label)}
-                                                onCopy={() => toast.success("TokenId Copied") }>
-                                                <span className="cursor-pointer float-end">
-                                                    <img src={clipboardIcon} alt="" />
-                                                </span>
-                                            </CopyToClipboard> 
-                                            <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureAddress(getTokenId(domain.label || label), 25)}</span>
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Length </span> {domain.label && <span className='float-end'>{domain.length}</span>}
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Segment Length </span>  {domain.label &&<span className='float-end'>{domain.segmentLength}</span>}
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Created Date </span> <span className='float-end'>{getDateString(domain.created)}</span>
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Registered Date </span> <span className='float-end'>{getDateString(domain.registered)}</span>
-                                        </li>
-                                        <li className='list-group-item border-0 p-0 pb-3'>
-                                            <span className='fw-bold fs-6 text-muted'>Expires Date </span> <span className='float-end'>{getDateString(domain.expires)}</span>
-                                        </li>
-                                    </ul>
-                                </div>
+                                        </CopyToClipboard> 
+                                        <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(domain.id, 25)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Tags </span> {domain.tags && <span className='float-end'>{domain.tags.join(", ")}</span>}
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <CopyToClipboard text={getTokenId(domain.label || label)}
+                                            onCopy={() => toast.success("TokenId Copied") }>
+                                            <span className="cursor-pointer float-end">
+                                                <img src={clipboardIcon} alt="" />
+                                            </span>
+                                        </CopyToClipboard> 
+                                        <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureAddress(getTokenId(domain.label || label), 25)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Length </span> {domain.label && <span className='float-end'>{domain.length}</span>}
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Segment Length </span>  {domain.label &&<span className='float-end'>{domain.segmentLength}</span>}
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Created Date </span> <span className='float-end'>{getDateString(domain.created)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Registered Date </span> <span className='float-end'>{getDateString(domain.registered)}</span>
+                                    </li>
+                                    <li className='list-group-item border-0 p-0 pb-3'>
+                                        <span className='fw-bold fs-6 text-muted'>Expires Date </span> <span className='float-end'>{getDateString(domain.expires)}</span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
-                    <div className='container mt-3'> 
-                        <div className="row">
-                            <DomainEvents id={domain.id} />
-                        </div>
+                </div>
+                <div className='container mt-3'> 
+                    <div className="row">
+                        <DomainEvents id={domain.id} />
                     </div>
                 </div>
+            </div>
         </>
     );
     } 

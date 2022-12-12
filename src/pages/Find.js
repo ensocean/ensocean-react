@@ -10,6 +10,9 @@ import ClaimNowButton from "../components/ClaimNowButton";
 import { useCart } from "react-use-cart";
 import ViewYourCartButton from "../components/ViewYourCartButton";
 import DomainCardInline from "../components/DomainCardInline";
+import { Search } from "react-bootstrap-icons";
+import { Spinner } from "react-bootstrap";
+import { DelayInput } from "react-delay-input";
 
 const GET_DOMAINS = gql`
     query Domains( $labels: [String] ) {
@@ -40,7 +43,7 @@ const Find = () => {
     const [options, setOptions] = useState(null); 
     const [available, setAvailable] = useState(false);
     const [isValid, setIsValid] = useState(true);
-    const [activeClass, setActiveClass] = useState("is-search");
+    const [activeClass, setActiveClass] = useState("");
     const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS); 
     const { addItem, removeItem, inCart } = useCart();
      
@@ -54,12 +57,11 @@ const Find = () => {
        
       q = q.toLowerCase().trim(); 
       setQuery(q); 
-      setActiveClass("is-search");
+      setActiveClass("");
        
       if(getLength(q) < 3) {
           setIsValid(false);
-          setAvailable(false);
-          setActiveClass("is-search");
+          setAvailable(false); 
           return;
       } 
 
@@ -119,8 +121,8 @@ const Find = () => {
         let domain = options[0];
 
         if(isExpired(domain.expires)) {
-          setAvailable(true);
-          setActiveClass("is-search");
+          setAvailable(true); 
+          setActiveClass("is-valid");
         } else if(isExpiring(domain.expires)) {
           setAvailable(false);
           setActiveClass("has-warning");
@@ -129,7 +131,7 @@ const Find = () => {
           setActiveClass("is-valid");
         } else {
           setAvailable(false);
-          setActiveClass("is-search");
+          setActiveClass("");
         }
         
       } else {
@@ -151,8 +153,13 @@ const Find = () => {
     }
 
     const handleChange = (e) => {   
-      e.preventDefault(); 
-      setActiveClass("is-search");
+      //e.preventDefault();
+      if(!isValidName(input.current.value)) {
+        setActiveClass("is-invalid");
+        return;
+      }
+      const domain = normalizeName(input.current.value);
+      navigate("/find?q="+ domain);
       return false;
     };
   
@@ -171,57 +178,55 @@ const Find = () => {
           <div className="row">
             <div className="col-lg-12 pt-3">
                 <form onSubmit={handleSubmit}>
-                  <div className="input-group input-group-lg form-group has-validation">
-                    <input ref={input} className={"form-control "+ activeClass} name="q" onChange={handleChange} defaultValue={query} placeholder="Search for a Web3 username" />
+                  <div className="input-group input-group-lg"> 
+                    <DelayInput minLength={3} delayTimeout={300} inputRef={input} className={"form-control " + activeClass} name="q" onChange={handleChange} value={query}   placeholder="Search for a Web3 username" />
+                    <span className="input-group-text  bg-white">
+                      {loading && <Spinner animation="border" variant="dark" size="sm" /> }
+                      {!loading && <Search />}
+                    </span>
                   </div>
                 </form>
              </div>
           </div>
           <div className="row">
-            <div className="col-lg-12 pt-3"> 
-              {loading && 
-               <div className={"d-flex flex-row justify-content-between placeholder-glow"}>
-                  <div className="flex-grow-1 ms-3">
-                    <div className="dflex flex-column">
-                      <div>
-                      <span className="placeholder col-12"></span>
-                      </div>
-                      <div>
-                      <span className="placeholder col-6"></span>
-                      </div>
-                    </div>
-                  </div>
-               </div>
-              }
-              {!query && <span className="text-muted">Type 3 charcters or more to search.</span>}
+            <div className="col-lg-12 pt-3 text-center"> 
+              {!query && <span className="text-muted text-center fs-6 fw-bold">Type 3 charcters or more to search.</span>}
               {!loading && query && options && options.length > 0 &&    
               <>
                 {!isAvailable(options[0].expires) && 
-                  <div className="d-flex flex-column align-items-center justify-content-center gap-2 p-2">
-                    <span className="text-muted fs-4 fw-bold">
-                    😭 Not Available
-                    </span>
-                    <div className="text-muted fs-6 text-center">
-                      This name was last registered on {getDateString(options[0].registered)} and expires {getExpires(options[0].expires)}
-                    </div>
+                  <div className="d-flex flex-column  align-items-center">
+                    <div className="d-flex flex-column justify-content-between align-items-center gap-2">
+                        <span className="text-muted fs-4 fw-bold">
+                        {options[0].label}.{options[0].extension} is not available 😭 
+                        </span>
+                        <span className="text-muted fw-bold">
+                          Expires {getExpires(options[0].expires)}
+                        </span>
+                        <div className="text-muted fs-6 text-center">
+                          This name was last registered on {getDateString(options[0].registered)}
+                        </div>
+                    </div> 
                   </div>
                 }
-                { isAvailable(options[0].expires) && 
+                {isAvailable(options[0].expires) && 
                   <>
-                  <div className="d-flex flex-row align-items-center justify-content-center">
-                    <span className="text-success fs-4 fw-bold">
-                    🥳 Available
-                    </span>
-                  </div>
-                  <div className="d-flex flex-row justify-content-center gap-3 mt-3"> 
-                      <AddToCartButton domain={options[0]} />
-                      {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
-                      {inCart(options[0].id) && <ViewYourCartButton domain={options[0]} />}
-                  </div> 
+                    <div className="d-flex flex-row align-items-center justify-content-center">
+                      <div className="d-flex flex-column justify-content-between align-items-center gap-2">
+                        <span className="text-success fs-4 fw-bold">
+                         {options[0].label}.{options[0].extension} is available 🥳
+                        </span> 
+                        <span className="text-muted fs-4 fw-bold"> 
+                        </span>
+                      </div>
+                    </div>
+                    <div className="d-flex flex-row justify-content-center gap-3 mt-3"> 
+                        <AddToCartButton domain={options[0]} />
+                        {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
+                        {inCart(options[0].id) && <ViewYourCartButton domain={options[0]} />}
+                    </div> 
                   </>
                 }
               </>    
-                
               }
             </div> 
           </div>
