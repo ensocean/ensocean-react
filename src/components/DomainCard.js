@@ -12,6 +12,8 @@ import DomainLink from "./DomainLink";
 import DomainImage from "./DomainImage";
 import AddToCartButton from "./AddToCartButton";
 import AddToCartSmallButton from "./AddToCartSmallButton";
+import AddToFavoritesSmallButton from "./AddToFavoritesSmallButton";
+import { CartProvider } from "react-use-cart";
 
 
 function DomainCard({domain, label}) { 
@@ -35,6 +37,9 @@ function DomainCard({domain, label}) {
                 </div>
                 <div className="card-footer bg-white text-start p-2 ">
                     <AddToCartSmallButton domain={domain} />
+                    <CartProvider id="ensocean_favorites" key="ensocean_favorites">
+                        <AddToFavoritesSmallButton domain={domain} />
+                    </CartProvider>
                 </div>
             </div> 
     )
