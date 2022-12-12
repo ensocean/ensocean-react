@@ -24,7 +24,7 @@ function DomainCard({domain, label, loading}) {
                     <div className="col mb-3" key={i}>
                         <div className="card h-100 text-start">
                             <div className="card-body p-0"> 
-                                <span className="placeholder w-100" style={{minWidth: 200, minHeight: 167 }}></span>
+                                <span className="placeholder w-100" style={{  minHeight: 167 }}></span>
                                 <p className="card-text"> </p>
                             </div>
                             <div className="card-footer bg-white p-2 placeholder-wave">
