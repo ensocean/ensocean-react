@@ -364,7 +364,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             <div className="flex-fill"> 
                 <div className="flex-grow-1"> 
                     <div className="d-flex flex-row gap-2">
-                        <button className="btn btn-outline-light rounded-0 border position-relative" onClick={handleFilterClick} type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
+                        <button className="btn btn-outline-light rounded-0 border position-relative d-block d-lg-none"  type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
                             <img src={funnelFill} alt= ""  />
                             {filterCount > 0 && 
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
