@@ -3,15 +3,12 @@ import { useLazyQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { getExpireCondition } from "../../helpers/String";
 import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg' 
-import refreshIcon from "../../assets/arrow-repeat.svg";
-import DomainCardInline from "../../components/DomainCardInline";
+import refreshIcon from "../../assets/arrow-repeat.svg"; 
 import DomainLink from "../../components/DomainLink";
 import ImageSmall from "../../components/ImageSmall";
 import DomainStatus from "../../components/DomainStatus";
-import AddToCartSmallButton from "../../components/AddToCartSmallButton";
-import AddToCartButton from "../../components/AddToCartButton";
-import AddToFavoritesSmallButton from "../../components/AddToFavoritesSmallButton";
-import { CartProvider } from "react-use-cart";
+import AddToCartSmallButton from "../../components/AddToCartSmallButton"; 
+import AddToWatchlistSmallButton from "../../components/AddToWatchlistSmallButton"; 
   
 const RECENTLY_EXPIRED = gql`
 {
@@ -94,11 +91,9 @@ const RecentExpired = () => {
                         <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
                           <div className="d-flex flex-row justify-content-between gap-2">
                             <DomainLink domain={domain} /> 
-                            <div className="d-flex flex-row gap-2">
-                              <AddToCartSmallButton domain={domain} /> 
-                              <CartProvider id="ensocean_favorites" key="ensocean_favorites">
-                                <AddToFavoritesSmallButton domain={domain} /> 
-                              </CartProvider>
+                            <div className="d-flex flex-row gap-2">  
+                                <AddToCartSmallButton domain={domain} />   
+                                <AddToWatchlistSmallButton domain={{ id: domain.id, price: 0 }} /> 
                             </div>
                           </div> 
                           <div className="d-flex flex-row justify-content-start">

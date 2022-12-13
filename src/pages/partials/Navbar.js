@@ -2,8 +2,8 @@ import logo from "../../assets/icon.png";
 import ConnectButton from "../../components/ConnectButton";
 import AutoComplete from "../../components/AutoComplete";
 import BasketButton from "../../components/BasketButton"; 
-import { useAccount } from 'wagmi';
-import { Link } from "react-router-dom";
+import { useAccount } from 'wagmi';  
+import WatchlistLink from "../../components/WatchlistLink";
 
 const Navbar = ({showSearch}) => {   
     const { isConnected, address } = useAccount();   
@@ -50,9 +50,12 @@ const Navbar = ({showSearch}) => {
                                     </a> 
                                 </li>
                             }
+                            <li className="nav-item">
+                                <WatchlistLink />
+                            </li> 
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-                            <BasketButton />
+                            <BasketButton /> 
                             <ConnectButton />
                         </div> 
                     </div> 

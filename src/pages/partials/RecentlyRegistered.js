@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 import refreshIcon from "../../assets/arrow-repeat.svg";
 import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg'
 import DomainLink from "../../components/DomainLink";
-import ImageSmall from "../../components/ImageSmall"; 
-import DomainCardInline from "../../components/DomainCardInline";
+import ImageSmall from "../../components/ImageSmall";  
 import DomainStatus from "../../components/DomainStatus";
-import AddToFavoritesSmallButton from "../../components/AddToFavoritesSmallButton";
-import { CartProvider } from "react-use-cart";
+import AddToWatchlistSmallButton from "../../components/AddToWatchlistSmallButton"; 
  
 const RECENTLY_REGISTERED = gql`
 {
@@ -86,10 +84,8 @@ const RecentRegistered = () => {
                           <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
                             <div className="d-flex flex-row justify-content-between gap-2">
                               <DomainLink domain={domain} /> 
-                              <div className="d-flex flex-row gap-2"> 
-                                <CartProvider id="ensocean_favorites" key="ensocean_favorites">
-                                  <AddToFavoritesSmallButton domain={domain} /> 
-                                </CartProvider>
+                              <div className="d-flex flex-row gap-2">  
+                                  <AddToWatchlistSmallButton domain={{ id: domain.id, price: 0 }} />
                               </div>
                             </div> 
                             <div className="d-flex flex-row justify-content-start">

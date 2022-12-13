@@ -26,21 +26,20 @@ function AddToCartSmallButton({domain}) {
         setShowRemove(false);
     }
 
-    const addToCart = () => {
+    const addToCart = (d) => {
         if(totalUniqueItems >= MAX_CART_ITEM_COUNT)
         {
             toast.error("Exced Max. Item Count");     
             return;
         }
-        addItem(_domain);  
+        addItem(d);  
         toast.success("Added to cart"); 
     }
 
     if(!inCart(_domain.id)) {
         return (
             <>   
-             {isValidName(domain.label) && isAvailable(domain.expires) && 
-
+             {isValidName(domain.label) && isAvailable(domain.expires) &&  
                 <OverlayTrigger placement="top"  overlay={<Tooltip>Add To Cart </Tooltip>} >
                     <button className="btn btn-default btn-sm" 
                         onClick={(e)=> { addToCart(_domain) }}>
