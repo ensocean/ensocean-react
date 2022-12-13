@@ -3,27 +3,25 @@ import Filter from "./partials/Filter";
 import {Helmet} from "react-helmet";  
 import Tabs from "./partials/Tabs";
  
-const Discover = () => {  
+const Registered = () => {  
     return (
         <>
         <Helmet> 
-            <title>Browse Web3 Domains - EnsOcean</title>
-            <meta name="description" content={"View all ENS domains. Find your web3 domain name idea."} />
+            <title>Registered Web3 Domains - EnsOcean</title>
+            <meta name="description" content="View all registered ENS domains. See who is claiming which domains." />
         </Helmet>
         <div className="container-fluid bg-primary">
             <div className="container text-center p-3 text-white">
-                <h1>{"Browse"}</h1>
+                <h1>Recently Registered</h1>
             </div> 
         </div>
         <div className="container-fluid p-0 m-0">
             <div className="card text-center">
                 <div className="card-header border-0">
-                     <Tabs tab={"all"} /> 
+                     <Tabs tab="registered" />
                 </div>
                 <div className="card-body p-2">
-                    <Filter First={100} Skip={0} Tab={"all"} OrderBy={"created"} OrderDirection={"desc"} Where={{
-                        label_not: null
-                    }} View="gallery" />
+                    <Filter First={100} Skip={0} Tab={"registered"} OrderBy={"registered"} OrderDirection={"desc"} Where={{label_not:null, registered_not: null }} View="gallery" />
                 </div>
             </div>
         </div> 
@@ -31,5 +29,6 @@ const Discover = () => {
     ) 
 };
 
+ 
   
-export default Discover;
+export default Registered;

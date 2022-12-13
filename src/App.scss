@@ -4,7 +4,10 @@
 @import "bootstrap/scss/_mixins.scss";
  
 
+$custom-grid-breakpoints: ( 
+    xxxl: 1600px
+);
  
-//$grid-breakpoints: map-merge($grid-breakpoints, $custom-grid-breakpoints);
+$grid-breakpoints: map-merge($grid-breakpoints, $custom-grid-breakpoints);
  
 @import "bootstrap/scss/bootstrap.scss";

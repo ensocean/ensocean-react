@@ -364,7 +364,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             <div className="flex-fill"> 
                 <div className="flex-grow-1"> 
                     <div className="d-flex flex-row gap-2">
-                        <button className="btn btn-outline-light rounded-0 border position-relative d-block d-lg-none"  type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
+                        <button className="btn btn-outline-light rounded-0 border position-relative"  type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
                             <img src={funnelFill} alt= ""  />
                             {filterCount > 0 && 
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -477,7 +477,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </div>
                 </div>
             </div>
-            <div className="flex-grow-1">
+            <div className="w-100">
                 <div className="container-fluid d-flex justify-content-between p-0">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
@@ -583,7 +583,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         if(view === "list") {
             return (
                 <>
-                <div className="w-100 table-responsive">
+                <div className="table-responsive">
                     <table className='table table-hover'>
                         <thead className="table-light text-start">
                             <tr>
@@ -623,7 +623,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         } else {
             return (
             <> 
-                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+                <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
                     {data.domains.length < 1 &&
                         <div className="col text-center text-warning">No Result found</div>
                     } 

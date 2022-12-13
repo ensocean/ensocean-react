@@ -7,7 +7,7 @@ import ImageSmall from './ImageSmall';
 import ViewYourCartButton from './ViewYourCartButton';
 import {CartProvider, useCart} from "react-use-cart";
 import DomainStatus from './DomainStatus';
-import AddToFavoritesSmallButton from './AddToFavoritesSmallButton';
+import AddToWatchlistSmallButton from './AddToWatchlistSmallButton';
 import AddToCartSmallButton from './AddToCartSmallButton';
    
 function DomainCardInline({domain, showBadge = true, showRegistered=false, showNotAvailable=false, showAddToCartButton=false, showExpires=false, imageWidth=32, imageHeight=32}) { 
@@ -22,11 +22,9 @@ function DomainCardInline({domain, showBadge = true, showRegistered=false, showN
             <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
                 <div className="d-flex flex-row justify-content-between gap-2">
                 <DomainLink domain={domain} /> 
-                <div className="d-flex flex-row gap-2">
-                    <AddToCartSmallButton domain={domain} /> 
-                    <CartProvider id="ensocean_favorites" key="ensocean_favorites">
-                    <AddToFavoritesSmallButton domain={domain} /> 
-                    </CartProvider>
+                <div className="d-flex flex-row gap-2"> 
+                    <AddToCartSmallButton domain={domain} />  
+                    <AddToWatchlistSmallButton domain={{ id: domain.id, price: 0 }} />  
                 </div>
                 </div> 
                 <div className="d-flex flex-row justify-content-start">
