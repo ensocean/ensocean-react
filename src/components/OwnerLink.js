@@ -9,7 +9,7 @@ function OwnerLink({domain}) {
         className="text-decoration-none link-dark btn btn-outline-warning"  
         title={"Domains of "+ domain.owner +""}
         to={"/account/"+ domain.owner }> 
-            {isConnected && address.toLowerCase() === domain.owner.toLowerCase()? "You" : obscureAddress(domain.owner || "", 20)}
+            {isConnected && address.toLowerCase() === domain.owner.id.toLowerCase()? "You" : obscureAddress(domain.owner.id || "", 20)}
     </Link> 
   )
 }

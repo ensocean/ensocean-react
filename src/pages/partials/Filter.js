@@ -413,8 +413,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     <div className="offcanvas-body p-0 m-0 overflow-scroll" style={{height:600}}> 
                         <div className="accordion w-100 card">
                             <div className="card-header border-0 d-flex flex-row justify-content-between p-3">
-                                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
-                                <button type="button" class="btn-close d-block d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
+                                <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
+                                <button type="button" className="btn-close d-block d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
                             </div>
                             <div className="accordion-item border-0 rounded-0">
                                 <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
@@ -654,8 +654,14 @@ function getQuery() {
             created
             registered
             expires
-            owner
-            registrant,
+            owner {
+                id
+                primaryName
+            }
+            registrant {
+                id
+                primaryName
+            }
             length
             extension
             segmentLength
