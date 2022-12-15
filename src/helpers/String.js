@@ -39,6 +39,10 @@ export const getLabelHash = (label) => {
     return utils.keccak256(utils.toUtf8Bytes(label));;
 }
 
+export const getNameHash = (name) => { 
+    return namehash.hash(name);
+}
+
 export const isAscii = (label) => {
     return /^[\x00-\x7F]*$/g.test(label) == true;
 }
