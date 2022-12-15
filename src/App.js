@@ -88,7 +88,7 @@ const wagmiClient = createClient({
 export default function App () {  
   return (  
       <CartProvider id={"ensocean_bulkregister_cart"}> 
-        <WatchlistProvider  id={"ensocean_favorites"}> 
+        <WatchlistProvider id={"ensocean_favorites"}> 
           <WagmiConfig client={wagmiClient}>
             <RainbowKitProvider chains={chains}>
               <ApolloProvider client={client}> 

@@ -33,9 +33,11 @@ const DOMAIN_DETAILS = gql`
             expires
             owner {
                 id
+                primaryName
             }
             registrant {
                 id
+                primaryName
             }
             length
             extension
@@ -226,27 +228,27 @@ const Domain = () => {
                 <meta name="description" content={(domain.label || label) +"."+ (domain.extension) +" was registered "+ getDateSimple(domain.registered) +" but is premium right now. Claim Now."} />
               }
             </Helmet> 
-            <div className="container-fluid bg-primary mb-4">
-                    <div className="container p-3 text-white">
-                        <div className='d-flex justify-content-between align-items-center'> 
-                            <div className='d-flex justify-content-start align-items-center gap-3 text-truncate'>
-                                <h1 className='m-auto fs-1 fw-bold text-truncate pe-3'>
-                                    <DomainLabel domain={domain} /> 
-                                </h1>
-                            </div> 
-                            <div className='d-flex align-items-center gap-3'> 
-                                <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
-                                    <img src={etherScanIcon} width={32} height={32}  alt= "" />
-                                </a>
-                                <CopyToClipboard text={window.location.href}
-                                    onCopy={ () => toast.success("Link Copied") }>
-                                    <span className='cursor-pointer' >
-                                        <img src={shareIcon} width={32} alt= "" className="text-white" />
-                                    </span>
-                                </CopyToClipboard> 
-                            </div>  
-                        </div>
-                    </div> 
+            <div className="container-fluid bg-primary text-white p-3 mb-4">
+                <div className="container">
+                    <div className='d-flex flex-column flex-lg-row justify-content-start align-items-lg-center gap-3'> 
+                        <div className='d-flex align-items-start text-truncate'>
+                            <h1 className='fs-1 fw-bold text-truncate pe-3'>
+                                <DomainLabel domain={domain} /> 
+                            </h1>
+                        </div> 
+                        <div className='d-flex flex-row gap-3'> 
+                            <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
+                                <img src={etherScanIcon} width={32} height={32}  alt= "" />
+                            </a>
+                            <CopyToClipboard text={window.location.href}
+                                onCopy={ () => toast.success("Link Copied") }>
+                                <span className='cursor-pointer' >
+                                    <img src={shareIcon} width={32} alt= "" className="text-white" />
+                                </span>
+                            </CopyToClipboard> 
+                        </div>  
+                    </div>
+                </div>
             </div>
             <div className='container-fluid'>
                 <div className='container'>

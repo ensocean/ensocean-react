@@ -53,7 +53,7 @@ const AccountInfo = ({  }) => {
         return (
             <div class="row">
                 <div class="col-2 col-lg-1">
-                    <div className="card">
+                    <div className="card mb-2">
                         <LazyLoadImage 
                             alt={addr} 
                             className="img-fluid card-img-top card-img-bottom rounded-1"
