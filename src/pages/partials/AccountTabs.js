@@ -12,7 +12,7 @@ const AccountTabs = ({account}) => {
 
     return (
         <> 
-            <ul className="nav nav-tabs card-header-tabs">
+            <ul className="nav card-header-tabs">
                 <li className="nav-item">
                     <Link className={"nav-link fs-5 p-3 "+ (tab === "all" || tab === null || tab === "" ? "active": "") } to={"/account/"+ account}>Collection</Link>
                 </li>  

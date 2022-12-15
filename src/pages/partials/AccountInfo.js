@@ -33,13 +33,13 @@ const AccountInfo = ({  }) => {
     });  
     
     if(isFetching) return (
-        <div className="row placeholder-glow">
-            <div className="col-2 col-lg-1 text-end"> 
-                <div className="card h-100">
+        <div class="row placeholder-glow">
+            <div class="col-2 col-lg-1 text-end">
+                    <div className="card mb-2 h-100">
                     <span className="placeholder col-12 w-100"></span>
                 </div>
             </div>
-            <div className="col-10 col-lg-11">
+            <div class="col-10 col-lg-11 ps-0">
                 <span className="placeholder col-4"></span>
                 <div className="d-flex flex-row mt-3">
                     <span className="placeholder col-3"></span>

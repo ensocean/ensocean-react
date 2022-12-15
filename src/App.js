@@ -22,7 +22,6 @@ import NotFound from "./pages/Notfound";
 import Layouts from "./pages/layouts";    
 import { CartProvider } from "react-use-cart";
 import { WatchlistProvider } from "react-use-watchlist";
-import Watchlist from "./pages/Watchlist";
 
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -106,9 +105,6 @@ export default function App () {
                       </Route>
                       <Route path="/register" element={<Layouts.Page />}>
                         <Route path="/register" element={<Register />} />
-                      </Route>
-                      <Route path="/watchlist" element={<Layouts.Watchlist />}>
-                        <Route path="/watchlist" forceRefresh={true} element={<Watchlist />} />
                       </Route>
                       <Route path="/" element={<Layouts.Page />}>
                         <Route index element={<Home />} />

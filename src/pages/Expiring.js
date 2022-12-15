@@ -24,7 +24,7 @@ const Expiring = () => {
                 <div className="card-header border-0">
                      <Tabs tab="expiring" />
                 </div>
-                <div className="card-body p-2">
+                <div className="card-body ps-3 pe-3">
                     <Filter First={100} Skip={0} Tab={"expiring"} OrderBy={"expires"} OrderDirection={"asc"} Where={{
                            label_not: null,
                            expires_lte: moment().utc().unix(),

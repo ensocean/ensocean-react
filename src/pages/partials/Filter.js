@@ -15,6 +15,7 @@ import sortDown from "../../assets/sort-down.svg";
 import OwnerLink from "../../components/OwnerLink";
 import DomainCardInline from "../../components/DomainCardInline";
 import DomainCard from "../../components/DomainCard"; 
+import { DelayInput } from "react-delay-input";
   
 const DEBOUNCE_INTERVAL = 500; 
  
@@ -156,7 +157,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const changeFilter = (value, prop) => {
         let _query = new URLSearchParams(search) 
         let newWhere = jsonParse(_query.get("filter")) || where;
-        if(value === null || value === undefined || value === "" || value === "0" || value < 1) { 
+        if(value === null || value === undefined || value === "" || value === "0" || Number(value) < 1) { 
             delete newWhere[prop]; 
             setFilterCount(filterCount - 1);
         }  else {  
@@ -204,20 +205,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     
     const onKeydownSearch = (e) => {
         if( e.key === "Enter" ) {
-            clearTimeout(timeout);
+            clearTimeout(timeout); 
             changeFilter(e.target.value, "label_contains_nocase");
         }
     }
 
     const onChangeSearch = (e) => { 
-        if(timeout) {  
-            clearTimeout(timeout);
-        } 
- 
-        timeout = setTimeout(()=> { 
-            changeFilter(e.target.value, "label_contains_nocase");
-        }, DEBOUNCE_INTERVAL); 
- 
+        changeFilter(e.target.value, "label_contains_nocase");
     }
 
     const onKeydownStartwith = (e) => {
@@ -369,7 +363,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             <span className="input-group-text bg-light border-end-0 rounded-0">
                                 <img src={searchIcon} alt= ""  />
                             </span>
-                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={onChangeSearch} onKeyDown={onKeydownSearch} defaultValue={where?.label_contains_nocase} placeholder="Search Name"  /> 
+                            <DelayInput minLength={1} delayTimeout={300} className={"form-control border-start-0 rounded-0"} name="searchText" onChange={onChangeSearch} onKeyDown={onKeydownSearch} value={where?.label_contains_nocase} placeholder="Search Name" />
                         </div> 
                     </div> 
                 </div>

@@ -24,7 +24,7 @@ const Premium = () => {
                 <div className="card-header border-0">
                      <Tabs tab="premium" />
                 </div>
-                <div className="card-body p-2">
+                <div className="card-body ps-3 pe-3">
                     <Filter First={100} Skip={0} Tab={"premium"} OrderBy={"expires"} OrderDirection={"asc"} Where={{
                             label_not: null,
                             expires_lte: moment().add(-GRACE_PERIOD, "days").utc().unix(),

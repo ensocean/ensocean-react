@@ -20,7 +20,7 @@ const Registered = () => {
                 <div className="card-header border-0">
                      <Tabs tab="registered" />
                 </div>
-                <div className="card-body p-2">
+                <div className="card-body ps-3 pe-3">
                     <Filter First={100} Skip={0} Tab={"registered"} OrderBy={"registered"} OrderDirection={"desc"} Where={{label_not:null, registered_not: null }} View="gallery" />
                 </div>
             </div>

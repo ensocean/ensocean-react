@@ -20,7 +20,7 @@ const Discover = () => {
                 <div className="card-header border-0">
                      <Tabs tab={"all"} /> 
                 </div>
-                <div className="card-body p-2">
+                <div className="card-body ps-3 pe-3">
                     <Filter First={100} Skip={0} Tab={"all"} OrderBy={"created"} OrderDirection={"desc"} Where={{
                         label_not: null
                     }} View="gallery" />
