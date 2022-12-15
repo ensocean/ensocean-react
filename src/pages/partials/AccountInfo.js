@@ -16,13 +16,15 @@ import { toast } from "react-toastify";
 import { useContractRead } from "wagmi";
 import reverseLookupAbi from "../../abis/ReverseLookup.json";
 import { Spinner } from "react-bootstrap";
+import { useRef } from "react";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
 
 const AccountInfo = ({  }) => {
     const addr = useParams().address;  
-     
+    const imgRef = useRef();
+
     const { data, isFetching } = useContractRead({
         addressOrName: process.env.REACT_APP_REVERSE_LOOKUP_ADDRESS,
         contractInterface: reverseLookupAbi,
@@ -32,18 +34,18 @@ const AccountInfo = ({  }) => {
     
     if(isFetching) return (
         <div className="d-flex placeholder-glow">
-                    <div className="flex-shrink-0">
-                        <div className="card h-100">
-                            <span className="placeholder col-12" style={ { width: 125, height:125 } }></span>
-                        </div>
-                    </div>
-                    <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">
-                        <span className="placeholder col-4"></span>
-                        <div className="d-flex flex-row mt-3">
-                            <span className="placeholder col-3"></span>
-                        </div>
-                    </div>
+            <div className="flex-shrink-0">
+                <div className="card h-100">
+                    <span className="placeholder col-12" style={ { width: 125, height:125 } }></span>
+                </div>
             </div>
+            <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">
+                <span className="placeholder col-4"></span>
+                <div className="d-flex flex-row mt-3">
+                    <span className="placeholder col-3"></span>
+                </div>
+            </div>
+        </div>
     )
     
     if(!isFetching && data) {
@@ -52,10 +54,10 @@ const AccountInfo = ({  }) => {
             <div className="d-flex">
                 <div className="flex-shrink-0">
                     <div className="card text-start">
-                        <LazyLoadImage
+                        <LazyLoadImage 
                             alt={addr} 
                             className="img-fluid card-img-top card-img-bottom"
-                            onError={(e)=> { document.getElementById(addr)?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                            onError={(e)=> { e.target.src = notAvailable; e.target.alt="Not available" }}
                             afterLoad={(e)=> { document.getElementById(addr)?.remove(); }}
                             placeholder={<img src={spinner} width={125} height={125} className="img-fluid card-img-top card-img-bottom" alt="" />}
                             placeholderSrc={spinner} 
@@ -63,7 +65,7 @@ const AccountInfo = ({  }) => {
                             height={125}
                             src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(primaryName.replace(".eth", ""))) }
                             />  
-                        <img id={addr} width={125} height={125} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
+                        <img itemRef={imgRef} id={addr} width={125} height={125} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
                     </div>
                 </div>
                 <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">

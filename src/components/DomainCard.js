@@ -49,7 +49,7 @@ function DomainCard({domain, label, loading}) {
                             <DomainImage domain={domain} />
                             <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate fs-5 fw-bold">
-                                    <DomainLink domain={domain} showBadge={false} showAddToCartButton={true} />
+                                    <DomainLabel domain={domain} showBadge={false} showAddToCartButton={true} />
                                 </h6>
                             </div>
                         </div>
