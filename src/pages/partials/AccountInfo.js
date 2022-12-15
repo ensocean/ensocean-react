@@ -33,13 +33,13 @@ const AccountInfo = ({  }) => {
     });  
     
     if(isFetching) return (
-        <div className="d-flex placeholder-glow">
-            <div className="flex-shrink-0">
+        <div className="row placeholder-glow">
+            <div className="col-2 col-lg-1 text-end"> 
                 <div className="card h-100">
-                    <span className="placeholder col-12 w-100" style={ { maxWidth:125, maxHeight:125 } }></span>
+                    <span className="placeholder col-12 w-100"></span>
                 </div>
             </div>
-            <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">
+            <div className="col-10 col-lg-11">
                 <span className="placeholder col-4"></span>
                 <div className="d-flex flex-row mt-3">
                     <span className="placeholder col-3"></span>
@@ -58,12 +58,12 @@ const AccountInfo = ({  }) => {
                             className="img-fluid card-img-top card-img-bottom rounded-1"
                             onError={(e)=> { imgRef.current.classList.add("d-none"); e.target.src = notAvailable; e.target.alt="Not available" }}
                             afterLoad={(e)=> { imgRef.current.classList.add("d-none")  }}
-                            placeholder={<img src={spinner} maxHeight={125} className="img-fluid card-img-top card-img-bottom" alt="" />}
+                            placeholder={<img src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />}
                             placeholderSrc={spinner} 
                             style={{maxWidth:125}}
                             src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(primaryName.replace(".eth", ""))) }
                             />  
-                        <img ref={imgRef} id={addr} maxHeight={125} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
+                        <img ref={imgRef} id={addr} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
                 </div>
                 <div className="col-10 col-lg-11">
                     <h2>{primaryName || obscureAddress(addr)}</h2>
