@@ -570,7 +570,9 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                 )
         } else {
             return (
+                <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
                  <DomainCard loading={loading} />
+                 </div>
             )
         } 
     } else if (error) {
