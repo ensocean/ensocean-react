@@ -413,8 +413,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     <div className="offcanvas-body p-0 m-0 overflow-scroll" style={{height:600}}> 
                         <div className="accordion w-100 card">
                             <div className="card-header border-0 d-flex flex-row justify-content-between p-3">
-                                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
-                                <button type="button" class="btn-close d-block d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
+                                <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
+                                <button type="button" className="btn-close d-block d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
                             </div>
                             <div className="accordion-item border-0 rounded-0">
                                 <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
@@ -595,26 +595,30 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             </tr>
                         </thead>
                         <tbody className="text-start">
-                            {data.domains.length < 1 &&
+                            {data && data.domains.length < 1 &&
                                 <tr>
                                     <td colSpan='6' className='p-3 text-center'><span className='text-warning'>No Result</span></td>
                                 </tr>
                             } 
-                            {data.domains.map((domain) => (
-                            <tr key={domain.id} className="t-card">
-                                <td className="p-3">
-                                    <DomainCardInline domain={domain} />
-                                </td> 
-                                <td className="p-3"> 
-                                    {getExpires(domain.expires)}
-                                </td>
-                                <td className="p-3"> 
-                                    <OwnerLink domain={domain} />
-                                </td>
-                                <td className="p-3">{getTimeAgo(domain.created)}</td>
-                                <td className="p-3">{getTimeAgo(domain.registered)}</td> 
-                            </tr>
-                            ))}  
+                            {data &&
+                                <>
+                                    {data.domains.map((domain) => (
+                                    <tr key={domain.id} className="t-card">
+                                        <td className="p-3">
+                                            <DomainCardInline domain={domain} />
+                                        </td> 
+                                        <td className="p-3"> 
+                                            {getExpires(domain.expires)}
+                                        </td>
+                                        <td className="p-3"> 
+                                            <OwnerLink domain={domain} />
+                                        </td>
+                                        <td className="p-3">{getTimeAgo(domain.created)}</td>
+                                        <td className="p-3">{getTimeAgo(domain.registered)}</td> 
+                                    </tr>
+                                    ))}
+                                </>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -624,14 +628,18 @@ const FilterResults = ( { called, loading, error, data, view}) => {
             return (
             <> 
                 <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
-                    {data.domains.length < 1 &&
+                    {data && data.domains.length < 1 &&
                         <div className="col text-center text-warning">No Result found</div>
                     } 
-                    {data.domains.map((domain) => (
-                    <div className="col mb-3" key={domain.id}>
-                        <DomainCard domain={domain} />
-                    </div>
-                    ))}
+                    {data && 
+                        <>
+                        {data.domains.map((domain) => (
+                        <div className="col mb-3" key={domain.id}>
+                            <DomainCard domain={domain} />
+                        </div> 
+                        ))}
+                        </>
+                    }
                 </div>  
             </>
             ) 
@@ -654,8 +662,14 @@ function getQuery() {
             created
             registered
             expires
-            owner
-            registrant,
+            owner {
+                id
+                primaryName
+            }
+            registrant {
+                id
+                primaryName
+            }
             length
             extension
             segmentLength

@@ -21,8 +21,12 @@ const RECENTLY_EXPIRED = gql`
     created
     registered
     expires
-    owner
-    registrant,
+    owner {
+      id
+    }
+    registrant {
+      id
+    }
     length
     tags
     extension

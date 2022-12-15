@@ -53,7 +53,6 @@ import Expired from "./pages/Expired";
 import Expiring from "./pages/Expiring";
 import Premium from "./pages/Premium";
 
-
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
   cache: new InMemoryCache() 
@@ -88,8 +87,8 @@ const wagmiClient = createClient({
   
 export default function App () {  
   return (  
-      <CartProvider  id="ensocean_bulkregister_cart"> 
-        <WatchlistProvider  id="ensocean_favorites"> 
+      <CartProvider id={"ensocean_bulkregister_cart"}> 
+        <WatchlistProvider  id={"ensocean_favorites"}> 
           <WagmiConfig client={wagmiClient}>
             <RainbowKitProvider chains={chains}>
               <ApolloProvider client={client}> 

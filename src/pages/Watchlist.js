@@ -5,8 +5,10 @@ import { useWatchlist } from "react-use-watchlist";
 import AccountTabs from "./partials/AccountTabs";
 import AccountInfo from "./partials/AccountInfo";
 import { useAccount } from 'wagmi';  
+import { useParams } from "react-router-dom";
   
 const Watchlist = () => {  
+    const addr = useParams().address;
     const { isConnected, address } = useAccount();   
     const { items } = useWatchlist();  
     
@@ -28,10 +30,11 @@ const Watchlist = () => {
                     <AccountTabs account={address} tab="watchlist" />
                 </div>
                 <div className="card-body p-2">
+                    {isConnected && address === addr &&
                     <Filter First={100} Skip={0} Tab={"watchlist"} OrderBy={"expires"} OrderDirection={"desc"} Where={{
                             label_not:null,
                             id_in: items.map(t=> t.id) 
-                    }} View="gallery" />
+                    }} View="gallery" />}
                 </div>
             </div> 
         </div>  
