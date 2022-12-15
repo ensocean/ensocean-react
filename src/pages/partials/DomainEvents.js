@@ -1,6 +1,7 @@
  
 import { useQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
+import OwnerLink from "../../components/OwnerLink";
 import { getTimeAgo, obscureAddress } from "../../helpers/String";
 
 const ETHERSCAN_ADDR = process.env.REACT_APP_ETHERSCAN_ADDR;
@@ -18,8 +19,12 @@ const DOMAIN_EVENTS = gql`
         {
             id
             name
-            from
-            to
+            from {
+                id
+            }
+            to {
+                id
+            }
             cost
             expires
             blockTimestamp
@@ -71,14 +76,11 @@ const DomainEvents = ({ id }) => {
                                         <tr key={event.id}>
                                             <td className="p-3">{event.name }</td>
                                             <td className="p-3">{event.from != null && 
-                                                <button className="btn btn-outline-warning">
-                                                    <Link className="text-dark" to={"/account/"+ event.from}>{ obscureAddress(event.from)}</Link>
-                                                </button>}
+                                                <OwnerLink owner={event.from} />}
                                             </td>
                                             <td className="p-3">{event.to != null && 
-                                                <button className="btn btn-outline-warning">
-                                                    <Link className="text-dark" to={"/account/"+ event.to}>{obscureAddress(event.to)}</Link>
-                                                </button>}
+                                                <OwnerLink owner={event.to} />
+                                            }
                                             </td>
                                             <td className="p-3">
                                                 <button className="btn btn-outline-warning">

@@ -1,11 +1,8 @@
 import React, {useState, useEffect } from "react"; 
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { getExpires, getTimeAgo, isExpired, isExpiring, isPremium, isValidName, jsonParse, jsonStringify, obscureAddress, obscureLabel, getTokenId, getDateString } from '../../helpers/String';
-import { useLazyQuery, gql } from '@apollo/client';
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import spinner from '../../assets/spinner.svg'
-import { CSVLink } from "react-csv";
-import arrowLeft from "../../assets/arrow-left.svg";
+import { getExpires, getTimeAgo, jsonParse, jsonStringify, getTokenId } from '../../helpers/String';
+import { useLazyQuery, gql } from '@apollo/client'; 
+import { CSVLink } from "react-csv"; 
 import fileTypeCsv from "../../assets/filetype-csv.svg";
 import listUl from "../../assets/list-ul.svg";
 import gridFill from "../../assets/grid-fill.svg";
@@ -14,18 +11,10 @@ import arrowRepeat from "../../assets/arrow-repeat.svg";
 import arrowRepeatSpin from "../../assets/arrow-repeat-spin.svg";
 import searchIcon from "../../assets/search.svg";
 import sortUp from "../../assets/sort-up.svg";
-import sortDown from "../../assets/sort-down.svg";
-import exclamationTriangleFill from "../../assets/exclamation-triangle-fill.svg";
-import dashCircleFill from "../../assets/dash-circle-fill.svg";
-import notAvailable from "../../assets/not-available.svg";
-import ImageSmall from "../../components/ImageSmall";
-import DomainLink from "../../components/DomainLink";
+import sortDown from "../../assets/sort-down.svg"; 
 import OwnerLink from "../../components/OwnerLink";
 import DomainCardInline from "../../components/DomainCardInline";
-import DomainCard from "../../components/DomainCard";
-import DomainStatus from "../../components/DomainStatus";
-import AddToCartButton from "../../components/AddToCartButton";
-import AddToCartSmallButton from "../../components/AddToCartSmallButton";
+import DomainCard from "../../components/DomainCard"; 
   
 const DEBOUNCE_INTERVAL = 500; 
  
@@ -613,7 +602,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                                             {getExpires(domain.expires)}
                                         </td>
                                         <td className="p-3"> 
-                                            <OwnerLink domain={domain} />
+                                            <OwnerLink owner={domain.owner} />
                                         </td>
                                         <td className="p-3">{getTimeAgo(domain.created)}</td>
                                         <td className="p-3">{getTimeAgo(domain.registered)}</td> 
