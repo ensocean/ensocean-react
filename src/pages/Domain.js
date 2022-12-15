@@ -4,21 +4,15 @@ import { useQuery, gql } from "@apollo/client";
 import {Helmet} from "react-helmet";
 import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { toast } from "react-toastify";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import DomainEvents from "./partials/DomainEvents";
-import spinner from '../assets/spinner.svg'
-import notAvailable from "../assets/not-available.svg";
+import { toast } from "react-toastify"; 
+import DomainEvents from "./partials/DomainEvents"; 
 import shareIcon from '../assets/share-white.svg'
-import clipboardIcon from "../assets/clipboard.svg"; 
-import dashCircleFillIcon from "../assets/dash-circle-fill.svg";
-import etherScanIcon from "../assets/etherscan.svg";
-import parse from "html-react-parser";
+import clipboardIcon from "../assets/clipboard.svg";  
+import etherScanIcon from "../assets/etherscan.svg"; 
 import DomainLabel from "../components/DomainLabel"; 
 import OwnerLink from "../components/OwnerLink";
 import AlertDomain from "../components/AlertDomain";
-import DomainImage from "../components/DomainImage";
-import DomainLink from "../components/DomainLink";
+import DomainImage from "../components/DomainImage";  
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -274,7 +268,7 @@ const Domain = () => {
                                 <ul className='list-group list-group-flush'>
                                     <li className='list-group-item border-0 p-0 pb-3'>
                                         <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>
-                                            <OwnerLink domain={domain} />
+                                            <OwnerLink owner={domain.owner} />
                                         </span>
                                     </li>
                                     <li className='list-group-item border-0 p-0 pb-3'>

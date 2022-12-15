@@ -36,7 +36,7 @@ const AccountInfo = ({  }) => {
         <div className="d-flex placeholder-glow">
             <div className="flex-shrink-0">
                 <div className="card h-100">
-                    <span className="placeholder col-12" style={ { width: 125, height:125 } }></span>
+                    <span className="placeholder col-12 w-100" style={ { maxWidth:125, maxHeight:125 } }></span>
                 </div>
             </div>
             <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">
@@ -51,24 +51,21 @@ const AccountInfo = ({  }) => {
     if(!isFetching && data) {
         const primaryName = data[0];
         return (
-            <div className="d-flex">
-                <div className="flex-shrink-0">
-                    <div className="card text-start">
+            <div className="row">
+                <div className="col-2 col-lg-1 text-end"> 
                         <LazyLoadImage 
                             alt={addr} 
-                            className="img-fluid card-img-top card-img-bottom"
-                            onError={(e)=> { e.target.src = notAvailable; e.target.alt="Not available" }}
-                            afterLoad={(e)=> { document.getElementById(addr)?.remove(); }}
-                            placeholder={<img src={spinner} width={125} height={125} className="img-fluid card-img-top card-img-bottom" alt="" />}
+                            className="img-fluid card-img-top card-img-bottom rounded-1"
+                            onError={(e)=> { imgRef.current.classList.add("d-none"); e.target.src = notAvailable; e.target.alt="Not available" }}
+                            afterLoad={(e)=> { imgRef.current.classList.add("d-none")  }}
+                            placeholder={<img src={spinner} maxHeight={125} className="img-fluid card-img-top card-img-bottom" alt="" />}
                             placeholderSrc={spinner} 
-                            width={125} 
-                            height={125}
+                            style={{maxWidth:125}}
                             src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(primaryName.replace(".eth", ""))) }
                             />  
-                        <img itemRef={imgRef} id={addr} width={125} height={125} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
-                    </div>
+                        <img ref={imgRef} id={addr} maxHeight={125} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
                 </div>
-                <div className="flex-grow-1 ms-3 d-flex flex-column align-items-start">
+                <div className="col-10 col-lg-11">
                     <h2>{primaryName || obscureAddress(addr)}</h2>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={addr} onCopy={() => toast.success("Address copied") }>
