@@ -21,9 +21,11 @@ const DOMAIN_EVENTS = gql`
             name
             from {
                 id
+                primaryName
             }
             to {
                 id
+                primaryName
             }
             cost
             expires
