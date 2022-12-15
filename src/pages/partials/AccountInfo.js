@@ -51,8 +51,9 @@ const AccountInfo = ({  }) => {
     if(!isFetching && data) {
         const primaryName = data[0];
         return (
-            <div className="row">
-                <div className="col-2 col-lg-1 text-end"> 
+            <div class="row">
+                <div class="col-2 col-lg-1">
+                    <div className="card">
                         <LazyLoadImage 
                             alt={addr} 
                             className="img-fluid card-img-top card-img-bottom rounded-1"
@@ -60,13 +61,13 @@ const AccountInfo = ({  }) => {
                             afterLoad={(e)=> { imgRef.current.classList.add("d-none")  }}
                             placeholder={<img src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />}
                             placeholderSrc={spinner} 
-                            style={{maxWidth:125}}
                             src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(primaryName.replace(".eth", ""))) }
                             />  
                         <img ref={imgRef} id={addr} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
+                    </div>
                 </div>
-                <div className="col-10 col-lg-11">
-                    <h2>{primaryName || obscureAddress(addr)}</h2>
+                <div class="col-10 col-lg-11 ps-0">
+                    <h2 className="text-truncate">{primaryName || obscureAddress(addr)}</h2>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={addr} onCopy={() => toast.success("Address copied") }>
                             <a href="#">
