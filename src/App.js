@@ -22,6 +22,7 @@ import NotFound from "./pages/Notfound";
 import Layouts from "./pages/layouts";    
 import { CartProvider } from "react-use-cart";
 import { WatchlistProvider } from "react-use-watchlist";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import '@rainbow-me/rainbowkit/styles.css';
 
@@ -86,6 +87,7 @@ const wagmiClient = createClient({
   
 export default function App () {  
   return (  
+    <HelmetProvider>
       <CartProvider id={"ensocean_bulkregister_cart"}> 
         <WatchlistProvider id={"ensocean_favorites"}> 
           <WagmiConfig client={wagmiClient}>
@@ -129,5 +131,6 @@ export default function App () {
           </WagmiConfig>
         </WatchlistProvider>
       </CartProvider> 
+    </HelmetProvider>
   );
 }

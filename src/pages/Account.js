@@ -1,4 +1,4 @@
-import {Helmet} from "react-helmet"; 
+import {Helmet} from "react-helmet-async"; 
 import { useLocation, useParams } from "react-router-dom"; 
 import Filter from "./partials/Filter"; 
 import AccountInfo from "./partials/AccountInfo";

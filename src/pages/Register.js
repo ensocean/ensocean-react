@@ -1,4 +1,4 @@
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import { useCart } from "react-use-cart";
 import { Trash, X, ArrowClockwise } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";

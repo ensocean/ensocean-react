@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect }  from "react"; 
 import { useLocation, Link, useNavigate} from "react-router-dom";  
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import { useLazyQuery, gql } from "@apollo/client";
 import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getTokenId, obscureLabel, isNonAscii, getDateSimple, obscureAddress, getExpires, getDateString, isAvailable} from '../helpers/String';
 import ImageSmall from "../components/ImageSmall";

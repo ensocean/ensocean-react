@@ -1,6 +1,6 @@
 import React from "react";  
 import Filter from "./partials/Filter"; 
-import {Helmet} from "react-helmet";  
+import {Helmet} from "react-helmet-async";
 import Tabs from "./partials/Tabs";
  
 const Discover = () => {  

@@ -1,7 +1,7 @@
 import React  from "react";
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
-import {Helmet} from "react-helmet";
+import {Helmet} from "react-helmet-async";
 import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify"; 
