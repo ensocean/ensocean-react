@@ -4,7 +4,7 @@ import Filter from "./partials/Filter";
 import AccountInfo from "./partials/AccountInfo";
 import AccountTabs from "./partials/AccountTabs";
 import { useWatchlist } from "react-use-watchlist";
-import { useAccount } from "wagmi";
+import { useAccount } from "wagmi"; 
 
 const Account = () => {
     const addr = useParams().address;  
@@ -13,7 +13,7 @@ const Account = () => {
     const params = new URLSearchParams(location.search);
     const tab = params.get("tab");
     const { items } = useWatchlist();   
-
+ 
     return (
       <>
       <Helmet> 
@@ -22,7 +22,7 @@ const Account = () => {
       </Helmet>
       <div className="container-fluid bg-primary">
         <div className="container-fluid container-fluid p-0 pt-4 pb-4 text-white">
-           <AccountInfo />
+            <AccountInfo />
         </div>
       </div>
       <div className="container-fluid p-0 m-0"> 
@@ -43,7 +43,7 @@ const Account = () => {
                             id_in: items.map(t=> t.id) 
                     }} View="gallery" />}
                 </div>
-            </div>  
+        </div>  
       </div>  
       </> 
     );

@@ -19,7 +19,7 @@ function DomainImage({domain, label}) {
                     afterLoad={(e)=> { document.getElementById(domain?.id || getTokenId(label))?.remove(); }}
                     src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain?.label)) }
                 /> 
-                <img id={domain.id} src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />
+                <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
             </>);
     } else {
         return (

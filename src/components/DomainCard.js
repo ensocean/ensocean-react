@@ -19,9 +19,9 @@ import { CartProvider } from "react-use-cart";
 function DomainCard({domain, label, loading}) { 
     if(loading) {
         return (
-            <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 placeholder-glow">
+            <>
                 {[...Array(12)].map((x, i) =>
-                    <div className="col mb-3" key={i}>
+                    <div className="col mb-3 placeholder-glow" key={i}>
                         <div className="card h-100 text-start">
                             <div className="card-body p-0"> 
                                 <span className="placeholder w-100" style={{  minHeight: 167 }}></span>
@@ -38,7 +38,7 @@ function DomainCard({domain, label, loading}) {
                         </div>
                     </div> 
                 )}
-            </div>  
+            </>  
         )
     } else {
         return ( 
