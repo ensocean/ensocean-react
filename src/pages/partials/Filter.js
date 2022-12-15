@@ -42,7 +42,8 @@ let defaultTags = [
     "only-digit",
     "include-unicode", 
     "include-emoji", 
-    "include-arabic"
+    "include-arabic",
+    "palindrome"
 ];
  
 const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
