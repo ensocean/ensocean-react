@@ -13,8 +13,7 @@ import { Spinner } from 'react-bootstrap';
 const AutoComplete = () => {
     const [query, setQuery] = useState("");
     const [options, setOptions] = useState([]);
-    const [available, setAvailable] = useState(false);
-    const [isValid, setIsValid] = useState(true);
+    const [available, setAvailable] = useState(false); 
     const [activeClass, setActiveClass] = useState("is-search");
     const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS);  
     const navigate = useNavigate(); 
@@ -42,10 +41,8 @@ const AutoComplete = () => {
         setQuery(q);
         setActiveClass("is-search");
         
-        if(getLength(q) < 3) {
-            setIsValid(false);
-            setAvailable(false);  
-            
+        if(getLength(q) < 3) { 
+            setAvailable(false);   
             return;
         } 
 
@@ -55,8 +52,7 @@ const AutoComplete = () => {
 
         let options = getDefaultOptions(q);
  
-        if(!isValidDomain(q)) {  
-            setIsValid(false);
+        if(!isValidDomain(q)) {   
             setAvailable(false);  
             setActiveClass("is-invalid"); 
             setOptions(options);
@@ -64,8 +60,7 @@ const AutoComplete = () => {
         } 
    
         const labels = options.map(t=> t.id);
-        
-        setIsValid(true);
+         
         setOptions(options);
 
         const { data } = await getDomains({ variables: { labels }});
@@ -160,11 +155,12 @@ const AutoComplete = () => {
             searchText="Search"
             emptyLabel="Type 3 character to search"
             placeholder="Search web3 name"
+             
             renderMenu={(domains, menuProps) => ( 
                 <Menu {...menuProps} >
                     {domains.map((domain, index) => (
-                        <>
-                        <div key={domain.id} className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
+                        <div key={domain.id}>
+                        <div  className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
                           <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
                               <DomainLink domain={domain} />
                               <div className='d-flex flex-row justify-content-center'>
@@ -178,7 +174,7 @@ const AutoComplete = () => {
                             {!loading && available && <ClaimNowButton domain={domain} /> }
                             {!loading && available && <ViewYourCartButton domain={domain} /> }
                         </div>
-                        </>
+                        </div>
                     ))}
                     {error && <span className="badge text-bg-danger">There was a problem. Please try again.</span>}
                     {query.length < 3 && <div className="d-flex flex-row justify-content-center p-2 gap-1">Type 3 characters to search</div>}
@@ -191,8 +187,8 @@ const AutoComplete = () => {
                             <input {...inputProps} 
                                 className={"form-control pe-2 border-primary " + activeClass }
                                 ref={(node) => {
-                                inputRef(node);
-                                referenceElementRef(node);
+                                    inputRef(node);
+                                    referenceElementRef(node);
                                 }} /> 
                         </div> 
                     </form> 
@@ -217,8 +213,14 @@ const GET_DOMAINS = gql`
             expires
             registered
             created
-            registrant
-            owner
+            registrant {
+                id
+                primaryName
+            }
+            owner {
+                id
+                primaryName
+            }
         }
     }
 `;

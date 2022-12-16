@@ -1,10 +1,8 @@
 
 
 import { getExpires, getTimeAgo, isAvailable, isExpired, isExpiring, isPremium, isValidName } from '../helpers/String';
-import AddToCartButton from './AddToCartButton';
-import AddToCartSmallButton from './AddToCartSmallButton';
 
-function DomainStatus({domain, label = "", loading = false, showBadge=true, showNotAvailable=false, showRegistered=false, showExpires=false}) {  
+function DomainStatus({domain, loading = false, showBadge=true, showNotAvailable=false, showRegistered=false, showExpires=false}) {  
     if(showBadge) {
         return ( 
             <div className='d-flex flex-row justify-content-start align-items-center gap-3'>

@@ -42,15 +42,15 @@ export const getLabelHash = (label) => {
 export const getNameHash = (name) => { 
     return namehash.hash(name);
 }
-
-export const encodeHtml = (text) => {
-    return text.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-        return '&#'+i.charCodeAt(0)+';';
-    });
-}
-
-export const isAscii = (label) => {
-    return /^[\x00-\x7F]*$/gu.test(label) === true;
+  
+export const isAscii = (label) => { 
+    for (let i = 0; i < label.length; i++) {
+        const c = label.charCodeAt(i)
+        if( !(c >= 32 && c < 127) ) {
+            return false;
+        }
+    }
+    return true;
 }
 
 export const getLength = (label) => { 

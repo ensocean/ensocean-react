@@ -25,8 +25,14 @@ const GET_DOMAINS = gql`
             expires
             registered
             created
-            owner
-            registrant
+            owner {
+              id
+              primaryName
+            }
+            registrant {
+              id
+              primaryName
+            }
         }
     }
 `;
@@ -35,30 +41,45 @@ const Find = () => {
     const location = useLocation(); 
     const navigate = useNavigate(); 
     const input = useRef();
-    const [query, setQuery] = useState(null); 
-    const [domain, setDomain] = useState(null); 
-    const [options, setOptions] = useState(null); 
-    const [available, setAvailable] = useState(false);
-    const [isValid, setIsValid] = useState(true);
+    const [query, setQuery] = useState(null);  
+    const [options, setOptions] = useState(null);  
     const [activeClass, setActiveClass] = useState("");
-    const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS); 
+    const [getDomains, { data, loading, error }] = useLazyQuery(GET_DOMAINS); 
     const {  inCart } = useCart();
      
+     
+    
+    const handleSubmit = async (e) => { 
+      e.preventDefault();  
+      if(!isValidName(input.current.value)) {
+        setActiveClass("is-invalid");
+        return;
+      }
+      const domain = normalizeName(input.current.value);
+      navigate("/find?q="+ domain);
+      return false;
+    }
+
+    const handleChange = (e) => {   
+      //e.preventDefault();
+      if(!isValidName(input.current.value)) {
+        setActiveClass("is-invalid");
+        return;
+      }
+      const domain = normalizeName(input.current.value);
+      navigate("/find?q="+ domain);
+      return false;
+    };
+
     useEffect(()=> {
       const search = new URLSearchParams(location.search);
       let q = search.get("q") || "";
-      handleSearch(q); 
-    }, [location]);
-
-    const handleSearch = async (q) => {
-       
+      
       q = q.toLowerCase().trim(); 
       setQuery(q); 
       setActiveClass("");
        
-      if(getLength(q) < 3) {
-          setIsValid(false);
-          setAvailable(false); 
+      if(getLength(q) < 3) {  
           return;
       } 
 
@@ -66,9 +87,7 @@ const Find = () => {
           q = q.substring(0, q.lastIndexOf(".eth"));
       }
 
-      if(!isValidDomain(q)) {  
-          setIsValid(false);
-          setAvailable(false);  
+      if(!isValidDomain(q)) {    
           setActiveClass("is-invalid");
           return;
       } 
@@ -76,7 +95,7 @@ const Find = () => {
       let options = [ { id: getLabelHash(q), label: q, extension: "eth", expires: null, price: 0, available: false, valid: isValidDomain(q) }]; 
       const labels = options.map(t=> t.id);
 
-      const { data } = await getDomains({ variables: { labels }});
+       getDomains({ variables: { labels }});
       
       if(data && data.domains.length > 0) {
         options = options.map(item => { 
@@ -117,48 +136,22 @@ const Find = () => {
         setOptions(options)
         let domain = options[0];
 
-        if(isExpired(domain.expires)) {
-          setAvailable(true); 
+        if(isExpired(domain.expires)) { 
           setActiveClass("is-valid");
-        } else if(isExpiring(domain.expires)) {
-          setAvailable(false);
+        } else if(isExpiring(domain.expires)) { 
           setActiveClass("has-warning");
-        }else if(isPremium(domain.expires)) {
-          setAvailable(true);
+        }else if(isPremium(domain.expires)) { 
           setActiveClass("is-valid");
-        } else {
-          setAvailable(false);
+        } else { 
           setActiveClass("");
         }
         
       } else {
-        setOptions(options);
-        setAvailable(true);
+        setOptions(options); 
         setActiveClass("is-valid");
       }
-    }
 
-    const handleSubmit = async (e) => { 
-      e.preventDefault();  
-      if(!isValidName(input.current.value)) {
-        setActiveClass("is-invalid");
-        return;
-      }
-      const domain = normalizeName(input.current.value);
-      navigate("/find?q="+ domain);
-      return false;
-    }
-
-    const handleChange = (e) => {   
-      //e.preventDefault();
-      if(!isValidName(input.current.value)) {
-        setActiveClass("is-invalid");
-        return;
-      }
-      const domain = normalizeName(input.current.value);
-      navigate("/find?q="+ domain);
-      return false;
-    };
+    }, [location, data, getDomains]);
   
     return (
         <>  
@@ -187,6 +180,7 @@ const Find = () => {
           </div>
           <div className="row">
             <div className="col-lg-12 pt-3 text-center"> 
+              {error && <span className="text-danger">There was an error. Please try again.</span>}
               {!query && <span className="text-muted text-center fs-6 fw-bold">Type 3 charcters or more to search.</span>}
               {!loading && query && options && options.length > 0 &&    
               <>

@@ -30,15 +30,15 @@ const AccountInfo = () => {
     });  
     
     if(isFetching) return (
-        <div class="row placeholder-glow">
-            <div class="col-2 col-lg-1 text-end">
-                    <div className="card mb-2 h-100">
-                    <span className="placeholder col-12 w-100" style={{width:100, height:100}}></span>
+        <div class="d-flex placeholder-glow">
+            <div class="flex-shrink-0">
+                <div className="card placeholder-glow  mb-2" style={{width:100, height:100}}>
+                    <span className="placeholder col-12 w-100 h-100 "></span>
                 </div>
             </div>
-            <div class="col-10 col-lg-11 ps-0">
-                <span className="placeholder col-4"></span>
-                <div className="d-flex flex-row mt-3">
+            <div class="flex-grow-1 ms-3 text-truncate">
+                <span className="text-truncate placeholder col-4"></span> 
+                <div className="d-flex gap-3">
                     <span className="placeholder col-3"></span>
                 </div>
             </div>
@@ -65,18 +65,18 @@ const AccountInfo = () => {
                         <img ref={imgRef} id={addr} width={100} height={100} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
                     </div>
                 </div>
-                <div class="flex-grow-1 ms-3 text-truncate">
+                <div class="flex-grow-1 ms-3">
                     <h2 className="text-truncate">{primaryName || obscureAddress(addr)}</h2>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={addr} onCopy={() => toast.success("Address copied") }>
-                            <a href="#">
+                            <span rule="button">
                                 <Clipboard className="text-white" />
-                            </a>
+                            </span>
                         </CopyToClipboard>
                         <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Link copied") }>
-                            <a href="#">
+                            <span rule="button">
                                 <Share className="text-white" />
-                            </a>
+                            </span>
                         </CopyToClipboard>
                         <a target="_blank" rel="noreferrer" href={"https://etherscan.io/address/"+ addr} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="View on etherscan.io" className='text-white'>
                             <img src={etherscanIcon} width={20} height={20} alt="" />
@@ -85,9 +85,9 @@ const AccountInfo = () => {
                             <img src={openseaIcon}  width={24} height={24} alt="" />
                         </a> 
                         <div className="dropdown p-0">
-                            <a className="" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <List />
-                            </a> 
+                            </span> 
                             <ul className="dropdown-menu">
                                 <li className="p-0">
                                     <a className="dropdown-item" target="_blank" rel="noreferrer" href={"https://x2y2.io/user/"+ addr}>
