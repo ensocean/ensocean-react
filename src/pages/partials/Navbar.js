@@ -12,7 +12,7 @@ const Navbar = ({showSearch}) => {
         <> 
         <nav id="navbar" className="navbar navbar-expand-lg ">
             <div className="container-fluid p-0 d-flex flex-row gap-1">
-                <a className="navbar-brand me-1" title="EnsOcean" href="/">
+                <a className="navbar-brand me-1 fw-bold fs-3" title="EnsOcean" href="/">
                     <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
                     EnsOcean
                 </a>

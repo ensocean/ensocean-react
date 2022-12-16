@@ -2,9 +2,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useParams } from "react-router-dom";
 import { getTokenId, obscureAddress } from "../../helpers/String"; 
 import notAvailable from "../../assets/not-available.svg";
-import spinner from '../../assets/spinner.svg'
-import clipboardIcon from '../../assets/clipboard-white.svg'
-import shareIcon from '../../assets/share-light.svg'
+import spinner from '../../assets/spinner.svg' 
 import etherscanIcon from '../../assets/etherscan.svg'
 import x2y2Icon from "../../assets/x2y2.svg";
 import raribleIcon from "../../assets/rarible.svg";
@@ -14,9 +12,9 @@ import listIcon from "../../assets/list-white.svg";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { useContractRead } from "wagmi";
-import reverseLookupAbi from "../../abis/ReverseLookup.json";
-import { Spinner } from "react-bootstrap";
+import reverseLookupAbi from "../../abis/ReverseLookup.json"; 
 import { useRef } from "react";
+import { Clipboard, Share } from "react-bootstrap-icons";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
@@ -36,7 +34,7 @@ const AccountInfo = ({  }) => {
         <div class="row placeholder-glow">
             <div class="col-2 col-lg-1 text-end">
                     <div className="card mb-2 h-100">
-                    <span className="placeholder col-12 w-100"></span>
+                    <span className="placeholder col-12 w-100" style={{width:100, height:100}}></span>
                 </div>
             </div>
             <div class="col-10 col-lg-11 ps-0">
@@ -51,32 +49,34 @@ const AccountInfo = ({  }) => {
     if(!isFetching && data) {
         const primaryName = data[0];
         return (
-            <div class="row">
-                <div class="col-2 col-lg-1">
+            <div class="d-flex">
+                <div class="flex-shrink-0">
                     <div className="card mb-2">
                         <LazyLoadImage 
                             alt={addr} 
                             className="img-fluid card-img-top card-img-bottom rounded-1"
                             onError={(e)=> { imgRef.current.classList.add("d-none"); e.target.src = notAvailable; e.target.alt="Not available" }}
                             afterLoad={(e)=> { imgRef.current.classList.add("d-none")  }}
-                            placeholder={<img src={spinner} className="img-fluid card-img-top card-img-bottom" alt="" />}
+                            placeholder={<img src={spinner} width={100} height={100} className="img-fluid card-img-top card-img-bottom" alt="" />}
                             placeholderSrc={spinner} 
+                            width={100} 
+                            height={100}
                             src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(primaryName.replace(".eth", ""))) }
                             />  
-                        <img ref={imgRef} id={addr} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
+                        <img ref={imgRef} id={addr} width={100} height={100} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
                     </div>
                 </div>
-                <div class="col-10 col-lg-11 ps-0">
+                <div class="flex-grow-1 ms-3 text-truncate">
                     <h2 className="text-truncate">{primaryName || obscureAddress(addr)}</h2>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={addr} onCopy={() => toast.success("Address copied") }>
                             <a href="#">
-                                <img src={clipboardIcon} width={20} height={20} alt="" />
+                                <Clipboard className="text-white" />
                             </a>
                         </CopyToClipboard>
                         <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Link copied") }>
                             <a href="#">
-                                <img src={shareIcon} width={20} height={20} alt="" />
+                                <Share className="text-white" />
                             </a>
                         </CopyToClipboard>
                         <a target="_blank" rel="noreferrer" href={"https://etherscan.io/address/"+ addr} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="View on etherscan.io" className='text-white'>
@@ -84,8 +84,7 @@ const AccountInfo = ({  }) => {
                         </a>
                         <a target="_blank" rel="noreferrer" href={"https://opensea.io/"+ addr}>
                             <img src={openseaIcon}  width={24} height={24} alt="" />
-                        </a>
-                        
+                        </a> 
                         <div className="dropdown p-0">
                             <a className="" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src={listIcon}  width={22} height={22} alt="" />

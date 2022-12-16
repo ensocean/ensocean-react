@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Tabs = ({tab}) => { 
     return (
-        <ul className="nav card-header-tabs">
+        <ul className="nav nav-tabs card-header-tabs flex-nowrap overflow-scroll text-nowrap">
             <li className="nav-item">
                 <Link className={"nav-link fs-5 p-3 "+ (tab === "all" || tab === null || tab === "" ? "active": "") } to="/discover?tab=all">All</Link>
             </li>

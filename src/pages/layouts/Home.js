@@ -2,8 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom"; 
 import Footer from "../partials/Footer"; 
 import Navbar from "../partials/Navbar"; 
-import AlertNetwork from "../../components/AlertNetwork";
-import { Carousel } from "react-bootstrap";
+import AlertNetwork from "../../components/AlertNetwork"; 
 
 const Home = () => { 
   return (

@@ -1,15 +1,12 @@
 import React, { useState, useRef, useEffect }  from "react"; 
-import { useLocation, Link, useNavigate} from "react-router-dom";  
-import {Helmet} from "react-helmet-async";
+import { useLocation, useNavigate} from "react-router-dom";  
+import { Helmet } from "react-helmet-async";
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getTokenId, obscureLabel, isNonAscii, getDateSimple, obscureAddress, getExpires, getDateString, isAvailable} from '../helpers/String';
-import ImageSmall from "../components/ImageSmall";
-import DomainLink from "../components/DomainLink";
+import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getExpires, getDateString, isAvailable} from '../helpers/String';
 import AddToCartButton from "../components/AddToCartButton";
 import ClaimNowButton from "../components/ClaimNowButton";
 import { useCart } from "react-use-cart";
-import ViewYourCartButton from "../components/ViewYourCartButton";
-import DomainCardInline from "../components/DomainCardInline";
+import ViewYourCartButton from "../components/ViewYourCartButton"; 
 import { Search } from "react-bootstrap-icons";
 import { Spinner } from "react-bootstrap";
 import { DelayInput } from "react-delay-input";
@@ -45,7 +42,7 @@ const Find = () => {
     const [isValid, setIsValid] = useState(true);
     const [activeClass, setActiveClass] = useState("");
     const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS); 
-    const { addItem, removeItem, inCart } = useCart();
+    const {  inCart } = useCart();
      
     useEffect(()=> {
       const search = new URLSearchParams(location.search);

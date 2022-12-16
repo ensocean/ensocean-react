@@ -1,11 +1,11 @@
 import { gql, useLazyQuery } from "@apollo/client";
-import { Link } from "react-router-dom";  
-import refreshIcon from "../../assets/arrow-repeat.svg";
-import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg'
+import { Link } from "react-router-dom";   
 import DomainLink from "../../components/DomainLink";
 import ImageSmall from "../../components/ImageSmall";  
 import DomainStatus from "../../components/DomainStatus";
 import AddToWatchlistSmallButton from "../../components/AddToWatchlistSmallButton"; 
+import { Spinner } from "react-bootstrap";
+import { ArrowRepeat } from "react-bootstrap-icons";
  
 const RECENTLY_REGISTERED = gql`
 {
@@ -46,12 +46,12 @@ const RecentRegistered = () => {
         <div className="card">
           <div className="card-header d-flex justify-content-between">
               <h5 className='fs-4 m-1'>Recently Registered</h5>
-              <button className={loading ? "btn btn-outline-light disabled": "btn btn-outline-light"}>
+              <button onClick={handleRefresh} disabled={loading?"disabled": ""} className={"btn btn-outline-light text-dark"}>
                 {loading &&
-                    <img src={arrowRepeatSpinIcon} alt="" /> 
+                    <Spinner animation="border" variant="dark" size="sm" />
                 }
                 {!loading &&
-                    <img src={refreshIcon} alt="" onClick={handleRefresh} /> 
+                    <ArrowRepeat />
                 }
               </button>
           </div> 

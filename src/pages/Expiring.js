@@ -3,8 +3,7 @@ import Filter from "./partials/Filter";
 import {Helmet} from "react-helmet-async";
 import Tabs from "./partials/Tabs";
 import moment from "moment";
- 
-const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
+  
 const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
 
 const Expiring = () => {  

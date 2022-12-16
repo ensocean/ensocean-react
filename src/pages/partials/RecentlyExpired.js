@@ -1,14 +1,14 @@
 import React from "react"; 
 import { useLazyQuery, gql } from "@apollo/client";
 import { Link } from "react-router-dom";
-import { getExpireCondition } from "../../helpers/String";
-import arrowRepeatSpinIcon from '../../assets/arrow-repeat-spin.svg' 
-import refreshIcon from "../../assets/arrow-repeat.svg"; 
+import { getExpireCondition } from "../../helpers/String"; 
 import DomainLink from "../../components/DomainLink";
 import ImageSmall from "../../components/ImageSmall";
 import DomainStatus from "../../components/DomainStatus";
 import AddToCartSmallButton from "../../components/AddToCartSmallButton"; 
 import AddToWatchlistSmallButton from "../../components/AddToWatchlistSmallButton"; 
+import { Spinner } from "react-bootstrap";
+import { ArrowRepeat } from "react-bootstrap-icons";
   
 const RECENTLY_EXPIRED = gql`
 {
@@ -52,13 +52,13 @@ const RecentExpired = () => {
         <div className="card">
           <div className="card-header d-flex justify-content-between">
               <h5 className='fs-4 m-1'>Just Dropped</h5>
-              <button className={loading ? "btn btn-outline-light disabled": "btn btn-outline-light"}>
-              {loading &&
-                <img src={arrowRepeatSpinIcon} alt="" /> 
-              }
-              {!loading &&
-                <img src={refreshIcon} alt="" onClick={handleRefresh} /> 
-              }
+              <button onClick={handleRefresh} disabled={loading?"disabled": ""} className={"btn btn-outline-light text-dark"}>
+                {loading &&
+                    <Spinner animation="border" variant="dark" size="sm" />
+                }
+                {!loading &&
+                    <ArrowRepeat />
+                }
               </button>
           </div> 
           <ol className="list-group list-group-flush placeholder-glow">
