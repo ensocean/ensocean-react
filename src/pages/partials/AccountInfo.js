@@ -30,15 +30,15 @@ const AccountInfo = () => {
     });  
     
     if(isFetching) return (
-        <div class="row placeholder-glow">
-            <div class="col-2 col-lg-1 text-end">
-                    <div className="card mb-2 h-100">
-                    <span className="placeholder col-12 w-100" style={{width:100, height:100}}></span>
+        <div class="d-flex placeholder-glow">
+            <div class="flex-shrink-0">
+                <div className="card placeholder-glow  mb-2" style={{width:100, height:100}}>
+                    <span className="placeholder col-12 w-100 h-100 "></span>
                 </div>
             </div>
-            <div class="col-10 col-lg-11 ps-0">
-                <span className="placeholder col-4"></span>
-                <div className="d-flex flex-row mt-3">
+            <div class="flex-grow-1 ms-3 text-truncate">
+                <span className="text-truncate placeholder col-4"></span> 
+                <div className="d-flex gap-3">
                     <span className="placeholder col-3"></span>
                 </div>
             </div>
