@@ -65,18 +65,18 @@ const AccountInfo = () => {
                         <img ref={imgRef} id={addr} width={100} height={100} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
                     </div>
                 </div>
-                <div class="flex-grow-1 ms-3 text-truncate">
+                <div class="flex-grow-1 ms-3">
                     <h2 className="text-truncate">{primaryName || obscureAddress(addr)}</h2>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={addr} onCopy={() => toast.success("Address copied") }>
-                            <a href="#">
+                            <span rule="button">
                                 <Clipboard className="text-white" />
-                            </a>
+                            </span>
                         </CopyToClipboard>
                         <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Link copied") }>
-                            <a href="#">
+                            <span rule="button">
                                 <Share className="text-white" />
-                            </a>
+                            </span>
                         </CopyToClipboard>
                         <a target="_blank" rel="noreferrer" href={"https://etherscan.io/address/"+ addr} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="View on etherscan.io" className='text-white'>
                             <img src={etherscanIcon} width={20} height={20} alt="" />
@@ -85,9 +85,9 @@ const AccountInfo = () => {
                             <img src={openseaIcon}  width={24} height={24} alt="" />
                         </a> 
                         <div className="dropdown p-0">
-                            <a className="" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <List />
-                            </a> 
+                            </span> 
                             <ul className="dropdown-menu">
                                 <li className="p-0">
                                     <a className="dropdown-item" target="_blank" rel="noreferrer" href={"https://x2y2.io/user/"+ addr}>

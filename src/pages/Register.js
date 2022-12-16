@@ -1,26 +1,22 @@
 import {Helmet} from "react-helmet-async";
 import { useCart } from "react-use-cart";
-import { Trash, X, ArrowClockwise } from "react-bootstrap-icons";
+import { Trash, ArrowClockwise } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import DomainLink from "../components/DomainLink";
-import { useAccount, useNetwork, useContractRead } from 'wagmi';
+import { useContractRead } from 'wagmi';
 import bulkControllerAbi from "../abis/BulkEthRegistrarController.json";
 import { getDurationSeconds, ZERO_ADDRESS } from "../helpers/String";
-import { BigNumber, ethers } from "ethers";
-import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import {DelayInput} from 'react-delay-input';
+import { useState } from "react";
+import { ethers } from "ethers";
 
 const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS;
-const BULK_CONTROLLER_ADDRESS = process.env.REACT_APP_BULK_CONTROLLER_ADDRESS;
-const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
+const BULK_CONTROLLER_ADDRESS = process.env.REACT_APP_BULK_CONTROLLER_ADDRESS; 
 const DEFAULT_RESOLVER = process.env.REACT_APP_DEFAULT_RESOLVER;
 const MIN_REGISTRATION_DURATION = process.env.REACT_APP_MIN_REGISTRATION_DURATION;
-
   
-const Register = () => {
-  const { isConnected, address } = useAccount();   
-  const { chain } = useNetwork();
+const Register = () => {  
   const { isEmpty, totalUniqueItems, getItem, items, updateItem, removeItem, emptyCart } = useCart();
   const [validationError, setValidationError] = useState(null);
   const [hasError, setHasError] = useState(null);
@@ -35,18 +31,13 @@ const Register = () => {
     }
   });
   
-  const { data, isLoading, isError, refetch, isFetching, isRefetching, isSuccess, error, isFetched } = useContractRead({
+  const { data, isError, refetch, isFetching, error } = useContractRead({
     addressOrName: BULK_CONTROLLER_ADDRESS,
     contractInterface: bulkControllerAbi,
     functionName: "bulkRentPrice",
     args: [ENS_CONTROLLER_ADDRESS, query]
   });  
-
-
-  const isSupportedNetwork = () => {
-    return isConnected && SUPPORTED_CHAIN_ID !== chain?.id;
-  }
-
+  
   const handleDurationChange = (e, item) => {   
     const value = e.target.value; 
     const newItem = getItem(item.id);
@@ -116,10 +107,10 @@ const Register = () => {
                 <table className="table">
                   <thead className="fw-bold fs-4">
                     <tr>
-                      <td scope="col">Name</td>
-                      <td scope="col">Duration</td>
-                      <td scope="col">Price</td>
-                      <td scope="col"></td>
+                      <th scope="col">Name</th>
+                      <th scope="col">Duration</th>
+                      <th scope="col">Price</th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>

@@ -1,17 +1,12 @@
 
- import { isAvailable, isExpired } from '../helpers/String';
-import AddToCartButton from './AddToCartButton';
-import ClaimNowButton from './ClaimNowButton';
 import DomainLink from './DomainLink';
-import ImageSmall from './ImageSmall';
-import ViewYourCartButton from './ViewYourCartButton';
-import {CartProvider, useCart} from "react-use-cart";
+import ImageSmall from './ImageSmall'; 
 import DomainStatus from './DomainStatus';
 import AddToWatchlistSmallButton from './AddToWatchlistSmallButton';
 import AddToCartSmallButton from './AddToCartSmallButton';
    
-function DomainCardInline({domain, showBadge = true, showRegistered=false, showNotAvailable=false, showAddToCartButton=false, showExpires=false, imageWidth=32, imageHeight=32}) { 
-    const {inCart} = useCart();
+function DomainCardInline({domain}) { 
+
     return (
         <div className="d-flex align-items-center">
             <div className="flex-shrink-0">
@@ -31,7 +26,7 @@ function DomainCardInline({domain, showBadge = true, showRegistered=false, showN
                     <DomainStatus domain={domain}  />
                 </div>  
             </div>
-            </div> 
+        </div> 
     )
 }
 

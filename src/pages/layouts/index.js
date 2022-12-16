@@ -1,4 +1,9 @@
 import Home from "./Home";
 import Page from "./Page";
 
-export default {Home, Page}; 
+const Layouts = {
+    Home,
+    Page,
+};
+
+export default Layouts; 
