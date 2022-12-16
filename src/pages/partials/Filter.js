@@ -2,19 +2,13 @@ import React, {useState, useEffect } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { getExpires, getTimeAgo, jsonParse, jsonStringify, getTokenId } from '../../helpers/String';
 import { useLazyQuery, gql } from '@apollo/client'; 
-import { CSVLink } from "react-csv"; 
-import fileTypeCsv from "../../assets/filetype-csv.svg";
-import listUl from "../../assets/list-ul.svg";
-import gridFill from "../../assets/grid-fill.svg";
-import funnelFill from "../../assets/funnel-fill.svg";
-import arrowRepeat from "../../assets/arrow-repeat.svg";
-import arrowRepeatSpin from "../../assets/arrow-repeat-spin.svg";
-import searchIcon from "../../assets/search.svg";
-import sortUp from "../../assets/sort-up.svg";
-import sortDown from "../../assets/sort-down.svg"; 
+import { CSVLink } from "react-csv";  
 import OwnerLink from "../../components/OwnerLink";
 import DomainCardInline from "../../components/DomainCardInline";
 import DomainCard from "../../components/DomainCard"; 
+import { DelayInput } from "react-delay-input";
+import { ArrowRepeat, FiletypeCsv, FunnelFill, GridFill, ListUl, Search, SortDown, SortUp } from "react-bootstrap-icons";
+import { Spinner } from "react-bootstrap";
   
 const DEBOUNCE_INTERVAL = 500; 
  
@@ -41,7 +35,8 @@ let defaultTags = [
     "only-digit",
     "include-unicode", 
     "include-emoji", 
-    "include-arabic"
+    "include-arabic",
+    "palindrome"
 ];
  
 const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => { 
@@ -156,7 +151,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const changeFilter = (value, prop) => {
         let _query = new URLSearchParams(search) 
         let newWhere = jsonParse(_query.get("filter")) || where;
-        if(value === null || value === undefined || value === "" || value === "0" || value < 1) { 
+        if(value === null || value === undefined || value === "" || value === "0" || Number(value) < 1) { 
             delete newWhere[prop]; 
             setFilterCount(filterCount - 1);
         }  else {  
@@ -204,20 +199,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     
     const onKeydownSearch = (e) => {
         if( e.key === "Enter" ) {
-            clearTimeout(timeout);
+            clearTimeout(timeout); 
             changeFilter(e.target.value, "label_contains_nocase");
         }
     }
 
     const onChangeSearch = (e) => { 
-        if(timeout) {  
-            clearTimeout(timeout);
-        } 
- 
-        timeout = setTimeout(()=> { 
-            changeFilter(e.target.value, "label_contains_nocase");
-        }, DEBOUNCE_INTERVAL); 
- 
+        changeFilter(e.target.value, "label_contains_nocase");
     }
 
     const onKeydownStartwith = (e) => {
@@ -354,7 +342,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 <div className="flex-grow-1"> 
                     <div className="d-flex flex-row gap-2">
                         <button className="btn btn-outline-light rounded-0 border position-relative"  type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
-                            <img src={funnelFill} alt= ""  />
+                            <FunnelFill className="text-dark" />
                             {filterCount > 0 && 
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                     {filterCount}
@@ -362,14 +350,14 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                 </span>
                             }
                         </button>
-                        <button className="btn btn-outline-light rounded-0 border" type="button" onClick={handleRefreshClick}>
-                                <img src={loading ? arrowRepeatSpin: arrowRepeat } alt= ""  />
+                        <button className="btn btn-outline-light rounded-0 border" disabled={loading?"disabled": ""} type="button" onClick={handleRefreshClick}>
+                            {loading ? <Spinner animation="border" variant="dark" size="sm" /> : <ArrowRepeat  className="text-dark" /> }
                         </button>
                         <div className="input-group input-group-lg">
                             <span className="input-group-text bg-light border-end-0 rounded-0">
-                                <img src={searchIcon} alt= ""  />
+                                <Search className="text-dark" />
                             </span>
-                            <input type="text" className="form-control border-start-0 rounded-0" name="searchText" onChange={onChangeSearch} onKeyDown={onKeydownSearch} defaultValue={where?.label_contains_nocase} placeholder="Search Name"  /> 
+                            <DelayInput minLength={1} delayTimeout={300} className={"form-control border-start-0 rounded-0"} name="searchText" onChange={onChangeSearch} onKeyDown={onKeydownSearch} value={where?.label_contains_nocase} placeholder="Search Name" />
                         </div> 
                     </div> 
                 </div>
@@ -385,12 +373,12 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </select>
                     {orderDirection === "desc" &&
                         <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
-                            <img src={sortUp} alt= ""  />
+                            <SortUp className="text-dark" />
                         </button>
                     }
                     {orderDirection === "asc" &&
                         <button className="btn btn-outline-light rounded-0 border" type="button"  onClick={handleOrderDirection} >
-                            <img src={sortDown} alt= ""  />
+                            <SortDown className="text-dark" />
                         </button>
                     }
                 </div>
@@ -470,7 +458,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 <div className="container-fluid d-flex justify-content-between p-0">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                            <img src={fileTypeCsv} alt= "" />
+                            <FiletypeCsv className="text-dark" />
                         </CSVLink> 
                     </div>
                     
@@ -485,10 +473,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
 
                     <div className="view-types d-flex gap-2">
                         <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                            <img src={listUl} alt= "" />
+                            <ListUl className="text-dark" />
                         </button>  
                         <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                            <img src={gridFill} alt= "" />
+                            <GridFill  className="text-dark" />
                         </button>
                     </div> 
                 </div>
@@ -498,7 +486,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 <div className="container-fluid d-flex justify-content-between p-0">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                            <img src={fileTypeCsv} alt= "" />
+                            <FiletypeCsv className="text-dark" />
                         </CSVLink> 
                     </div> 
                     <div className="paging d-flex gap-2"> 
@@ -511,10 +499,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </div> 
                     <div className="view-types d-flex gap-2">
                         <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                            <img src={listUl} alt= "" />
+                            <ListUl className="text-dark" />
                         </button>  
                         <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                            <img src={gridFill} alt= "" />
+                            <GridFill className="text-dark" />
                         </button>
                     </div> 
                 </div>  
@@ -625,7 +613,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                     {data && 
                         <>
                         {data.domains.map((domain) => (
-                        <div className="col mb-3" key={domain.id}>
+                        <div className="col mb-3 p-1" key={domain.id}>
                             <DomainCard domain={domain} />
                         </div> 
                         ))}

@@ -1,6 +1,5 @@
  
-import { useQuery, gql } from "@apollo/client";
-import { Link } from "react-router-dom";
+import { useQuery, gql } from "@apollo/client"; 
 import OwnerLink from "../../components/OwnerLink";
 import { getTimeAgo, obscureAddress } from "../../helpers/String";
 
@@ -21,9 +20,11 @@ const DOMAIN_EVENTS = gql`
             name
             from {
                 id
+                primaryName
             }
             to {
                 id
+                primaryName
             }
             cost
             expires

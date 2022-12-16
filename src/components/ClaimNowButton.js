@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from "react";
-import { useCart } from "react-use-cart";
-import { Check2, X } from "react-bootstrap-icons";
+import React from "react";
+import { useCart } from "react-use-cart"; 
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -12,17 +11,9 @@ function ClaimNowButton({loading, domain}) {
     Object.preventExtensions(_domain);
 
     const navigate = useNavigate(); 
-    const { addItem, removeItem, inCart, totalUniqueItems } = useCart();
-    const [showRemove, setShowRemove] = useState(false);
+    const { addItem, inCart, totalUniqueItems } = useCart(); 
    
-    const handleMouseOver = (e) => {
-        setShowRemove(true);
-    }
-
-    const handleMouseOut = (e) => {
-        setShowRemove(false);
-    }
-
+     
     const addToCart = () => {
         if(totalUniqueItems >= MAX_CART_ITEM_COUNT)
         {

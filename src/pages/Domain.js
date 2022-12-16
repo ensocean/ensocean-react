@@ -1,21 +1,19 @@
 import React  from "react";
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
-import {Helmet} from "react-helmet";
-import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
+import {Helmet} from "react-helmet-async";
+import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify"; 
-import DomainEvents from "./partials/DomainEvents"; 
-import shareIcon from '../assets/share-white.svg'
-import clipboardIcon from "../assets/clipboard.svg";  
+import DomainEvents from "./partials/DomainEvents";  
 import etherScanIcon from "../assets/etherscan.svg"; 
 import DomainLabel from "../components/DomainLabel"; 
 import OwnerLink from "../components/OwnerLink";
 import AlertDomain from "../components/AlertDomain";
 import DomainImage from "../components/DomainImage";  
+import { Clipboard, ShareFill } from "react-bootstrap-icons";
 
-const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
-const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
+const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS;  
 const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
 
 const DOMAIN_DETAILS = gql`
@@ -33,9 +31,11 @@ const DOMAIN_DETAILS = gql`
             expires
             owner {
                 id
+                primaryName
             }
             registrant {
                 id
+                primaryName
             }
             length
             extension
@@ -52,13 +52,7 @@ const Domain = () => {
     const { data, loading, error } = useQuery(DOMAIN_DETAILS, {
         variables: { id },
     });  
-
-    const encodeHtml = (text) => {
-        return text.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-            return '&#'+i.charCodeAt(0)+';';
-        });
-    }
-     
+  
     if(loading) {
         return (
             <>
@@ -125,20 +119,21 @@ const Domain = () => {
                     <title>{label}.{extension} - EnsOcean</title>
                     <meta name="description" content={label +"."+ extension +" is available right now. Claim Now."} />
                 </Helmet>  
-                <div className="container-fluid bg-primary mb-4">
-                    <div className="container p-3 text-white">
-                        <div className='d-flex justify-content-between align-items-center'> 
-                            <div className='d-flex justify-content-start align-items-center gap-3 text-truncate'>
-                                <h1 className='m-auto fs-1 fw-bold text-truncate pe-3'>
+                <div className="container-fluid bg-primary text-white p-3 mb-4">
+                    <div className="container">
+                        <div className='d-flex flex-column flex-lg-row justify-content-start align-items-lg-center gap-3'> 
+                            <div className='d-flex align-items-start text-truncate'>
+                                <h1 className='fs-1 fw-bold text-truncate pe-3'>
                                    <DomainLabel label={label} />
                                 </h1>
                             </div> 
                             <div className='d-flex align-items-center gap-3'> 
+                                <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
+                                    <img src={etherScanIcon} width={32} height={32}  alt= "" />
+                                </a>
                                 <CopyToClipboard text={window.location.href}
                                     onCopy={() => toast.success("Link Copied") }>
-                                    <span className='cursor-pointer'>
-                                        <img src={shareIcon} width={32} height={32} alt=""  />
-                                    </span>
+                                     <ShareFill role="button" width={32} height={32} />
                                 </CopyToClipboard> 
                             </div> 
                         </div>
@@ -148,7 +143,7 @@ const Domain = () => {
                     <div className='container'>
                         <div className="row">
                             <div className="col-lg-12">
-                                <AlertDomain label={label} />
+                                <AlertDomain domain={{ label: label }} />
                             </div>
                         </div>
                         <div className="row"> 
@@ -167,8 +162,8 @@ const Domain = () => {
                                     <li className='list-group-item border-0 p-0 pb-3'>
                                         <CopyToClipboard text={getLabelHash(label)}
                                             onCopy={() => toast.success("TokenId Copied") }>
-                                            <span className="cursor-pointer float-end">
-                                                <img src={clipboardIcon} alt="" />
+                                            <span role="button" className="cursor-pointer float-end">
+                                               <Clipboard />
                                             </span>
                                         </CopyToClipboard> 
                                         <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(getLabelHash(label), 25)}</span>
@@ -179,8 +174,8 @@ const Domain = () => {
                                     <li className='list-group-item border-0 p-0 pb-3'>  
                                         <CopyToClipboard text={getTokenId(label)}
                                             onCopy={() => toast.success("TokenId Copied") }>
-                                            <span className="cursor-pointer float-end">
-                                                <img src={clipboardIcon} alt="" />
+                                            <span role="button" className="cursor-pointer float-end">
+                                                <Clipboard />
                                             </span>
                                         </CopyToClipboard> 
                                         <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureLabel(getTokenId(label), 25)}</span>
@@ -226,27 +221,25 @@ const Domain = () => {
                 <meta name="description" content={(domain.label || label) +"."+ (domain.extension) +" was registered "+ getDateSimple(domain.registered) +" but is premium right now. Claim Now."} />
               }
             </Helmet> 
-            <div className="container-fluid bg-primary mb-4">
-                    <div className="container p-3 text-white">
-                        <div className='d-flex justify-content-between align-items-center'> 
-                            <div className='d-flex justify-content-start align-items-center gap-3 text-truncate'>
-                                <h1 className='m-auto fs-1 fw-bold text-truncate pe-3'>
-                                    <DomainLabel domain={domain} /> 
-                                </h1>
-                            </div> 
-                            <div className='d-flex align-items-center gap-3'> 
-                                <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
-                                    <img src={etherScanIcon} width={32} height={32}  alt= "" />
-                                </a>
-                                <CopyToClipboard text={window.location.href}
-                                    onCopy={ () => toast.success("Link Copied") }>
-                                    <span className='cursor-pointer' >
-                                        <img src={shareIcon} width={32} alt= "" className="text-white" />
-                                    </span>
-                                </CopyToClipboard> 
-                            </div>  
-                        </div>
-                    </div> 
+            <div className="container-fluid bg-primary text-white p-3 mb-4">
+                <div className="container">
+                    <div className='d-flex flex-column flex-lg-row justify-content-start align-items-lg-center gap-3'> 
+                        <div className='d-flex align-items-start text-truncate'>
+                            <h1 className='fs-1 fw-bold text-truncate pe-3'>
+                                <DomainLabel domain={domain} /> 
+                            </h1>
+                        </div> 
+                        <div className='d-flex flex-row gap-3'> 
+                            <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
+                                <img src={etherScanIcon} width={32} height={32}  alt= "" />
+                            </a>
+                            <CopyToClipboard text={window.location.href}
+                                onCopy={ () => toast.success("Link Copied") }>
+                                <ShareFill role="button" width={32} height={32} />
+                            </CopyToClipboard> 
+                        </div>  
+                    </div>
+                </div>
             </div>
             <div className='container-fluid'>
                 <div className='container'>
@@ -274,8 +267,8 @@ const Domain = () => {
                                     <li className='list-group-item border-0 p-0 pb-3'>
                                         <CopyToClipboard text={domain.id}
                                             onCopy={() => toast.success("TokenId Copied") }>
-                                            <span className="cursor-pointer float-end">
-                                                <img src={clipboardIcon} alt="" />
+                                            <span role="button" className="cursor-pointer float-end">
+                                                <Clipboard />
                                             </span>
                                         </CopyToClipboard> 
                                         <span className='fw-bold fs-6 text-muted'>Hash </span> <span className='float-end me-2'>{obscureAddress(domain.id, 25)}</span>
@@ -286,8 +279,8 @@ const Domain = () => {
                                     <li className='list-group-item border-0 p-0 pb-3'>
                                         <CopyToClipboard text={getTokenId(domain.label || label)}
                                             onCopy={() => toast.success("TokenId Copied") }>
-                                            <span className="cursor-pointer float-end">
-                                                <img src={clipboardIcon} alt="" />
+                                            <span role="button" className="cursor-pointer float-end">
+                                            <Clipboard />
                                             </span>
                                         </CopyToClipboard> 
                                         <span className='fw-bold fs-6 text-muted'>Token ID </span> <span className='float-end me-2'>{obscureAddress(getTokenId(domain.label || label), 25)}</span>

@@ -1,10 +1,9 @@
 import React from "react";  
 import Filter from "./partials/Filter"; 
-import {Helmet} from "react-helmet";  
+import {Helmet} from "react-helmet-async";
 import Tabs from "./partials/Tabs";
 import moment from "moment";
- 
-const GRACE_PERIOD = Number(process.env.REACT_APP_GRACE_PREIOD);
+  
 const PREMIUM_PERIOD =  Number(process.env.REACT_APP_PREMIUM_PERIOD);
 
 const Expiring = () => {  
@@ -24,7 +23,7 @@ const Expiring = () => {
                 <div className="card-header border-0">
                      <Tabs tab="expiring" />
                 </div>
-                <div className="card-body p-2">
+                <div className="card-body ps-3 pe-3">
                     <Filter First={100} Skip={0} Tab={"expiring"} OrderBy={"expires"} OrderDirection={"asc"} Where={{
                            label_not: null,
                            expires_lte: moment().utc().unix(),

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { useWatchlist } from "react-use-watchlist"; 
 import { useAccount } from 'wagmi';  
 
-function WatchlistLink({}) {   
+function WatchlistLink() {   
     const { isConnected, address } = useAccount();   
     const { totalUniqueItems } = useWatchlist();
       

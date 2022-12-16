@@ -1,9 +1,9 @@
 
 
-import React, {useState, useEffect} from "react";
-import { useCart, createCartIdentifier, CartProvider } from "react-use-cart";
-import { Check2, X, Cart4, ThreeDotsVertical } from "react-bootstrap-icons";
-import { Dropdown, DropdownButton, OverlayTrigger, Tooltip } from "react-bootstrap";
+import React, {useState} from "react";
+import { useCart } from "react-use-cart";
+import { Check2, X, Cart4 } from "react-bootstrap-icons";
+import {  OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { isAvailable, isValidName } from "../helpers/String";
 
@@ -15,7 +15,7 @@ function AddToCartSmallButton({domain}) {
     _domain.price = 0;
     Object.preventExtensions(_domain);
  
-    const { addItem, removeItem, inCart, totalUniqueItems, id, metadata } = useCart();
+    const { addItem, removeItem, inCart, totalUniqueItems } = useCart();
     const [showRemove, setShowRemove] = useState(false);
        
     const handleMouseOver = (e) => {

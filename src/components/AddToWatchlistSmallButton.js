@@ -1,11 +1,10 @@
 
 
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import { useWatchlist } from "react-use-watchlist";
-import { Check2, X, Cart4, Heart, ThreeDotsVertical, HeartFill } from "react-bootstrap-icons";
-import { Dropdown, DropdownButton, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { toast } from "react-toastify";
-import { isAvailable, isValidName } from "../helpers/String";
+import { X, Heart, HeartFill } from "react-bootstrap-icons";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { toast } from "react-toastify"; 
  
 function AddToWatchlistSmallButton({domain}) {   
        

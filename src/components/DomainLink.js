@@ -1,10 +1,8 @@
 
 import { Link } from 'react-router-dom'; 
-import { getTimeAgo, isAscii, isAvailable, isExpired, isExpiring, isPremium, isValidName, obscureLabel } from '../helpers/String';
-import exclamationTriangleFill from "../assets/exclamation-triangle-fill.svg";
-import dashCircleFill from "../assets/dash-circle-fill.svg";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import DomainStatus from './DomainStatus';
+import { isAscii, isValidName, obscureLabel } from '../helpers/String'; 
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'; 
+import { DashCircleFill, ExclamationTriangleFill } from 'react-bootstrap-icons';
 
 function DomainLink({domain, label}) {  
     return ( 
@@ -19,9 +17,7 @@ function DomainLink({domain, label}) {
                 
             { !isAscii(domain.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Include non-ascii characters</Tooltip>}>
-                    <span>
-                        <img src={exclamationTriangleFill} alt= "" />
-                    </span>
+                    <ExclamationTriangleFill className='text-warning' />
                 </OverlayTrigger>
             }
                 
@@ -29,9 +25,7 @@ function DomainLink({domain, label}) {
 
             { !isValidName(domain.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Malformed domain</Tooltip>}>
-                    <span>
-                        <img src={dashCircleFill} alt= ""  />
-                    </span>
+                    <DashCircleFill className='text-danger' />
                 </OverlayTrigger>
             } 
         </Link>
