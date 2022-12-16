@@ -8,7 +8,7 @@ import DomainCardInline from "../../components/DomainCardInline";
 import DomainCard from "../../components/DomainCard"; 
 import { DelayInput } from "react-delay-input";
 import { ArrowRepeat, FiletypeCsv, FunnelFill, GridFill, ListUl, Search, SortDown, SortUp } from "react-bootstrap-icons";
-import { Spinner } from "react-bootstrap";
+import { Offcanvas, Spinner } from "react-bootstrap";
   
 const DEBOUNCE_INTERVAL = 500; 
  
@@ -64,12 +64,17 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const [view, setView] = useState(_view); 
     const [csvData, setCsvData] = useState([]); 
     const [filterCount, setFilterCount] = useState(0); 
-   
+    const [filterShow, setFilterShow] = useState(false);
+
+    const handleFilterClose = () => setFilterShow(false);
+    const handleFilterShow = () => setFilterShow(true);
+ 
+     
     let [getDomains, { called, loading, error, data, refetch } ] = useLazyQuery( gql(getQuery()), {
         variables: { skip, first, orderBy, orderDirection, where },
         notifyOnNetworkStatusChange: true
     }); 
-
+ 
     if(!called)  {  
         getDomains();
     }
@@ -103,8 +108,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     }, [data])
 
     
-    const handleFilterClick = (e) => {
-        e.preventDefault();
+    const handleFilterClick = (e) => { 
+        setFilterShow(true);
         const elem = document.getElementById("filters");
         if(elem.classList.contains("d-none")) {
             elem.classList.add("d-block")
@@ -341,7 +346,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             <div className="flex-fill"> 
                 <div className="flex-grow-1"> 
                     <div className="d-flex flex-row gap-2">
-                        <button className="btn btn-outline-light rounded-0 border position-relative"  type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasFilter" aria-controls="offcanvasNavbar" >
+                        <button className="btn btn-outline-light rounded-0 border position-relative"  type="button" onClick={handleFilterClick}>
                             <FunnelFill className="text-dark" />
                             {filterCount > 0 && 
                                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -384,10 +389,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div>
             </div> 
         </div> 
-        <div className="d-flex flex-row align-items-start pt-2"> 
+        <div className="d-flex flex-row align-items-start pt-2 gap-2"> 
             <div id="filters" className="sticky-lg-top">
-                <div className="offcanvas-lg offcanvas-start me-3" style={{ minWidth: 320, maxWidth:320 }} data-bs-scroll="true" data-bs-backdrop="true" id="offCanvasFilter" aria-labelledby="offCanvasFilterLabel">
-                    <div className="offcanvas-body p-0 m-0 overflow-scroll" style={{height:600}}> 
+                <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3" style={{ minWidth: 320, maxWidth:320 }}>
+                    <Offcanvas.Body className="p-0 m-0 overflow-scroll" style={{height:600}}>
                         <div className="accordion w-100 card">
                             <div className="card-header border-0 d-flex flex-row justify-content-between p-3">
                                 <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
@@ -451,8 +456,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </Offcanvas.Body>
+                </Offcanvas>
             </div>
             <div className="w-100">
                 <div className="container-fluid d-flex justify-content-between p-0">
