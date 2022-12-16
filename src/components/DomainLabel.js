@@ -1,7 +1,6 @@
 
 
-import { isAscii, isValidName, obscureLabel } from '../helpers/String'; 
-import dashCircleFill from "../assets/dash-circle-fill.svg";
+import { isAscii, isValidName, obscureLabel } from '../helpers/String';  
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { DashCircleFill, ExclamationTriangleFill } from 'react-bootstrap-icons';
  

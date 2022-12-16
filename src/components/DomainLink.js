@@ -1,10 +1,7 @@
 
 import { Link } from 'react-router-dom'; 
-import { getTimeAgo, isAscii, isAvailable, isExpired, isExpiring, isPremium, isValidName, obscureLabel } from '../helpers/String';
-import exclamationTriangleFill from "../assets/exclamation-triangle-fill.svg";
-import dashCircleFill from "../assets/dash-circle-fill.svg";
-import { OverlayTrigger, Tooltip } from 'react-bootstrap';
-import DomainStatus from './DomainStatus';
+import { isAscii, isValidName, obscureLabel } from '../helpers/String'; 
+import { OverlayTrigger, Tooltip } from 'react-bootstrap'; 
 import { DashCircleFill, ExclamationTriangleFill } from 'react-bootstrap-icons';
 
 function DomainLink({domain, label}) {  

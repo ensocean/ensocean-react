@@ -3,9 +3,9 @@ import logo from "../../assets/icon.png"
 import openSeaIcon from "../../assets/opensea.svg";
 import githubIcon from "../../assets/github.svg";
 import twitterIcon from "../../assets/twitter.svg";
-import telegramIcon from "../../assets/telegram.svg";
-import envelopeFillIcon from "../../assets/envelope-fill.svg";
+import telegramIcon from "../../assets/telegram.svg"; 
 import useGoogleAnalytics from "./GoogleAnalytics";
+import { EnvelopeOpenFill } from "react-bootstrap-icons";
 
 const Footer = () => { 
     useGoogleAnalytics();
@@ -48,7 +48,7 @@ const Footer = () => {
                             </li> 
                             <li className="list-inline-item">
                                 <a href="mailto:support@ensocean.com" target="_blank"  rel="noreferrer" title="Contact Via Email" className="text-decoration-none"> 
-                                    <img src={envelopeFillIcon} alt=""  />
+                                    <EnvelopeOpenFill />
                                 </a>
                             </li> 
                             </ul>

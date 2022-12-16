@@ -1,13 +1,11 @@
 
 
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Bag, BagFill } from "react-bootstrap-icons";
 import Numeral from "react-numeral";
 import { Link } from "react-router-dom";
-import { useCart } from "react-use-cart";
-import bagIcon from "../assets/bag.svg";
-import bagFillIcon from "../assets/bag.svg";
+import { useCart } from "react-use-cart"; 
 
 function BasketButton({width, height, smallButton = false}) {   
     const { isEmpty, totalUniqueItems } = useCart();

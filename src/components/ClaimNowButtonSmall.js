@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import { useCart } from "react-use-cart";
 import { Check2, X, ThreeDotsVertical } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
@@ -12,16 +12,8 @@ function ClaimNowButtonSmall({domain}) {
     Object.preventExtensions(_domain);
      
     const navigate = useNavigate(); 
-    const { addItem, removeItem, totalUniqueItems, inCart } = useCart();
-    const [showRemove, setShowRemove] = useState(false);
-   
-    const handleMouseOver = (e) => {
-        setShowRemove(true);
-    }
-
-    const handleMouseOut = (e) => {
-        setShowRemove(false);
-    }
+    const { addItem, totalUniqueItems, inCart } = useCart(); 
+    
 
     const addToCart = () => {
         if(totalUniqueItems >= MAX_CART_ITEM_COUNT)

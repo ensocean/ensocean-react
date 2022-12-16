@@ -31,13 +31,13 @@ const Account = () => {
                 <AccountTabs account={addr} tab="" />
             </div>
             <div className="card-body ps-3 pe-3">
-                {tab == "" || tab === null &&  
+                {(tab === "" || tab === null) &&  
                 <Filter First={100} Skip={0} OrderBy={"created"} OrderDirection={"desc"} Where={{
                     label_not: null, 
                     owner: addr.toLowerCase()
                 }} />}
 
-                {tab == "watchlist" && isConnected && address === addr &&
+                {tab === "watchlist" && isConnected && address === addr &&
                 <Filter First={100} Skip={0} Tab={"watchlist"} OrderBy={"expires"} OrderDirection={"desc"} Where={{
                         label_not:null, 
                         id_in: items.map(t=> t.id) 

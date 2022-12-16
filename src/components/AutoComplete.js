@@ -1,15 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { Link, useLocation, useNavigate} from "react-router-dom";  
+import { useNavigate} from "react-router-dom";  
 import { Menu, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName } from '../helpers/String';
-import { useCart } from "react-use-cart";
-import { Check2 } from "react-bootstrap-icons";
+import { getLabelHash, getLength, isValidDomain, isValidName, normalizeName } from '../helpers/String';
 import AddToCartButton from './AddToCartButton';
 import ClaimNowButton from './ClaimNowButton';
 import DomainLink from './DomainLink';
-import ViewYourCartButton from './ViewYourCartButton';
-import ImageSmall from './ImageSmall';
+import ViewYourCartButton from './ViewYourCartButton'; 
 import DomainStatus from './DomainStatus';
 import { Spinner } from 'react-bootstrap';
 
@@ -19,11 +16,9 @@ const AutoComplete = () => {
     const [available, setAvailable] = useState(false);
     const [isValid, setIsValid] = useState(true);
     const [activeClass, setActiveClass] = useState("is-search");
-    const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS); 
-    const location = useLocation();
+    const [getDomains, { loading, error }] = useLazyQuery(GET_DOMAINS);  
     const navigate = useNavigate(); 
-    const input = useRef();
-    const { addItem, removeItem, inCart } = useCart();
+    const input = useRef(); 
       
     const getDefaultOptions = (q)=> {
         return [ { 

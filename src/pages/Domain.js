@@ -1,13 +1,11 @@
 import React  from "react";
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
 import {Helmet} from "react-helmet-async";
-import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, isValidName, obscureAddress, obscureLabel } from "../helpers/String";
+import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify"; 
-import DomainEvents from "./partials/DomainEvents"; 
-import shareIcon from '../assets/share-white.svg'
-import clipboardIcon from "../assets/clipboard.svg";  
+import DomainEvents from "./partials/DomainEvents";  
 import etherScanIcon from "../assets/etherscan.svg"; 
 import DomainLabel from "../components/DomainLabel"; 
 import OwnerLink from "../components/OwnerLink";
@@ -15,8 +13,7 @@ import AlertDomain from "../components/AlertDomain";
 import DomainImage from "../components/DomainImage";  
 import { Clipboard, ShareFill } from "react-bootstrap-icons";
 
-const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
-const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
+const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS;  
 const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
 
 const DOMAIN_DETAILS = gql`
@@ -55,13 +52,7 @@ const Domain = () => {
     const { data, loading, error } = useQuery(DOMAIN_DETAILS, {
         variables: { id },
     });  
-
-    const encodeHtml = (text) => {
-        return text.replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-            return '&#'+i.charCodeAt(0)+';';
-        });
-    }
-     
+  
     if(loading) {
         return (
             <>

@@ -7,19 +7,18 @@ import etherscanIcon from '../../assets/etherscan.svg'
 import x2y2Icon from "../../assets/x2y2.svg";
 import raribleIcon from "../../assets/rarible.svg";
 import looksrareIcon from "../../assets/looksrare.svg";
-import openseaIcon from "../../assets/opensea2.svg";
-import listIcon from "../../assets/list-white.svg";
+import openseaIcon from "../../assets/opensea2.svg"; 
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify";
 import { useContractRead } from "wagmi";
 import reverseLookupAbi from "../../abis/ReverseLookup.json"; 
 import { useRef } from "react";
-import { Clipboard, Share } from "react-bootstrap-icons";
+import { Clipboard, List, Share } from "react-bootstrap-icons";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS; 
 const ENS_IMAGE_URL = process.env.REACT_APP_ENS_IMAGE_URL;
 
-const AccountInfo = ({  }) => {
+const AccountInfo = () => {
     const addr = useParams().address;  
     const imgRef = useRef();
 
@@ -87,7 +86,7 @@ const AccountInfo = ({  }) => {
                         </a> 
                         <div className="dropdown p-0">
                             <a className="" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src={listIcon}  width={22} height={22} alt="" />
+                                <List />
                             </a> 
                             <ul className="dropdown-menu">
                                 <li className="p-0">
