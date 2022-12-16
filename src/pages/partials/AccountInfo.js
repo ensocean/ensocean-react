@@ -30,13 +30,13 @@ const AccountInfo = () => {
     });  
     
     if(isFetching) return (
-        <div class="d-flex placeholder-glow">
-            <div class="flex-shrink-0">
+        <div className="d-flex placeholder-glow">
+            <div className="flex-shrink-0">
                 <div className="card placeholder-glow  mb-2" style={{width:100, height:100}}>
                     <span className="placeholder col-12 w-100 h-100 "></span>
                 </div>
             </div>
-            <div class="flex-grow-1 ms-3 text-truncate">
+            <div className="flex-grow-1 ms-3 text-truncate">
                 <span className="text-truncate placeholder col-4"></span> 
                 <div className="d-flex gap-3">
                     <span className="placeholder col-3"></span>
@@ -48,8 +48,8 @@ const AccountInfo = () => {
     if(!isFetching && data) {
         const primaryName = data[0];
         return (
-            <div class="d-flex">
-                <div class="flex-shrink-0">
+            <div className="d-flex">
+                <div className="flex-shrink-0">
                     <div className="card mb-2">
                         <LazyLoadImage 
                             alt={addr} 
@@ -65,7 +65,7 @@ const AccountInfo = () => {
                         <img ref={imgRef} id={addr} width={100} height={100} src={spinner} className="img-fluid card-img-top card-img-bottom position-absolute top-0 start-0" alt="" />
                     </div>
                 </div>
-                <div class="flex-grow-1 ms-3">
+                <div className="flex-grow-1 ms-3">
                     <h2 className="text-truncate">{primaryName || obscureAddress(addr)}</h2>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={addr} onCopy={() => toast.success("Address copied") }>

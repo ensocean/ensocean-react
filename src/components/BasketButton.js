@@ -13,7 +13,7 @@ function BasketButton({width, height, smallButton = false}) {
     return (
         <OverlayTrigger placement="bottom"  overlay={<Tooltip>View Your Cart</Tooltip>} >
             <Link className={"btn btn-default position-relative "+ (smallButton ? "btn-sm": "") }  to="/register">
-                {isEmpty ? <Bag width={width || 28} height={height || 28 } />: <BagFill width={width || 28} height={height || 28 } />}
+                {isEmpty ? <Bag width={width || 28} height={height || 28 } />: <BagFill className="text-warning" width={width || 28} height={height || 28 } />}
                 
                 {totalUniqueItems > 0 && 
                     <small className="position-absolute top-50 start-75 translate-middle badge rounded-pill bg-danger">
