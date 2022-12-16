@@ -159,7 +159,7 @@ const AutoComplete = () => {
             promptText="Type 3 character to search"
             searchText="Search"
             emptyLabel="Type 3 character to search"
-            placeholder="Search for a web3 username"
+            placeholder="Search web3 name"
             renderMenu={(domains, menuProps) => ( 
                 <Menu {...menuProps} >
                     {domains.map((domain, index) => (

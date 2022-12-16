@@ -21,7 +21,7 @@ const Navbar = ({showSearch}) => {
  
     return (
         <> 
-        <nav  id="navbar" className="navbar navbar-expand-lg ">
+        <nav  id="navbar" className="navbar navbar-expand-lg">
             <div className="container-fluid p-0 d-flex flex-row gap-1">
                 <Link className="navbar-brand me-1 fw-bold fs-3" title="EnsOcean" to="/">
                     <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
