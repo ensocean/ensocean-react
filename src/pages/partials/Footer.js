@@ -48,7 +48,7 @@ const Footer = () => {
                             </li> 
                             <li className="list-inline-item">
                                 <a href="mailto:support@ensocean.com" target="_blank"  rel="noreferrer" title="Contact Via Email" className="text-decoration-none"> 
-                                    <EnvelopeOpenFill />
+                                    <EnvelopeOpenFill width={30} height={30} class="text-white" />
                                 </a>
                             </li> 
                             </ul>

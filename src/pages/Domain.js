@@ -2,7 +2,7 @@ import React  from "react";
 import { useParams } from 'react-router-dom';
 import { useQuery, gql } from "@apollo/client";  
 import {Helmet} from "react-helmet-async";
-import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from "../helpers/String";
+import { getDateSimple, getDateString, getLabelHash, getLength, getSegmentLength, getTokenId, isAvailable, isExpired, isExpiring, isPremium, obscureAddress, obscureLabel } from "../helpers/String";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { toast } from "react-toastify"; 
 import DomainEvents from "./partials/DomainEvents";  
@@ -260,13 +260,14 @@ const Domain = () => {
                                 <hr />
                                 <ul className='list-group list-group-flush'>
                                     <li className='list-group-item border-0 p-0 pb-3'>
-                                        <span className='fw-bold fs-6 text-muted'>Owner: </span> <span className='float-end'>
+                                        <span className='fw-bold fs-6 text-muted'>
+                                            {isAvailable(domain.expires) ? <>Previous Owner</> : <>Owner</>}: </span> <span className='float-end'>
                                             <OwnerLink owner={domain.owner} />
                                         </span>
                                     </li>
                                     <li className='list-group-item border-0 p-0 pb-3'>
                                         <CopyToClipboard text={domain.id}
-                                            onCopy={() => toast.success("TokenId Copied") }>
+                                            onCopy={() => toast.success("Hash Copied") }>
                                             <span role="button" className="cursor-pointer float-end">
                                                 <Clipboard />
                                             </span>
