@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import Footer from "../partials/Footer";
 import Navbar from "../partials/Navbar"; 
 import AlertNetwork from "../../components/AlertNetwork";
+import ScrollToTopButton from "../../components/ScrollToTopButton";
 
 const Page = () => { 
   return (
@@ -13,6 +14,7 @@ const Page = () => {
       </div>
       <Outlet />
       <Footer />
+      <ScrollToTopButton />
     </>
   )
 };

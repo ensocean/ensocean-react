@@ -7,7 +7,7 @@ import OwnerLink from "../../components/OwnerLink";
 import DomainCardInline from "../../components/DomainCardInline";
 import DomainCard from "../../components/DomainCard"; 
 import { DelayInput } from "react-delay-input";
-import { ArrowRepeat, FiletypeCsv, FunnelFill, GridFill, ListUl, Search, SortDown, SortUp } from "react-bootstrap-icons";
+import { ArrowRepeat, ArrowUp, FiletypeCsv, FunnelFill, GridFill, ListUl, Search, SortDown, SortUp } from "react-bootstrap-icons";
 import { Offcanvas, Spinner } from "react-bootstrap";
   
 const DEBOUNCE_INTERVAL = 500; 
@@ -339,9 +339,9 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         localStorage.setItem("view", v); 
         setView(v);
     }
- 
+  
     return (
-        <>  
+        <>   
         <div className="d-flex flex-lg-row flex-column justify-content-between gap-2 pt-2"> 
             <div className="flex-fill"> 
                 <div className="flex-grow-1"> 
@@ -391,69 +391,72 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
         </div> 
         <div className="d-flex flex-row align-items-start pt-2 gap-2"> 
             <div id="filters" className="sticky-lg-top">
-                <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3" style={{ minWidth: 320, maxWidth:320 }}>
+                <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3">
+                    <Offcanvas.Header closeButton>
+                        <span class="fw-bold fs-6">Filter</span>
+                    </Offcanvas.Header>
                     <Offcanvas.Body className="p-0 m-0 overflow-scroll" style={{height:600}}>
-                        <div className="accordion w-100 card">
-                            <div className="card-header border-0 d-flex flex-row justify-content-between p-3">
-                                <h5 className="offcanvas-title" id="offcanvasScrollingLabel">Filter</h5> 
-                                <button type="button" className="btn-close d-block d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter" aria-label="Close"></button>
-                            </div>
-                            <div className="accordion-item border-0 rounded-0">
-                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
-                                    <h6 className="accordion-header fw-bold text-dark">Character Set</h6>
-                                </button> 
-                                <div id="charSet" className="accordion-collapse collapse show text-muted p-3 overflow-scroll" style={{height: "240px"}}>
-                                    {defaultTags.map((t) =>
-                                        <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
-                                            <label htmlFor={t} className="cursor-pointer">{t}</label>
-                                            <input name="tags" className="form-check-input rounded-0" type="checkbox" id={t} value={t} onChange={onChangeTag} />
+                        <div class="card">
+                            <div class="card-body p-1">
+                            <div className="accordion"> 
+                                <div className="accordion-item border-0 rounded-0">
+                                    <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
+                                        <h6 className="accordion-header fw-bold text-dark">Character Set</h6>
+                                    </button> 
+                                    <div id="charSet" className="accordion-collapse collapse show text-muted p-3 overflow-scroll" style={{height: "240px"}}>
+                                        {defaultTags.map((t) =>
+                                            <div key={t} className="input-group p-2 d-flex flex-row justify-content-between align-items-between">
+                                                <label htmlFor={t} className="cursor-pointer">{t}</label>
+                                                <input name="tags" className="form-check-input rounded-0" type="checkbox" id={t} value={t} onChange={onChangeTag} />
+                                            </div>
+                                        )} 
+                                    </div>
+                                </div>
+                                <div className="accordion-item border-0 rounded-0">
+                                    <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
+                                        <h6 className="accordion-header fw-bold text-dark">Starts/Ends With</h6>
+                                    </button> 
+                                    <div id="startsWith" className="accordion-collapse collapse show">
+                                        <div className="input-group p-3">
+                                            <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
+                                            <span className="input-group-text">and</span>                                    
+                                            <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
                                         </div>
-                                    )} 
-                                </div>
-                            </div>
-                            <div className="accordion-item border-0 rounded-0">
-                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#startsWith">
-                                    <h6 className="accordion-header fw-bold text-dark">Starts/Ends With</h6>
-                                </button> 
-                                <div id="startsWith" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="text" name="startWith" onChange={onChangeStartwith} onKeyDown={onKeydownStartwith} defaultValue={where?.label_starts_with_nocase} className="form-control" placeholder="Starts with" />
-                                        <span className="input-group-text">and</span>                                    
-                                        <input type="text" name="endWith" onChange={onChangeEndwith} onKeyDown={onKeydownEndwith} defaultValue={where?.label_ends_with_nocase} className="form-control" placeholder="Ends with" />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="accordion-item border-0">
-                                <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
-                                    <h6 className="accordion-header fw-bold text-dark">Length</h6>
-                                </button> 
-                                <div id="length" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
-                                        <span className="input-group-text">to</span>
-                                        <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
+                                <div className="accordion-item border-0">
+                                    <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#length" >
+                                        <h6 className="accordion-header fw-bold text-dark">Length</h6>
+                                    </button> 
+                                    <div id="length" className="accordion-collapse collapse show">
+                                        <div className="input-group p-3">
+                                            <input type="number" name="minLength" onChange={onChangeMinLength} onKeyDown={onKeydownMinLength} defaultValue={where?.length_gte} className="form-control" placeholder="Min" />
+                                            <span className="input-group-text">to</span>
+                                            <input type="number" name="maxLength" onChange={onChangeMaxLength} onKeyDown={onKeydownMaxLength} defaultValue={where?.length_lte} className="form-control" placeholder="Max  " />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="accordion-item border-0">
-                                <button className="accordion-button border-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
-                                    <h6 className="accordion-header fw-bold text-dark">Segment Length</h6>
-                                </button> 
-                                <div id="segmentLength" className="accordion-collapse collapse show">
-                                    <div className="input-group p-3">
-                                        <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
-                                        <span className="input-group-text">to</span>
-                                        <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                <div className="accordion-item border-0">
+                                    <button className="accordion-button border-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#segmentLength" >
+                                        <h6 className="accordion-header fw-bold text-dark">Segment Length</h6>
+                                    </button> 
+                                    <div id="segmentLength" className="accordion-collapse collapse show">
+                                        <div className="input-group p-3">
+                                            <input type="number" name="minSegmentLength" onChange={onChangeMinSegmentLength} onKeyDown={onKeydownMinSegmentLength} defaultValue={where?.segmentLength_gte} className="form-control" placeholder="Min" />
+                                            <span className="input-group-text">to</span>
+                                            <input type="number" name="maxSegmentLength" onChange={onChangeMaxSegmentLength} onKeyDown={onKeydownMaxSegmentLength} defaultValue={where?.segmentLength_lte} className="form-control" placeholder="Max  " />
+                                        </div>
                                     </div>
+                                </div> 
+                                <div className="d-flex flex-row justify-content-between p-2 gap-2">
+                                    <button className="btn btn-outline-primary" type="button" onClick={handleResetFilter} >
+                                        Reset Filters
+                                    </button>
+                                    <button className="btn btn-primary" type="button" onClick={handleFilterClose}>
+                                        Done
+                                    </button>
                                 </div>
-                            </div> 
-                            <div className="d-flex flex-row justify-content-between p-2">
-                                <button className="btn btn-outline-primary" type="button" onClick={handleResetFilter} >
-                                    Reset Filters
-                                </button>
-                                <button className="btn btn-primary" type="button" data-bs-dismiss="offcanvas" data-bs-target="#offCanvasFilter">
-                                    Done
-                                </button>
+                            </div>
                             </div>
                         </div>
                     </Offcanvas.Body>
@@ -611,7 +614,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         } else {
             return (
             <> 
-                <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
                     {data && data.domains.length < 1 &&
                         <div className="col text-center text-warning">No Result found</div>
                     } 
