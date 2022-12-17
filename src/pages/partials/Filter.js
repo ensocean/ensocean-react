@@ -389,13 +389,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </div>
             </div> 
         </div> 
-        <div className="d-flex flex-row align-items-start pt-2 gap-2"> 
-            <div id="filters" className="sticky-lg-top">
-                <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3">
+        <div className="d-flex flex-row align-items-start"> 
+            <div id="filters" className="flex-shrink-0 sticky-lg-top mt-3" style={{ maxWidth: 350 }}>
+                <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3" style={{  }}>
                     <Offcanvas.Header closeButton>
                         <span class="fw-bold fs-6">Filter</span>
                     </Offcanvas.Header>
-                    <Offcanvas.Body className="p-0 m-0 overflow-scroll" style={{height:600}}>
+                    <Offcanvas.Body className="p-0 m-0 overflow-scroll">
                         <div class="card">
                             <div class="card-body p-1">
                             <div className="accordion"> 
@@ -462,14 +462,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </Offcanvas.Body>
                 </Offcanvas>
             </div>
-            <div className="w-100">
-                <div className="container-fluid d-flex justify-content-between p-0">
+            <div className="d-flex flex-column flex-grow-1">
+                <div className="d-flex justify-content-between mt-2">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
                             <FiletypeCsv className="text-dark" />
                         </CSVLink> 
-                    </div>
-                    
+                    </div> 
                     <div className="paging d-flex gap-2"> 
                         <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
                             {"<"} Prev
@@ -477,8 +476,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
                             Next {">"}
                         </button> 
-                    </div> 
-
+                    </div>  
                     <div className="view-types d-flex gap-2">
                         <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
                             <ListUl className="text-dark" />
@@ -488,10 +486,10 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </button>
                     </div> 
                 </div>
-                <div className="container-fluid p-0 mt-2 mb-2" id="#results">
+                <div className="container-fluid p-1" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
-                <div className="container-fluid d-flex justify-content-between p-0">
+                <div className="d-flex justify-content-between">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
                             <FiletypeCsv className="text-dark" />
