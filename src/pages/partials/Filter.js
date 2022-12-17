@@ -396,7 +396,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         <span class="fw-bold fs-6">Filter</span>
                     </Offcanvas.Header>
                     <Offcanvas.Body className="p-0 m-0 overflow-scroll">
-                        <div class="card" style={{ height:600}}>
+                        <div class="card">
                             <div class="card-body p-1">
                             <div className="accordion"> 
                                 <div className="accordion-item border-0 rounded-0">
@@ -486,7 +486,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </button>
                     </div> 
                 </div>
-                <div className="container-fluid" id="#results">
+                <div className="container-fluid p-1" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
                 <div className="d-flex justify-content-between">
