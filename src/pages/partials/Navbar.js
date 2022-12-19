@@ -8,6 +8,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState } from "react";
 import { useWatchlist } from "react-use-watchlist";
 import Numeral from "react-numeral";
+import GasPriceButton from "../../components/GasPriceButton";
 
 const Navbar = ({showSearch}) => {   
     const { isConnected, address } = useAccount();   
@@ -70,6 +71,7 @@ const Navbar = ({showSearch}) => {
                             </li> 
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+                            <GasPriceButton />
                             <BasketButton /> 
                             <ConnectButton />
                         </div> 

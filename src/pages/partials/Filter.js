@@ -393,11 +393,11 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             <div id="filters" className="flex-shrink-0 sticky-lg-top mt-3" style={{ maxWidth: 350 }}>
                 <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3" style={{  }}>
                     <Offcanvas.Header closeButton>
-                        <span class="fw-bold fs-6">Filter</span>
+                        <span classNam="fw-bold fs-6">Filter</span>
                     </Offcanvas.Header>
                     <Offcanvas.Body className="p-0 m-0 overflow-scroll">
-                        <div class="card">
-                            <div class="card-body p-1">
+                        <div classNam="card">
+                            <div classNam="card-body p-1">
                             <div className="accordion"> 
                                 <div className="accordion-item border-0 rounded-0">
                                     <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
