@@ -25,7 +25,7 @@ function ClaimNowButton({loading, domain}) {
         navigate("/register")
     }
 
-    if(!useRegisterlist(_domain.id)) {
+    if(!inRegisterlist(_domain.id)) {
         return ( 
             <> 
             <button disabled={loading ? "disabled": ""} className="btn btn-outline-success" 
