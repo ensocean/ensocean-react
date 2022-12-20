@@ -477,12 +477,16 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             </CSVLink> 
                         </div> 
                         <div className="paging d-flex gap-2"> 
-                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                                {"<"} Prev
-                            </button>  
-                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                                Next {">"}
-                            </button> 
+                            {data && data.domains.length > 0 && 
+                            <>
+                                <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                                    {"<"} Prev
+                                </button>  
+                                <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                                    Next {">"}
+                                </button> 
+                            </>
+                            }
                         </div>  
                         <div className="view-types d-flex gap-2">
                             <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
@@ -507,12 +511,16 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             </CSVLink> 
                         </div> 
                         <div className="paging d-flex gap-2"> 
-                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                                {"<"} Prev
-                            </button>  
-                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                                Next {">"}
-                            </button> 
+                            {data && data.domains.length > 0 && 
+                            <>
+                                <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                                    {"<"} Prev
+                                </button>  
+                                <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                                    Next {">"}
+                                </button> 
+                            </>
+                            }
                         </div> 
                         <div className="view-types d-flex gap-2">
                             <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
