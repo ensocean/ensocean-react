@@ -468,70 +468,62 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                 </Offcanvas>
             </div>
             <div className="container-fluid p-0">
-                <div className="d-flex justify-content-between mt-2">
-                {data && data.domains.length > 1 &&
-                    <>
-                        <div className="csv-download">
-                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                                <FiletypeCsv className="text-dark" />
-                            </CSVLink> 
-                        </div> 
-                        <div className="paging d-flex gap-2"> 
-                            {data && data.domains.length > 0 && 
-                            <>
-                                <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                                    {"<"} Prev
-                                </button>  
-                                <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                                    Next {">"}
-                                </button> 
-                            </>
-                            }
-                        </div>  
-                        <div className="view-types d-flex gap-2">
-                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                                <ListUl className="text-dark" />
+                <div className="d-flex justify-content-between mt-2"> 
+                    <div className="csv-download">
+                        <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                            <FiletypeCsv className="text-dark" />
+                        </CSVLink> 
+                    </div> 
+                    <div className="paging d-flex gap-2"> 
+                        {data && data.domains.length > 0 && 
+                        <>
+                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                                {"<"} Prev
                             </button>  
-                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                                <GridFill  className="text-dark" />
-                            </button>
-                        </div> 
-                    </>
-                }
+                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                                Next {">"}
+                            </button> 
+                        </>
+                        }
+                    </div>  
+                    <div className="view-types d-flex gap-2">
+                        <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                            <ListUl className="text-dark" />
+                        </button>  
+                        <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                            <GridFill  className="text-dark" />
+                        </button>
+                    </div>
                 </div>
                 <div className="container-fluid p-1" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
-                <div className="d-flex justify-content-between">
-                    {data && data.domains.length > 1 &&
-                    <>
-                        <div className="csv-download">
-                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                                <FiletypeCsv className="text-dark" />
-                            </CSVLink> 
-                        </div> 
-                        <div className="paging d-flex gap-2"> 
-                            {data && data.domains.length > 0 && 
-                            <>
-                                <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                                    {"<"} Prev
-                                </button>  
-                                <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                                    Next {">"}
-                                </button> 
-                            </>
-                            }
-                        </div> 
-                        <div className="view-types d-flex gap-2">
-                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                                <ListUl className="text-dark" />
+                <div className="d-flex justify-content-between"> 
+                    <div className="csv-download">
+                        <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                            <FiletypeCsv className="text-dark" />
+                        </CSVLink> 
+                    </div> 
+                    <div className="paging d-flex gap-2"> 
+                        {data && data.domains.length > 0 && 
+                        <>
+                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                                {"<"} Prev
                             </button>  
-                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                                <GridFill className="text-dark" />
-                            </button>
-                        </div>
-                    </>
-                    }
+                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                                Next {">"}
+                            </button> 
+                        </>
+                        }
+                    </div> 
+                    <div className="view-types d-flex gap-2">
+                        <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                            <ListUl className="text-dark" />
+                        </button>  
+                        <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                            <GridFill className="text-dark" />
+                        </button>
+                    </div> 
                 </div>  
             </div>
         </div> 
