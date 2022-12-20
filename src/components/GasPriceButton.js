@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { useEffect, useRef, useState } from 'react';
-import { Button, Dropdown, Overlay, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, Dropdown, Overlay, OverlayTrigger, Popover, Spinner } from 'react-bootstrap';
 import { FuelPump } from 'react-bootstrap-icons';
 import Numeral from 'react-numeral';
 
@@ -8,51 +8,54 @@ import Numeral from 'react-numeral';
 const API_URL = "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=FS1QSVDXCPUFGE1VCX74EQJKZ4JG8WE8SI";
 
 function GasPriceButton() {
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(null); 
     const [isLoaded, setIsLoaded] = useState(false);
-    const [data, setData] = useState([]);
-    const [show, setShow] = useState(false);
-    const target = useRef(null);
+    const [data, setData] = useState(null);
+   
+    
 
-    const fetchData = ()=> {
-        fetch(API_URL)
-        .then(res => res.json())
-        .then(
-        (data) => { 
-            setIsLoaded(true);
-            setData(data);
-        },
-        (error) => {
-            setIsLoaded(true);
-            setError(error);
+    useEffect(() => { 
+        
+        const fetchData = async () => {  
+            try {
+                const response = await fetch(API_URL);
+                const json = await response.json();
+                console.log(json);
+            } catch (error) {
+                console.log("error", error);
+            }
         }
-        )
-    }
 
-    useEffect(()=> {
-        fetchData();
+         fetchData();
+         
+         return () => {
+
+         }
+
     }, []) 
+
+    
 
     const popover = (
         <Popover id="popover-basic">
           <Popover.Header as="h3">Gas Tracker</Popover.Header>
           <Popover.Body>
-         {isLoaded && data &&
-           <>
-           <div className='d-flex flex-row justify-content-between'>
-                <span>High</span>
-                <span>{data.result.FastGasPrice}</span>
-           </div>
-           <div className='d-flex flex-row justify-content-between'>
-                <span>Avarage</span>
-                <span>{data.result.ProposeGasPrice}</span>
-           </div>
-           <div className='d-flex flex-row justify-content-between'>
-                <span>Low</span>
-                <span>{data.result.SafeGasPrice}</span>
-           </div>
-           </>
-           }
+            {isLoaded && data &&
+                <>
+                <div className='d-flex flex-row justify-content-between'>
+                        <span>High</span>
+                        <span>{data.result.FastGasPrice}</span>
+                </div>
+                <div className='d-flex flex-row justify-content-between'>
+                        <span>Avarage</span>
+                        <span>{data.result.ProposeGasPrice}</span>
+                </div>
+                <div className='d-flex flex-row justify-content-between'>
+                        <span>Low</span>
+                        <span>{data.result.SafeGasPrice}</span>
+                </div>
+                </>
+            }
           </Popover.Body>
         </Popover>
       );
@@ -60,11 +63,11 @@ function GasPriceButton() {
     return (
         <> 
         <OverlayTrigger trigger="click" placement="left" overlay={popover}>
-            <Button className='p-0' variant="default">
+            <Button className='p-0' variant="default" width={50}>
                 <small className='fw-bold'>
                     <FuelPump />
                         { " " }
-                        {!isLoaded && <>...</>}
+                        {!isLoaded && <> <Spinner animation="border" variant="dark" size="sm" /> Gwei </> }
                         {error && <>!</>}
                         {isLoaded && data && <><Numeral value={data.result.ProposeGasPrice} format={"0"} /> Gwei</>}
                 </small> 

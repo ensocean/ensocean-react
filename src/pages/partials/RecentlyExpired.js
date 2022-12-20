@@ -112,7 +112,7 @@ const RecentExpired = () => {
 
           </ol> 
           <div className="card-footer">
-              <Link className="btn btn-success" to="/discover?tab=expired" title="View all expired ENS domains">View More</Link>
+              <Link className="btn btn-primary" to="/expired" title="View all expired ENS domains">View More</Link>
           </div>
         </div>
       </>

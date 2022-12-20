@@ -41,15 +41,15 @@ const Account = () => {
         </div>
       </div>
       <div className="container-fluid p-0 m-0"> 
-            <div className="d-flex flex-row justify-content-end align-items-center gap-3 p-2">        
-                {totalUniqueItems &&
+            <div className="d-flex flex-row justify-content-end align-items-center gap-3 pt-3 pe-3">        
+                {totalUniqueItems > 0 &&
                 <button className="btn btn-primary" onClick={handleShow}> <Trash /> Clear Watchlist</button>
                 }
             </div>
             <div className="container-fluid p-2">
                 <AccountTabs account={addr} tab="" />
             </div>
-            <div className="container-fluid">
+            <div className="container-fluid ps-3 pe-3">
                 {(tab === "" || tab === null) &&  
                 <Filter First={100} Skip={0} OrderBy={"created"} OrderDirection={"desc"} Where={{
                     label_not: null, 
@@ -72,7 +72,7 @@ const Account = () => {
                 Cancel
             </Button>
             <Button variant="primary" onClick={handleClearList}>
-                Clear All
+               Continue
             </Button>
             </Modal.Footer>
         </Modal>
