@@ -161,7 +161,7 @@ const AutoComplete = () => {
                     {domains.map((domain, index) => (
                         <div key={domain.id}>
                         <div  className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
-                          <div className="flex-grow-1 d-flex flex-column flex-md-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
+                          <div className="flex-grow-1 d-flex flex-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
                               <DomainLink domain={domain} />
                               <div className='d-flex flex-row justify-content-center'>
                                 {loading && <Spinner animation="border" variant="dark" size="sm" /> }
