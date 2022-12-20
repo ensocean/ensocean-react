@@ -61,7 +61,7 @@ function GasPriceButton() {
         <> 
         <OverlayTrigger trigger="click" placement="left" overlay={popover}>
             <Button variant="default">
-                <span className='fw-bold fs-6'>
+                <span className='fw-bold'>
                     <FuelPump />
                         { " " }
                         {!isLoaded && <>...</>}
