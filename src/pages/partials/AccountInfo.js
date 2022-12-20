@@ -86,7 +86,7 @@ const AccountInfo = () => {
                         </a> 
                         <div className="dropdown p-0">
                             <span role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <List />
+                                <List width={24} height={24} />
                             </span> 
                             <ul className="dropdown-menu">
                                 <li className="p-0">

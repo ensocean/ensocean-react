@@ -13,7 +13,7 @@ const AccountTabs = ({account}) => {
 
     return (
         <> 
-            <ul className="list-inline text-nowrap flex-nowrap overflow-scroll m-0">
+            <ul className="list-inline text-nowrap flex-nowrap overflow-scroll m-0 border-light border-2 border-bottom">
                 <li className={"list-inline-item p-3 "+ (tab === "all" || tab === null || tab === "" ? "border-bottom border-primary border-2": "")}>
                     <Link className={"text-decoration-none link-secondary fs-5 p-3"} to={"/account/"+ account}>Collection</Link>
                 </li>  
