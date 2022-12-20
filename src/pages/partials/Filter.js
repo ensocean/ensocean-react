@@ -584,7 +584,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                 {data && data.domains.length < 1 &&
                     <div className="alert alert-light text-center"> No Result Found</div>
                 }
-                {data && data.domains.length > 1 &&
+                {data && data.domains.length > 0 &&
                 <div className="table-responsive">
                     <table className='table table-hover'>
                         <thead className="table-light text-start">
