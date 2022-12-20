@@ -1,5 +1,5 @@
 import React from "react";
-import { useCart } from "react-use-cart";
+import { useRegisterlist } from "react-use-registerlist";
 import { Check2, X, ThreeDotsVertical } from "react-bootstrap-icons";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,10 +12,10 @@ function ClaimNowButtonSmall({domain}) {
     Object.preventExtensions(_domain);
      
     const navigate = useNavigate(); 
-    const { addItem, totalUniqueItems, inCart } = useCart(); 
+    const { addItem, totalUniqueItems, inRegisterlist } = useRegisterlist(); 
     
 
-    const addToCart = () => {
+    const addToRegisterlist = () => {
         if(totalUniqueItems >= MAX_CART_ITEM_COUNT)
         {
             toast.error("Exced Max. Item Count");     
@@ -26,11 +26,11 @@ function ClaimNowButtonSmall({domain}) {
         navigate("/register")
     }
 
-    if(!inCart(_domain.id)) {
+    if(!inRegisterlist(_domain.id)) {
         return (
             <> 
             <button className="btn btn-sm btn-outline-success" 
-                onClick={(e)=> { addToCart(_domain) }}>
+                onClick={(e)=> { addToRegisterlist(_domain) }}>
                     Claim Now
             </button> 
             </>

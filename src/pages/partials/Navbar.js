@@ -10,11 +10,11 @@ import { useWatchlist } from "react-use-watchlist";
 import Numeral from "react-numeral";
 import GasPriceButton from "../../components/GasPriceButton";
 import WatchlistLink from "../../components/WatchlistLink";
-import { useCart } from "react-use-cart";
+import { useRegisterlist } from "react-use-registerlist";
 
 const Navbar = ({showSearch}) => {   
     const { isConnected, address } = useAccount();   
-    const  totalCartlistItems = useCart().totalUniqueItems;
+    const  totalRegisterlistItems = useRegisterlist().totalUniqueItems;
     const  totalWatchlistItems = useWatchlist().totalUniqueItems;
     
     const [show, setShow] = useState(false);
@@ -38,7 +38,7 @@ const Navbar = ({showSearch}) => {
                     <button className="navbar-toggler p-1" type="button" onClick={(e)=> handleShow()}>
                         <span className="navbar-toggler-icon"></span>
                         <small className="position-absolute translate-middle badge rounded-pill bg-danger">
-                            <Numeral value={totalCartlistItems + totalWatchlistItems} format={"0,0"} />
+                            <Numeral value={totalRegisterlistItems + totalWatchlistItems} format={"0,0"} />
                         </small>
                     </button>
                 </div>

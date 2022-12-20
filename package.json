@@ -48,6 +48,8 @@
     "react-timeago": "^7.1.0",
     "react-toastify": "^9.1.1",
     "react-use-cart": "^1.13.0",
+    "react-use-registerlist": "^0.0.1-semantic-release",
+    "react-use-renewlist": "^0.0.2-semantic-release",
     "react-use-watchlist": "^0.0.1-semantic-release",
     "tailwindcss": "^3.2.4",
     "wagmi": "0.6.8",

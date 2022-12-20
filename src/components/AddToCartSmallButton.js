@@ -1,7 +1,7 @@
 
 
 import React, {useState} from "react";
-import { useCart } from "react-use-cart";
+import { useRegisterlist } from "react-use-registerlist";
 import { Check2, X, Cart4 } from "react-bootstrap-icons";
 import {  OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -15,7 +15,7 @@ function AddToCartSmallButton({domain}) {
     _domain.price = 0;
     Object.preventExtensions(_domain);
  
-    const { addItem, removeItem, inCart, totalUniqueItems } = useCart();
+    const { addItem, removeItem, inRegisterlist, totalUniqueItems } = useRegisterlist();
     const [showRemove, setShowRemove] = useState(false);
        
     const handleMouseOver = (e) => {
@@ -26,7 +26,7 @@ function AddToCartSmallButton({domain}) {
         setShowRemove(false);
     }
 
-    const addToCart = (d) => {
+    const addToRegisterlist = (d) => {
         if(totalUniqueItems >= MAX_CART_ITEM_COUNT)
         {
             toast.error("Exced Max. Item Count");     
@@ -36,13 +36,13 @@ function AddToCartSmallButton({domain}) {
         toast.success("Added to cart"); 
     }
 
-    if(!inCart(_domain.id)) {
+    if(!inRegisterlist(_domain.id)) {
         return (
             <>   
              {isValidName(domain.label) && isAvailable(domain.expires) &&  
                 <OverlayTrigger placement="top"  overlay={<Tooltip>Add To Cart </Tooltip>} >
                     <button className="btn btn-default btn-sm" 
-                        onClick={(e)=> { addToCart(_domain) }}>
+                        onClick={(e)=> { addToRegisterlist(_domain) }}>
                         <Cart4 width={20} height={20} />
                     </button>  
                 </OverlayTrigger>   

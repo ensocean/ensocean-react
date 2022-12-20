@@ -5,7 +5,7 @@ import { useLazyQuery, gql } from "@apollo/client";
 import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getExpires, getDateString, isAvailable} from '../helpers/String';
 import AddToCartButton from "../components/AddToCartButton";
 import ClaimNowButton from "../components/ClaimNowButton";
-import { useCart } from "react-use-cart";
+import { useRegisterlist } from "react-use-registerlist";
 import ViewYourCartButton from "../components/ViewYourCartButton"; 
 import { Search } from "react-bootstrap-icons";
 import { Spinner } from "react-bootstrap";
@@ -45,7 +45,7 @@ const Find = () => {
     const [options, setOptions] = useState(null);  
     const [activeClass, setActiveClass] = useState("");
     const [getDomains, { data, loading, error }] = useLazyQuery(GET_DOMAINS); 
-    const {  inCart } = useCart();
+    const {  inRegisterlist } = useRegisterlist();
      
      
     
@@ -212,8 +212,8 @@ const Find = () => {
                     </div>
                     <div className="d-flex flex-row justify-content-center gap-3 mt-3"> 
                         <AddToCartButton domain={options[0]} />
-                        {!inCart(options[0].id) && <ClaimNowButton domain={options[0]} />}
-                        {inCart(options[0].id) && <ViewYourCartButton domain={options[0]} />}
+                        {!inRegisterlist(options[0].id) && <ClaimNowButton domain={options[0]} />}
+                        {inRegisterlist(options[0].id) && <ViewYourCartButton domain={options[0]} />}
                     </div> 
                   </>
                 }
