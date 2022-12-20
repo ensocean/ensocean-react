@@ -16,15 +16,13 @@ const Discover = () => {
             </div> 
         </div>
         <div className="container-fluid p-0 m-0">
-            <div className="card text-center">
-                <div className="card-header border-0">
-                     <Tabs tab={"all"} /> 
-                </div>
-                <div className="card-body ps-3 pe-3">
-                    <Filter First={100} Skip={0} Tab={"all"} OrderBy={"created"} OrderDirection={"desc"} Where={{
-                        label_not: null
-                    }} View="gallery" />
-                </div>
+            <div className="container-fluid p-2">
+                    <Tabs tab={"all"} /> 
+            </div>
+            <div className="container-fluid ps-3 pe-3">
+                <Filter First={100} Skip={0} Tab={"all"} OrderBy={"created"} OrderDirection={"desc"} Where={{
+                    label_not: null
+                }} View="gallery" />
             </div>
         </div> 
         </>

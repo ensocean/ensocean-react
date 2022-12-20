@@ -1,5 +1,5 @@
 import {Helmet} from "react-helmet-async";
-import { useCart } from "react-use-cart";
+import { useRegisterlist } from "react-use-registerlist";
 import { Trash, ArrowClockwise } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
 import DomainLink from "../components/DomainLink";
@@ -17,7 +17,7 @@ const DEFAULT_RESOLVER = process.env.REACT_APP_DEFAULT_RESOLVER;
 const MIN_REGISTRATION_DURATION = process.env.REACT_APP_MIN_REGISTRATION_DURATION;
   
 const Register = () => {  
-  const { isEmpty, totalUniqueItems, getItem, items, updateItem, removeItem, emptyCart } = useCart();
+  const { isEmpty, totalUniqueItems, getItem, items, updateItem, removeItem, emptyRegisterlist } = useRegisterlist();
   const [validationError, setValidationError] = useState(null);
   const [hasError, setHasError] = useState(null);
 
@@ -96,7 +96,7 @@ const Register = () => {
                     </button>
                   }
                   {totalUniqueItems > 0 && 
-                    <button className="btn btn-danger ps-1" onClick={(e)=> emptyCart()}>
+                    <button className="btn btn-danger ps-1" onClick={(e)=> emptyRegisterlist()}>
                       <Trash /> Clear Cart
                     </button>
                   }

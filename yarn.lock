@@ -10142,6 +10142,13 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
+react-infinite-scroll-component@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-6.1.0.tgz#7e511e7aa0f728ac3e51f64a38a6079ac522407f"
+  integrity sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==
+  dependencies:
+    throttle-debounce "^2.1.0"
+
 react-is@^16.13.1, react-is@^16.3.2, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -10374,6 +10381,16 @@ react-use-cart@^1.13.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/react-use-cart/-/react-use-cart-1.13.0.tgz#af7f4306612bdb9c7563e59fbee299ee2f8fe278"
   integrity sha512-V3jrNOgBXxTn/RWh1HCEdrQk/jx2xCixdkX1c7Vyl4zxEf9jOuniUnjZSTALO7rQ5226onqmvXxKz1eu0Yz6Iw==
+
+react-use-registerlist@^0.0.1-semantic-release:
+  version "0.0.1-semantic-release"
+  resolved "https://registry.yarnpkg.com/react-use-registerlist/-/react-use-registerlist-0.0.1-semantic-release.tgz#e9342dcb3e7cc0b6543e2263a2463f2150e90c31"
+  integrity sha512-3PPAInmPlp0gkr8dbHocjKqLQuLzxRYF34LE4h5nc0nKll83hGrRd7Ut70UKrA6vqhbh9mIvVvKvsudtvbazRA==
+
+react-use-renewlist@^0.0.2-semantic-release:
+  version "0.0.2-semantic-release"
+  resolved "https://registry.yarnpkg.com/react-use-renewlist/-/react-use-renewlist-0.0.2-semantic-release.tgz#3b735634d7dbe074d2df5634951c12cce2295115"
+  integrity sha512-DfgEHOUNSf/Johtyww/m2PB1RTuLo3krnr+NRCaURNUlA11W8LYFQXLXnDnQVNL/j2DKLXnYUezftwDTQiSSmQ==
 
 react-use-watchlist@^0.0.1-semantic-release:
   version "0.0.1-semantic-release"
@@ -11664,6 +11681,11 @@ throat@^6.0.1:
   version "6.0.1"
   resolved "https://registry.npmjs.org/throat/-/throat-6.0.1.tgz"
   integrity sha512-8hmiGIJMDlwjg7dlJ4yKGLK8EsYqKgPWbG3b4wjJddKNwc7N7Dpn08Df4szr/sZdMVeOstrdYSsqzX6BYbcB+w==
+
+throttle-debounce@^2.1.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz#fd31865e66502071e411817e241465b3e9c372e2"
+  integrity sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==
 
 "through@>=2.2.7 <3":
   version "2.3.8"

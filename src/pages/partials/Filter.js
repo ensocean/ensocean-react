@@ -9,7 +9,8 @@ import DomainCard from "../../components/DomainCard";
 import { DelayInput } from "react-delay-input";
 import { ArrowRepeat, ArrowUp, FiletypeCsv, FunnelFill, GridFill, ListUl, Search, SortDown, SortUp } from "react-bootstrap-icons";
 import { Offcanvas, Spinner } from "react-bootstrap";
-  
+import InfiniteScroll from "react-infinite-scroll-component";
+
 const DEBOUNCE_INTERVAL = 500; 
  
 let timeout;
@@ -53,7 +54,8 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     let _orderDirection = _query.get("orderDirection") || OrderDirection; 
     let _where = jsonParse(_query.get("filter")) || Where; 
     let _view = localStorage.getItem("view") || _query.get("_view") || View;  
-
+    let _filterShow = localStorage.getItem("filterShow") || false;  
+ 
     const [search, setSearch] = useState(_search);
     const [tab, setTab] = useState(Tab);
     const [first, setFirst] = useState(_first);
@@ -109,14 +111,17 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
 
     
     const handleFilterClick = (e) => { 
-        setFilterShow(true);
+        setFilterShow(!filterShow);
+
         const elem = document.getElementById("filters");
         if(elem.classList.contains("d-none")) {
             elem.classList.add("d-block")
             elem.classList.remove("d-none")
+            localStorage.setItem("filterShow", true); 
         } else { 
             elem.classList.remove("d-block") 
-            elem.classList.add("d-none") 
+            elem.classList.add("d-none")
+            localStorage.setItem("filterShow", false); 
         }
     } 
 
@@ -390,14 +395,14 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             </div> 
         </div> 
         <div className="d-flex flex-row align-items-start"> 
-            <div id="filters" className="flex-shrink-0 sticky-lg-top mt-3" style={{ maxWidth: 350 }}>
+            <div id="filters" className={"flex-shrink-0 sticky-lg-top mt-3 "+ (_filterShow === "true" ? "d-block": "d-none")}  style={{ maxWidth: 350 }}>
                 <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3" style={{  }}>
                     <Offcanvas.Header closeButton>
-                        <span class="fw-bold fs-6">Filter</span>
+                        <span className="fw-bold fs-6">Filter</span>
                     </Offcanvas.Header>
                     <Offcanvas.Body className="p-0 m-0 overflow-scroll">
-                        <div class="card">
-                            <div class="card-body p-1">
+                        <div className="card">
+                            <div className="card-body p-1">
                             <div className="accordion"> 
                                 <div className="accordion-item border-0 rounded-0">
                                     <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
@@ -462,7 +467,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </Offcanvas.Body>
                 </Offcanvas>
             </div>
-            <div className="d-flex flex-column flex-grow-1">
+            <div className="container-fluid p-0">
                 <div className="d-flex justify-content-between mt-2">
                     <div className="csv-download">
                         <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
@@ -553,9 +558,9 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                 )
         } else {
             return (
-                <div className="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
+                <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
                  <DomainCard loading={loading} />
-                 </div>
+                </div>
             )
         } 
     } else if (error) {
@@ -582,7 +587,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                         <tbody className="text-start">
                             {data && data.domains.length < 1 &&
                                 <tr>
-                                    <td colSpan='6' className='p-3 text-center'><span className='text-warning'>No Result</span></td>
+                                    <td colSpan='6' className='p-3 text-center'><span className='text-muted'>No Result</span></td>
                                 </tr>
                             } 
                             {data &&
@@ -614,7 +619,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
             <> 
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
                     {data && data.domains.length < 1 &&
-                        <div className="col text-center text-warning">No Result found</div>
+                        <div className="col text-center text-muted">No Result found</div>
                     } 
                     {data && 
                         <>

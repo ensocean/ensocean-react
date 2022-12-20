@@ -13,14 +13,16 @@ const AccountTabs = ({account}) => {
 
     return (
         <> 
-            <ul className="nav nav-tabs card-header-tabs flex-nowrap">
-                <li className="nav-item">
-                    <Link className={"nav-link fs-5 p-3 "+ (tab === "all" || tab === null || tab === "" ? "active": "") } to={"/account/"+ account}>Collection</Link>
+            <ul className="list-inline text-nowrap flex-nowrap overflow-scroll m-0">
+                <li className={"list-inline-item p-3 "+ (tab === "all" || tab === null || tab === "" ? "border-bottom border-primary border-2": "")}>
+                    <Link className={"text-decoration-none link-secondary fs-5 p-3"} to={"/account/"+ account}>Collection</Link>
                 </li>  
                 {isConnected && address === addr &&
-                <li className="nav-item">
-                    <Link className={"nav-link fs-5  p-3 "+ (tab === "watchlist" ? "active": "")} to={"/account/"+ address +"?tab=watchlist"}>Watchlist</Link>
-                </li> 
+                <>
+                    <li className={"list-inline-item p-3 "+ (tab === "watchlist" ? "border-bottom border-primary border-2": "")}>
+                        <Link className={"text-decoration-none link-secondary fs-5  p-3"} to={"/account/"+ address +"?tab=watchlist"}>Watchlist</Link>
+                    </li> 
+                </>
                 }
             </ul> 
         </>

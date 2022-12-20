@@ -23,7 +23,7 @@ function AddToWatchlistSmallButton({domain}) {
         return (
             <>   
             { 
-                 <OverlayTrigger placement="top"  overlay={<Tooltip>Add To Favorites </Tooltip>} >
+                 <OverlayTrigger placement="top" overlay={<Tooltip>Add To Favorites</Tooltip>} >
                     <button className="btn btn-default btn-sm" 
                         onClick={(e)=> { addItem(domain);  toast.success("Added to favorites");   }}>
                         <Heart width={20} height={20} />
