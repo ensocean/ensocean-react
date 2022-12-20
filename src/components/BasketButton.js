@@ -5,10 +5,10 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Bag, BagFill } from "react-bootstrap-icons";
 import Numeral from "react-numeral";
 import { Link } from "react-router-dom";
-import { useCart } from "react-use-cart"; 
+import { useRegisterlist } from "react-use-registerlist"; 
 
 function BasketButton({width, height, smallButton = false}) {   
-    const { isEmpty, totalUniqueItems } = useCart();
+    const { isEmpty, totalUniqueItems } = useRegisterlist();
       
     return (
         <OverlayTrigger placement="bottom"  overlay={<Tooltip>View Your Cart</Tooltip>} >

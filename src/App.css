@@ -1,11 +1,7 @@
 
  
-.g-card:hover{
-  border-width: 1px !important;
-  border-color: #ffbb00 !important;
-}
  
-
+  
 .form-control.is-search {
   border-color: #555555;
   padding-right: calc(1.5em + 0.75rem);

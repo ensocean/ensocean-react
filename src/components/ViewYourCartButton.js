@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useCart } from "react-use-cart"; 
+import { useRegisterlist } from "react-use-registerlist"; 
 import { getLabelHash } from "../helpers/String";
 
 function ViewYourCartButton({domain, label}) {   
@@ -13,9 +13,9 @@ function ViewYourCartButton({domain, label}) {
     _domain.price = 0;
     Object.preventExtensions(_domain);
 
-    const { inCart } = useCart();
+    const { inRegisterlist } = useRegisterlist();
       
-    if(inCart(_domain.id)) {
+    if(inRegisterlist(_domain.id)) {
         return (
             <Link className="btn btn-primary" to="/register">
                 View Your Cart

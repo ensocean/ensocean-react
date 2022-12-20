@@ -3,21 +3,21 @@ import { Link } from "react-router-dom";
 
 const Tabs = ({tab}) => { 
     return (
-        <ul className="nav nav-tabs card-header-tabs flex-nowrap overflow-scroll text-nowrap">
-            <li className="nav-item">
-                <Link className={"nav-link fs-5 p-3 "+ (tab === "all" || tab === null || tab === "" ? "active": "") } to="/discover?tab=all">All</Link>
+        <ul className="list-inline text-nowrap flex-nowrap overflow-scroll m-0">
+            <li  className={"list-inline-item p-3 "+ (tab === "all" ? "border-bottom border-primary border-2": "")}>
+                <Link className={"text-decoration-none link-secondary fs-5"} to="/discover?tab=all">All</Link>
             </li>
-            <li className="nav-item">
-                <Link className={"nav-link fs-5 p-3 "+ (tab === "expired" ? "active": "")} to="/expired">Expired</Link>
+            <li  className={"list-inline-item p-3 "+ (tab === "expired" ? "border-bottom border-primary border-2": "")}>
+                <Link className={"text-decoration-none link-secondary fs-5"} to="/expired">Expired</Link>
             </li>
-            <li className="nav-item">
-                <Link className={"nav-link fs-5 p-3 "+ (tab === "expiring" ? "active": "")} to="/expiring">Expiring</Link>
+            <li  className={"list-inline-item p-3 "+ (tab === "expiring" ? "border-bottom border-primary border-2": "")}>
+                <Link className={"text-decoration-none link-secondary fs-5"} to="/expiring">Expiring</Link>
             </li>
-            <li className="nav-item">
-                <Link className={" nav-link fs-5 p-3 "+ (tab === "premium" ? "active": "")} to="/premium">Premium</Link>
+            <li  className={"list-inline-item p-3 "+ (tab === "premium" ? "border-bottom border-primary border-2": "")}>
+                <Link className={"text-decoration-none link-secondary fs-5"} to="/premium">Premium</Link>
             </li>
-            <li className="nav-item">
-                <Link className={"nav-link fs-5  p-3 "+ (tab === "registered" ? "active": "")} to="/registered">Recently Registered</Link>
+            <li  className={"list-inline-item p-3 "+ (tab === "registered" ? "border-bottom border-primary border-2": "")}>
+                <Link className={"text-decoration-none link-secondary fs-5"} to="/registered">Recently Registered</Link>
             </li> 
         </ul>
     )

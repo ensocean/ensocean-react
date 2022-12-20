@@ -1,7 +1,7 @@
 
 
 import React, {useState} from "react";
-import { useCart } from "react-use-cart";
+import { useRegisterlist } from "react-use-registerlist";
 import { Check2, X } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
 import { getLabelHash, isAvailable, isValidName } from "../helpers/String";
@@ -19,7 +19,7 @@ function AddToCartButton({domain, label}) {
     _domain.price = 0;
     Object.preventExtensions(_domain);
 
-    const { addItem, removeItem, inCart, totalUniqueItems } = useCart();
+    const { addItem, removeItem, inRegisterlist, totalUniqueItems } = useRegisterlist();
     const [showRemove, setShowRemove] = useState(false);
    
     const handleMouseOver = (e) => {
@@ -30,7 +30,7 @@ function AddToCartButton({domain, label}) {
         setShowRemove(false);
     }
 
-    const addToCart = () => {
+    const addToRegisterlist = () => {
         if(totalUniqueItems >= MAX_CART_ITEM_COUNT)
         {
             toast.error("Exced Max. Item Count");     
@@ -40,12 +40,12 @@ function AddToCartButton({domain, label}) {
         toast.success("Added to cart"); 
     }
 
-    if(!inCart(_domain.id)) {
+    if(!inRegisterlist(_domain.id)) {
         return (
             <> 
             {isValidName(_domain.label) && isAvailable(_domain.expires) && 
                 <button className="btn btn-success" 
-                    onClick={(e)=> { addToCart(_domain) }}>
+                    onClick={(e)=> { addToRegisterlist(_domain) }}>
                         Add To Cart
                 </button> 
             }
