@@ -393,11 +393,11 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             <div id="filters" className="flex-shrink-0 sticky-lg-top mt-3" style={{ maxWidth: 350 }}>
                 <Offcanvas show={filterShow} onHide={handleFilterClose} responsive="lg" placement="start" className="me-3" style={{  }}>
                     <Offcanvas.Header closeButton>
-                        <span classNam="fw-bold fs-6">Filter</span>
+                        <span className="fw-bold fs-6">Filter</span>
                     </Offcanvas.Header>
                     <Offcanvas.Body className="p-0 m-0 overflow-scroll">
-                        <div classNam="card">
-                            <div classNam="card-body p-1">
+                        <div className="card">
+                            <div className="card-body p-1">
                             <div className="accordion"> 
                                 <div className="accordion-item border-0 rounded-0">
                                     <button className="accordion-button rounded-0 bg-white ps-3" type="button" data-bs-toggle="collapse" data-bs-target="#charSet">
@@ -582,7 +582,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                         <tbody className="text-start">
                             {data && data.domains.length < 1 &&
                                 <tr>
-                                    <td colSpan='6' className='p-3 text-center'><span className='text-warning'>No Result</span></td>
+                                    <td colSpan='6' className='p-3 text-center'><span className='text-muted'>No Result</span></td>
                                 </tr>
                             } 
                             {data &&
@@ -614,7 +614,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
             <> 
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
                     {data && data.domains.length < 1 &&
-                        <div className="col text-center text-warning">No Result found</div>
+                        <div className="col text-center text-muted">No Result found</div>
                     } 
                     {data && 
                         <>

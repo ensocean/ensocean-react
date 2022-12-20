@@ -9,11 +9,14 @@ import { useState } from "react";
 import { useWatchlist } from "react-use-watchlist";
 import Numeral from "react-numeral";
 import GasPriceButton from "../../components/GasPriceButton";
+import WatchlistLink from "../../components/WatchlistLink";
+import { useCart } from "react-use-cart";
 
 const Navbar = ({showSearch}) => {   
     const { isConnected, address } = useAccount();   
-    const { totalUniqueItems } = useWatchlist();
-
+    const  totalCartlistItems = useCart().totalUniqueItems;
+    const  totalWatchlistItems = useWatchlist().totalUniqueItems;
+    
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -27,14 +30,17 @@ const Navbar = ({showSearch}) => {
                     <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
                     EnsOcean
                 </Link>
-                <div className="d-flex flex-row justify-content-end align-items-center gap-1">         
-                    <div className="d-lg-none d-flex flex-row">
+                <div className="d-flex flex-row justify-content-end align-items-center gap-2">         
+                    <div className="d-lg-none d-flex flex-row gap-2">
+                        <GasPriceButton />
                         <ConnectButton smallButton={true} />
-                        <BasketButton smallButton={true} />
                     </div>
-                    <button className="navbar-toggler" type="button" onClick={(e)=> handleShow()}>
+                    <button className="navbar-toggler position-relative p-1" type="button" onClick={(e)=> handleShow()}>
                         <span className="navbar-toggler-icon"></span>
-                    </button> 
+                        <small className="position-absolute translate-middle badge rounded-pill bg-danger">
+                            <Numeral value={totalCartlistItems + totalWatchlistItems} format={"0,0"} />
+                        </small>
+                    </button>
                 </div>
                 <Offcanvas show={show} onHide={handleClose} responsive="lg" placement="end" className="flex-grow-1">
                     <Offcanvas.Header closeButton>
@@ -61,13 +67,7 @@ const Navbar = ({showSearch}) => {
                                 </li>
                             }
                             <li className="nav-item">
-                                {isConnected && 
-                                    <Link onClick={ handleClose } className="nav-link fw-bold" to={"/account/"+ address +"?tab=watchlist"}>
-                                        Watchlist {" "}
-                                        <small className="translate-middle ms-2 badge rounded-pill bg-danger">
-                                            <Numeral value={totalUniqueItems} format={"0,0"} />
-                                        </small>
-                                    </Link>}
+                                <WatchlistLink />
                             </li> 
                         </ul>
                         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">

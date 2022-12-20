@@ -60,14 +60,14 @@ function GasPriceButton() {
     return (
         <> 
         <OverlayTrigger trigger="click" placement="left" overlay={popover}>
-            <Button variant="default">
-                <span className='fw-bold'>
+            <Button className='p-0' variant="default">
+                <small className='fw-bold'>
                     <FuelPump />
                         { " " }
                         {!isLoaded && <>...</>}
                         {error && <>!</>}
                         {isLoaded && data && <><Numeral value={data.result.ProposeGasPrice} format={"0"} /> Gwei</>}
-                </span> 
+                </small> 
             </Button>
         </OverlayTrigger> 
         </>
