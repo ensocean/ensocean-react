@@ -469,53 +469,61 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
             </div>
             <div className="container-fluid p-0">
                 <div className="d-flex justify-content-between mt-2">
-                    <div className="csv-download">
-                        <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                            <FiletypeCsv className="text-dark" />
-                        </CSVLink> 
-                    </div> 
-                    <div className="paging d-flex gap-2"> 
-                        <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                            {"<"} Prev
-                        </button>  
-                        <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                            Next {">"}
-                        </button> 
-                    </div>  
-                    <div className="view-types d-flex gap-2">
-                        <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                            <ListUl className="text-dark" />
-                        </button>  
-                        <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                            <GridFill  className="text-dark" />
-                        </button>
-                    </div> 
+                {data && data.domains.length > 1 &&
+                    <>
+                        <div className="csv-download">
+                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                                <FiletypeCsv className="text-dark" />
+                            </CSVLink> 
+                        </div> 
+                        <div className="paging d-flex gap-2"> 
+                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                                {"<"} Prev
+                            </button>  
+                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                                Next {">"}
+                            </button> 
+                        </div>  
+                        <div className="view-types d-flex gap-2">
+                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                                <ListUl className="text-dark" />
+                            </button>  
+                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                                <GridFill  className="text-dark" />
+                            </button>
+                        </div> 
+                    </>
+                }
                 </div>
                 <div className="container-fluid p-1" id="#results">
                     <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
                 <div className="d-flex justify-content-between">
-                    <div className="csv-download">
-                        <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
-                            <FiletypeCsv className="text-dark" />
-                        </CSVLink> 
-                    </div> 
-                    <div className="paging d-flex gap-2"> 
-                        <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                            {"<"} Prev
-                        </button>  
-                        <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                            Next {">"}
-                        </button> 
-                    </div> 
-                    <div className="view-types d-flex gap-2">
-                        <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
-                            <ListUl className="text-dark" />
-                        </button>  
-                        <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
-                            <GridFill className="text-dark" />
-                        </button>
-                    </div> 
+                    {data && data.domains.length > 1 &&
+                    <>
+                        <div className="csv-download">
+                            <CSVLink filename={"ensocean-domain-results.csv"} data={csvData} headers={csvHeaders} data-bs-toogle="tooltip" data-bs-title="Download CSV" className="btn btn-default" >
+                                <FiletypeCsv className="text-dark" />
+                            </CSVLink> 
+                        </div> 
+                        <div className="paging d-flex gap-2"> 
+                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                                {"<"} Prev
+                            </button>  
+                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                                Next {">"}
+                            </button> 
+                        </div> 
+                        <div className="view-types d-flex gap-2">
+                            <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
+                                <ListUl className="text-dark" />
+                            </button>  
+                            <button type="button" className={view === "gallery" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "gallery")}>
+                                <GridFill className="text-dark" />
+                            </button>
+                        </div>
+                    </>
+                    }
                 </div>  
             </div>
         </div> 
@@ -573,6 +581,10 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         if(view === "list") {
             return (
                 <>
+                {data && data.domains.length < 1 &&
+                    <div className="alert alert-light text-center"> No Result Found</div>
+                }
+                {data && data.domains.length > 1 &&
                 <div className="table-responsive">
                     <table className='table table-hover'>
                         <thead className="table-light text-start">
@@ -585,11 +597,6 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             </tr>
                         </thead>
                         <tbody className="text-start">
-                            {data && data.domains.length < 1 &&
-                                <tr>
-                                    <td colSpan='6' className='p-3 text-center'><span className='text-muted'>No Result</span></td>
-                                </tr>
-                            } 
                             {data &&
                                 <>
                                     {data.domains.map((domain) => (
@@ -612,25 +619,26 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                         </tbody>
                     </table>
                 </div>
+                }
                 </>
             )
         } else {
             return (
             <> 
+                {data && data.domains.length < 1 &&
+                    <div className="alert alert-light text-center">No Result found</div>
+                } 
+                {data && 
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
-                    {data && data.domains.length < 1 &&
-                        <div className="col text-center text-muted">No Result found</div>
-                    } 
-                    {data && 
                         <>
                         {data.domains.map((domain) => (
                         <div className="col mb-3 p-1" key={domain.id}>
                             <DomainCard domain={domain} />
                         </div> 
                         ))}
-                        </>
-                    }
+                        </> 
                 </div>  
+                }
             </>
             ) 
         } 

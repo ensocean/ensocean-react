@@ -32,7 +32,7 @@ const Navbar = ({showSearch}) => {
                 </Link>
                 <div className="d-flex flex-row justify-content-end align-items-center gap-2">         
                     <div className="d-lg-none d-flex flex-row gap-2">
-                        
+                        <GasPriceButton />
                         <ConnectButton smallButton={true} />
                     </div>
                     <button className="navbar-toggler p-1" type="button" onClick={(e)=> handleShow()}>
