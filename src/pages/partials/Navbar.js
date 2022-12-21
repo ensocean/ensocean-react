@@ -31,7 +31,7 @@ const Navbar = ({showSearch}) => {
     const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
     const { openConnectModal } = useConnectModal(); 
     const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
-    
+     
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -94,20 +94,29 @@ const Navbar = ({showSearch}) => {
                             <li> <GasPriceButton /></li>
                             
                             <li> 
-                                { SUPPORTED_CHAIN_ID !== chain?.id ? 
-                                <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
-                                    <button className={"btn btn-danger"} disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
-                                    {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
-                                    <span> Wrong Network</span>
-                                    </button> 
-                                </OverlayTrigger>
-                                : <button className={"btn btn-outline-primary"} onClick={handleShow}>
-                                    <Wallet /> {" "}
-                                    {obscureAddress(address)} 
-                                    <small className="position-absolute top-50 start-75 badge rounded-pill bg-danger">
-                                        <Numeral value={totalRegisterlistItems + totalWatchlistItems} format={"0,0"} />
-                                    </small>
-                                    </button>
+                                {isConnected && 
+                                    <>
+                                        { SUPPORTED_CHAIN_ID !== chain?.id ? 
+                                            <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
+                                                <button className={"btn btn-danger"} disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+                                                {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
+                                                <span> Wrong Network</span>
+                                                </button> 
+                                            </OverlayTrigger>
+                                        : <button className={"btn btn-outline-primary"} onClick={handleShow}>
+                                            <Wallet /> {" "}
+                                            {obscureAddress(address)} 
+                                            <small className="position-absolute top-50 start-75 badge rounded-pill bg-danger">
+                                                <Numeral value={totalRegisterlistItems + totalWatchlistItems} format={"0,0"} />
+                                            </small>
+                                          </button>
+                                        }
+                                    </>
+                                }
+                                {!isConnected && 
+                                  <button className={"btn btn-primary"} onClick={handleConnect}>
+                                    Connect Wallet
+                                  </button>
                                 }
                             </li>
                         </ul> 
