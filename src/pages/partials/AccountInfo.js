@@ -66,7 +66,7 @@ const AccountInfo = () => {
                     </div>
                 </div>
                 <div className="flex-grow-1 ms-3">
-                    <h2 className="text-truncate">{primaryName || obscureAddress(addr)}</h2>
+                    <h1 className="text-truncate">{primaryName || obscureAddress(addr)}</h1>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={addr} onCopy={() => toast.success("Address copied") }>
                             <span rule="button">
