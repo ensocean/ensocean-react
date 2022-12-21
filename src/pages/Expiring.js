@@ -22,7 +22,7 @@ const Expiring = () => {
             <div className="container-fluid p-2">
                 <Tabs tab="expiring" />
             </div>
-            <div className="container-fluid">
+            <div className="container-fluid ps-3 pe-3">
                 <Filter First={100} Skip={0} Tab={"expiring"} OrderBy={"expires"} OrderDirection={"asc"} Where={{
                         label_not: null,
                         expires_lte: moment().utc().unix(),
