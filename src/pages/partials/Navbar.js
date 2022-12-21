@@ -16,11 +16,11 @@ import Numeral from "react-numeral";
 import GasPriceButton from "../../components/GasPriceButton";
 import WatchlistLink from "../../components/WatchlistLink";
 import { useRegisterlist } from "react-use-registerlist";
-import UserMenuButton from "../../components/UserMenuButton";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { toast } from "react-toastify";
 import { OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { obscureAddress } from "../../helpers/String";
+import { Bag } from "react-bootstrap-icons";
 
 const Navbar = ({showSearch}) => {   
     const { isConnected, address } = useAccount();   
@@ -100,7 +100,13 @@ const Navbar = ({showSearch}) => {
                                     <span> Wrong Network</span>
                                     </button> 
                                 </OverlayTrigger>
-                                : <button className={"btn btn-outline-primary"} onClick={handleShow}>{obscureAddress(address)}</button>}
+                                : <button className={"btn btn-outline-primary"} onClick={handleShow}>
+                                    {obscureAddress(address)}
+                                    <small className="position-absolute top-0 start-75 badge rounded-pill bg-danger">
+                                        <Numeral value={totalRegisterlistItems + totalWatchlistItems} format={"0,0"} />
+                                    </small>
+                                    </button>
+                                }
                             </li>
                         </ul> 
                     </div>
@@ -128,11 +134,26 @@ const Navbar = ({showSearch}) => {
                                 </Link> 
                             </li>
                         }
+                        {isConnected && 
+                            <li>
+                                <Link onClick={ handleClose } className="nav-link fw-bold" title={"My Watchlist"} to={"/account/"+ address +"?tab=watchlist"}>
+                                    Watchlist {" "}
+                                    <small className="translate-middle ms-2 badge rounded-pill bg-danger">
+                                        <Numeral value={totalWatchlistItems} format={"0,0"} />
+                                    </small>
+                                </Link> 
+                            </li>
+                        }
                         <li>
-                            <WatchlistLink />
-                        </li> 
-                        <li>
-                            <BasketButton /> 
+                            <Link onClick={ handleClose }  className={"btn btn-default position-relative nav-link fw-bold"}  to="/register">
+                                BulkRegister
+    
+                                {totalRegisterlistItems > 0 && 
+                                    <small className="position-absolute ms-2 translate-middle badge rounded-pill bg-danger">
+                                        <Numeral value={totalRegisterlistItems} format={"0,0"} />
+                                    </small>
+                                }
+                            </Link>
                         </li>
                         <li>
                             <ConnectButton />
