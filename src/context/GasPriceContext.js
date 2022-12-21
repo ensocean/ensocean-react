@@ -1,13 +1,12 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 
 // const API_URL = "https://beaconcha.in/api/v1/execution/gasnow";
 const API_URL = "https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=FS1QSVDXCPUFGE1VCX74EQJKZ4JG8WE8SI";
 
 const GasPriceContext = React.createContext();
 
-export const GasPriceProvider = ({ children }) => {
-    //const [state, dispatch] = React.useReducer(gasPriceReducer, { data: null, error: null, isLoading: false });
-    
+export const GasPriceProvider = ({ children }) => { 
+
     const [data, setData] = useState(null);
     const [error, setError] = useState(null); 
     const [isLoading, setIsLoading] = useState(false);

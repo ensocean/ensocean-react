@@ -150,7 +150,6 @@ const AutoComplete = () => {
             onKeyDown={handleKeydown} 
             options={options} 
             defaultInputValue={query}
-            className="flex-grow-1"
             promptText="Type 3 character to search"
             searchText="Search"
             emptyLabel="Type 3 character to search"

@@ -8,6 +8,7 @@ import { useAccount } from "wagmi";
 import { Trash } from "react-bootstrap-icons";
 import { Button, Modal } from "react-bootstrap";
 import { useState } from "react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Account = () => {
     const addr = useParams().address;  
@@ -55,15 +56,28 @@ const Account = () => {
                     label_not: null, 
                     owner: addr.toLowerCase()
                 }} />} 
-                {tab === "watchlist" && isConnected && address === addr &&
-                <Filter First={100} Skip={0} Tab={"watchlist"} OrderBy={"expires"} OrderDirection={"desc"} Where={{
-                        label_not:null, 
-                        id_in: items.map(t=> t.id) 
-                }} View="gallery" />}
+                {tab === "watchlist" &&
+                <>
+                    {isConnected  &&
+                        <Filter First={100} Skip={0} Tab={"watchlist"} OrderBy={"expires"} OrderDirection={"desc"} Where={{
+                            label_not:null, 
+                            id_in: items.map(t=> t.id) 
+                        }} View="gallery" />}
+
+                    {!isConnected  &&
+                        <div className="d-flex flex-row justify-content-center">
+                            <ConnectButton />
+                        </div>
+                    }
+                 
+                </>
+                
+                
+                }
             </div>
       </div>  
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal backdrop={true} centered show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Are you sure want to delete all?</Modal.Title>
             </Modal.Header>
