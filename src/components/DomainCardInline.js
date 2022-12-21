@@ -18,8 +18,8 @@ function DomainCardInline({domain}) {
                 <div className="d-flex flex-row justify-content-between gap-2">
                 <DomainLink domain={domain} /> 
                 <div className="d-flex flex-row gap-2"> 
-                    <AddToCartSmallButton domain={domain} />  
-                    <AddToWatchlistSmallButton domain={{ id: domain.id, price: 0 }} />  
+                    <AddToCartSmallButton domain={domain} variation="default" />  
+                    <AddToWatchlistSmallButton domain={{ id: domain.id, price: 0 }}  variation="default" />  
                 </div>
                 </div> 
                 <div className="d-flex flex-row justify-content-start">

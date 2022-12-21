@@ -32,26 +32,30 @@ function DomainCard({domain, label, loading}) {
         )
     } else {
         return ( 
-            <div className="card border-light bg-light g-card">  
+            <div className="card g-card border border-light bg-light shadow-sm">  
                 <div className="card-body p-0">
                     <Link className="text-decoration-none link-dark fw-bold fs-5" title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"} to={"/"+ encodeURIComponent(domain.label) + "."+ domain.extension }>
-                        <div className="card border-0 text-start bg-light">
+                        <div className="card border-0 text-start">
                             <DomainImage domain={domain} />
-                            <div className="card-body p-2  bg-light">
+                            <div className="card-body p-2">
                                 <h6 className="card-title m-0 text-truncate fs-5 fw-bold">
                                     <DomainLabel domain={domain} showBadge={false} showAddToCartButton={true} />
                                 </h6>
                             </div>
-                             
+                            <div className="card-img-overlay">
+                                
+                            </div>
                         </div>
                     </Link>
-                </div>
-                <div className="p-2 d-flex flex-column justify-content-between gap-2">
-                    <DomainStatus domain={domain} showExpires={true} />
-                </div>
-                <div className="card-footer bg-light text-start p-2 ">
-                    <AddToCartSmallButton domain={domain} /> 
-                    <AddToWatchlistSmallButton domain={domain} /> 
+                </div> 
+                <div className="card-footer bg-light text-start p-2 bg-light">
+                    <div className="d-flex flex-column">
+                        <DomainStatus domain={domain} showExpires={true} /> 
+                        <div className="d-flex flex-row justify-content-end gap-2 align-items-center mt-1">
+                            <AddToCartSmallButton domain={domain} /> 
+                            <AddToWatchlistSmallButton domain={domain} /> 
+                        </div>
+                    </div>
                 </div>
             </div> 
         )
