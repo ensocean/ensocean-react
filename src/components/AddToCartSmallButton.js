@@ -40,19 +40,16 @@ function AddToCartSmallButton({domain}) {
         return (
             <>   
              {isValidName(domain.label) && isAvailable(domain.expires) &&  
-                <OverlayTrigger placement="top"  overlay={<Tooltip>Add To Cart </Tooltip>} >
                     <button className="btn btn-default btn-sm" 
                         onClick={(e)=> { addToRegisterlist(_domain) }}>
                         <Cart4 width={20} height={20} />
                     </button>  
-                </OverlayTrigger>   
             }
             </>
         )   
     } else {
         return (
             <> 
-             <OverlayTrigger placement="top"  overlay={<Tooltip>Remove From Cart </Tooltip>} >
                 <button className={showRemove ? "btn btn-default btn-sm": "btn btn-default btn-sm text-success"}
                     onMouseOverCapture={handleMouseOver} 
                     onMouseOutCapture={handleMouseOut}
@@ -60,7 +57,6 @@ function AddToCartSmallButton({domain}) {
                     {showRemove && <span><X width={20} height={20} /> </span>} 
                     {!showRemove && <span><Check2 width={20} height={20} /> </span>}
                 </button> 
-            </OverlayTrigger>  
             </>
         )
     }   
