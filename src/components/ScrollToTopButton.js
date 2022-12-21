@@ -26,7 +26,7 @@ function ScrollToTopButton( ) {
     return (
         <>  
           {showButton && (
-            <button onClick={scrollToTop} className="btn btn-lg btn-primary position-fixed bottom-0 end-0 mb-4 me-4">
+            <button onClick={scrollToTop} className="btn btn-primary position-fixed bottom-0 end-0 mb-4 me-4">
                <ArrowUp />
             </button>
           )}

@@ -16,3 +16,7 @@
   bottom: 20px;
   right: 20px; 
 }
+
+tr > td {
+  min-width: 200px;
+}

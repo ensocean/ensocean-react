@@ -600,8 +600,8 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             {data &&
                                 <>
                                     {data.domains.map((domain) => (
-                                    <tr key={domain.id} className="t-card">
-                                        <td className="p-3">
+                                    <tr key={domain.id}>
+                                        <td className="p-3" style={{maxWidth: 480}}>
                                             <DomainCardInline domain={domain} />
                                         </td> 
                                         <td className="p-3"> 

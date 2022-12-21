@@ -20,7 +20,7 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { toast } from "react-toastify";
 import { OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { obscureAddress } from "../../helpers/String";
-import { Bag } from "react-bootstrap-icons";
+import { Bag, Wallet } from "react-bootstrap-icons";
 
 const Navbar = ({showSearch}) => {   
     const { isConnected, address } = useAccount();   
@@ -92,6 +92,7 @@ const Navbar = ({showSearch}) => {
                     <div className="d-flex flex-row justify-content-end">
                         <ul className="list-unstyled d-flex flex-row justify-content-end gap-2 align-items-center m-0">
                             <li> <GasPriceButton /></li>
+                            
                             <li> 
                                 { SUPPORTED_CHAIN_ID !== chain?.id ? 
                                 <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
@@ -101,8 +102,9 @@ const Navbar = ({showSearch}) => {
                                     </button> 
                                 </OverlayTrigger>
                                 : <button className={"btn btn-outline-primary"} onClick={handleShow}>
-                                    {obscureAddress(address)}
-                                    <small className="position-absolute top-0 start-75 badge rounded-pill bg-danger">
+                                    <Wallet /> {" "}
+                                    {obscureAddress(address)} 
+                                    <small className="position-absolute top-50 start-75 badge rounded-pill bg-danger">
                                         <Numeral value={totalRegisterlistItems + totalWatchlistItems} format={"0,0"} />
                                     </small>
                                     </button>
@@ -114,9 +116,10 @@ const Navbar = ({showSearch}) => {
             </div>
             <Offcanvas show={show} onHide={handleClose} placement="end" className="flex-grow-1">
                 <Offcanvas.Header closeButton>
-                    <a className="navbar-brand" title="EnsOcean" href="/">
+                    <Link className="navbar-brand me-1 fw-bold fs-3" title="EnsOcean" to="/">
                         <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
-                    </a>
+                        EnsOcean
+                    </Link>
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                     <AutoComplete />  
@@ -126,28 +129,25 @@ const Navbar = ({showSearch}) => {
                         </li> 
                         <li>
                             <Link onClick={ handleClose } className="nav-link fw-bold" to="/discover">Browse</Link>
+                        </li>  
+                        {isConnected &&
+                        <li>
+                            <Link onClick={ handleClose } className="nav-link fw-bold" title={"My Portfolio"} to={"/account/"+ address }> 
+                                My Domains
+                            </Link> 
+                        </li>
+                        }
+                        <li> 
+                            <Link onClick={ isConnected ? handleClose: handleConnect } className="nav-link fw-bold" title={"My Watchlist"} to={"/account/"+ address +"?tab=watchlist"}>
+                                Watchlist {" "}
+                                <small className="translate-middle ms-2 badge rounded-pill bg-danger">
+                                    <Numeral value={totalWatchlistItems} format={"0,0"} />
+                                </small>
+                            </Link> 
                         </li> 
-                        {isConnected && 
-                            <li>
-                                <Link onClick={ handleClose } className="nav-link fw-bold" title={"My Portfolio"} to={"/account/"+ address }> 
-                                    My Domains
-                                </Link> 
-                            </li>
-                        }
-                        {isConnected && 
-                            <li>
-                                <Link onClick={ handleClose } className="nav-link fw-bold" title={"My Watchlist"} to={"/account/"+ address +"?tab=watchlist"}>
-                                    Watchlist {" "}
-                                    <small className="translate-middle ms-2 badge rounded-pill bg-danger">
-                                        <Numeral value={totalWatchlistItems} format={"0,0"} />
-                                    </small>
-                                </Link> 
-                            </li>
-                        }
                         <li>
                             <Link onClick={ handleClose }  className={"btn btn-default position-relative nav-link fw-bold"}  to="/register">
-                                BulkRegister
-    
+                                Bulk Registration 
                                 {totalRegisterlistItems > 0 && 
                                     <small className="position-absolute ms-2 translate-middle badge rounded-pill bg-danger">
                                         <Numeral value={totalRegisterlistItems} format={"0,0"} />
