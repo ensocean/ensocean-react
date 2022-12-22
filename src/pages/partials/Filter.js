@@ -538,30 +538,9 @@ const FilterResults = ( { called, loading, error, data, view}) => {
         if(view === "list") {
             return ( 
             <>
-            <div className='w-100 table-responsive placeholder-glow'>
-                <table className='table table-hover'>
-                    <thead className="table-light text-start">
-                        <tr>
-                            <th className="p-3">Name</th> 
-                            <th className="p-3">Expires</th>
-                            <th className="p-3">Owner</th>
-                            <th className="p-3">Created</th>
-                            <th className="p-3">Registered</th> 
-                        </tr>
-                    </thead>
-                    <tbody className="text-start"> 
-                        {[...Array(10)].map((x, i) =>
-                        <tr key={i}>
-                            <td className="p-3"><span className="placeholder col-12"></span></td> 
-                            <td className="p-3"><span className="placeholder col-8"></span></td>
-                            <td className="p-3"><span className="placeholder col-8"></span></td>
-                            <td className="p-3"><span className="placeholder col-4"></span></td>
-                            <td className="p-3"><span className="placeholder col-4"></span></td> 
-                        </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>  
+                <div className='w-100 table-responsive placeholder-glow'>
+                    <DomainCardInline loading={loading} />
+                </div> 
             </>     
                 )
         } else {
@@ -574,7 +553,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
     } else if (error) {
         return (
             <>
-            <span className='text-danger'>{error.message}</span>     
+             <span className='text-danger'>{error.message}</span>     
             </>
         );
     } else {   
@@ -585,11 +564,26 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                     <div className="alert alert-light text-center"> No Result Found</div>
                 }
                 {data && data.domains.length > 0 &&
-                <div className="d-flex gap-3 flex-column mt-3">
+                <div className="d-flex gap-3 flex-column mt-3"> 
+                        <div className="row border-bottom bg-light pt-2 pb-2"> 
+                            <div className="col-12 col-sm-12 col-md-6 p-2">
+                                <span className="fw-bold">Name</span>
+                            </div>
+                            <div className="col-2 p-2 d-none d-md-block">
+                                <span className="fw-bold">Owner</span>
+                            </div>
+                            <div className="col-2 p-2 d-none d-md-block">
+                                <span className="fw-bold">Registered</span>
+                            </div>
+                            <div className="col-2 p-2 d-none d-md-block">
+                                <span className="fw-bold">Created</span>
+                            </div>
+                        </div>  
+
                     {data &&
                         <>
                             {data.domains.map((domain) => ( 
-                                <DomainCardInline domain={domain} showExpires={true} />
+                                <DomainCardInline domain={domain} />
                             ))}
                         </>
                     } 
