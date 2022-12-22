@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Dropdown, Overlay, OverlayTrigger, Popover, Spinner } from 'react-bootstrap';
 import { FuelPump } from 'react-bootstrap-icons';
 import Numeral from 'react-numeral';
+import { Link } from 'react-router-dom';
 import useGasPrice from '../context/GasPriceContext';
 
 function GasPriceButton() {
@@ -35,15 +36,12 @@ function GasPriceButton() {
     return (
         <> 
         <OverlayTrigger trigger="click" placement="left" overlay={popover}>
-            <Button className='p-0' variant="default" width={50}>
-                <small className='fw-bold'>
-                    <FuelPump />
-                        { " " }
-                        {isLoading && <> <Spinner animation="border" variant="dark" size="sm" /> Gwei </> }
-                        {error && <>!</>}
-                        {!isLoading && data && <><Numeral value={data.result.ProposeGasPrice} format={"0"} /> Gwei</>}
-                </small> 
-            </Button>
+            <Link className='text-decoration-none link-dark d-flex flex-row align-items-center gap-1 fw-bold' variant="default" width={50}>
+                <FuelPump />
+                {isLoading && <> <Spinner animation="border" variant="dark" size="sm" /> Gwei </> }
+                {error && <>!</>}
+                {!isLoading && data && <small><Numeral value={data.result.ProposeGasPrice} format={"0"} /> Gwei</small>}
+            </Link>
         </OverlayTrigger> 
         </>
     )

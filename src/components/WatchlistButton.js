@@ -2,16 +2,16 @@
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import React from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Bag, BagFill } from "react-bootstrap-icons";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Heart, HeartFill } from "react-bootstrap-icons";
 import Numeral from "react-numeral";
 import { Link, useNavigate } from "react-router-dom";
-import { useRegisterlist } from "react-use-registerlist"; 
+import { useWatchlist } from "react-use-watchlist";
 import { useAccount } from "wagmi";
 
-function BasketButton() {   
-    const { isEmpty, totalUniqueItems } = useRegisterlist();
+function WatchlistButton() {   
     const { isConnected, address } = useAccount();   
+    const { isEmpty, totalUniqueItems } = useWatchlist();
     const { openConnectModal } = useConnectModal(); 
     const navigate = useNavigate();
 
@@ -20,15 +20,15 @@ function BasketButton() {
         if(!isConnected) {
             openConnectModal();
         } else {
-            navigate("/register");
+            navigate("/account/"+ address +"?tab=watchlist");
         }
     }
 
     return (
-        <OverlayTrigger placement="bottom"  overlay={<Tooltip>View Your Cart</Tooltip>} >
-            <Link className={"text-decoration-none link-dark d-flex flex-row align-items-center gap-1 position-relative "}  onClick={handleClick}>
-                {isEmpty ? <Bag />: <BagFill />}
-                <small>Registration</small>
+        <OverlayTrigger placement="bottom" overlay={<Tooltip>View Your Watchlist</Tooltip>} >
+            <Link className={"text-decoration-none link-dark d-flex flex-row align-items-center gap-1 position-relative"}  onClick={handleClick}>
+                {isEmpty ? <Heart /> : <HeartFill />}
+                <small>Watchlist</small>
                 {totalUniqueItems > 0 && 
                     <small className="position-absolute top-0 start-100 ms-1 translate-middle badge rounded-pill bg-danger">
                         <Numeral value={totalUniqueItems} format={"0,0"} />
@@ -39,5 +39,5 @@ function BasketButton() {
     ) 
 }
 
-export default BasketButton;
+export default WatchlistButton;
 
