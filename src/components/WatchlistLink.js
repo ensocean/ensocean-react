@@ -17,7 +17,7 @@ function WatchlistLink() {
     const handleConnect = (e) => {
         e.preventDefault();
         openConnectModal();
-      }
+    }
       
     return ( 
         <>

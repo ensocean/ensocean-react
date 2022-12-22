@@ -52,7 +52,7 @@ const RecentExpired = () => {
         <div className="card">
           <div className="card-header d-flex justify-content-between">
               <h5 className='fs-4 m-1'>Just Dropped</h5>
-              <button onClick={handleRefresh} disabled={loading?"disabled": ""} className={"btn btn-outline-light text-dark"}>
+              <button onClick={handleRefresh} disabled={loading?"disabled": ""} className={"btn btn-outline-light text-dark p-0"}>
                 {loading &&
                     <Spinner animation="border" variant="dark" size="sm" />
                 }

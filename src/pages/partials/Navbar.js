@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useWatchlist } from "react-use-watchlist";
 import Numeral from "react-numeral";
 import GasPriceButton from "../../components/GasPriceButton";
-import WatchlistLink from "../../components/WatchlistLink";
+import WatchlistButton from "../../components/WatchlistButton";
 import { useRegisterlist } from "react-use-registerlist";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { toast } from "react-toastify";
@@ -90,9 +90,16 @@ const Navbar = ({showSearch}) => {
                         </ul> 
                     </div>
                     <div className="d-flex flex-row justify-content-end">
-                        <ul className="list-unstyled d-flex flex-row justify-content-end gap-2 align-items-center m-0">
-                            <li> <GasPriceButton /></li>
-                            
+                        <ul className="list-unstyled d-flex flex-row justify-content-end gap-3 align-items-center m-0 fw-bold">
+                            <li> 
+                                <GasPriceButton />
+                            </li>
+                            <li>
+                                <WatchlistButton />
+                            </li>
+                            <li>
+                                <BasketButton />
+                            </li>
                             <li> 
                                 {isConnected && 
                                     <>
@@ -103,13 +110,10 @@ const Navbar = ({showSearch}) => {
                                                 <span> Wrong Network</span>
                                                 </button> 
                                             </OverlayTrigger>
-                                        : <button className={"btn btn-outline-primary"} onClick={handleShow}>
+                                        : <Link className={"text-decoration-none"} onClick={handleShow}>
                                             <Wallet /> {" "}
                                             {obscureAddress(address)} 
-                                            <small className="position-absolute top-50 start-75 badge rounded-pill bg-danger">
-                                                <Numeral value={totalRegisterlistItems + totalWatchlistItems} format={"0,0"} />
-                                            </small>
-                                          </button>
+                                          </Link>
                                         }
                                     </>
                                 }

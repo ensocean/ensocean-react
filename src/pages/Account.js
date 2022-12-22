@@ -42,7 +42,7 @@ const Account = () => {
         </div>
       </div>
       <div className="container-fluid p-0 m-0"> 
-            {totalUniqueItems > 0 &&
+            {isConnected && totalUniqueItems > 0 &&
                 <div className="d-flex flex-row justify-content-end align-items-center gap-3 pt-3 pe-3">        
                     <button className="btn btn-primary" onClick={handleShow}> <Trash /> Clear Watchlist</button>
                 </div>
@@ -68,11 +68,8 @@ const Account = () => {
                         <div className="d-flex flex-row justify-content-center">
                             <ConnectButton />
                         </div>
-                    }
-                 
-                </>
-                
-                
+                    } 
+                </> 
                 }
             </div>
       </div>  
