@@ -77,7 +77,7 @@ const Navbar = ({showSearch}) => {
             <div className="flex-fill d-none d-lg-block d-flex flex-row justify-content-between">
                 <div className="d-flex flex-row justify-content-between">
                     <div className="flex-grow-1 d-flex flex-row justify-content-start gap-3">
-                        <div className="w-50">
+                        <div style={{ width: "60%" }}>
                             <AutoComplete />  
                         </div>
                         <ul className="list-unstyled m-0 d-flex flex-row justify-content-start gap-2 align-items-center ">
