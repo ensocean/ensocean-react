@@ -18,12 +18,12 @@ function DomainCardInline({domain, loading = false, showExpires = false}) {
                         <div className='d-flex flex-row gap-2 align-items-center'>
                             <div className="flex-shrink-0">
                                 <div className="card">
-                                    <div className="placeholder" style={{ minWidth:48,  minHeight: 48 }}></div>
+                                    <div className="placeholder card-img-top card-img-bottom" style={{ width:48,  height: 48 }}></div>
                                 </div>
                             </div>
                             <div className='flex-grow-1 d-flex flex-column text-truncate gap-1'>
-                                <span className='placeholder w-100'   ></span>
-                                <span className='placeholder w-50'  ></span>
+                                <span className='placeholder w-100'></span>
+                                <span className='placeholder w-50'></span>
                             </div>  
                         </div>
                     </div> 

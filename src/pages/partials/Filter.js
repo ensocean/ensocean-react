@@ -537,16 +537,32 @@ const FilterResults = ( { called, loading, error, data, view}) => {
     if (loading)  {
         if(view === "list") {
             return ( 
-            <>
-                <div className='w-100 table-responsive placeholder-glow'>
+            <> 
+                <div className="d-flex gap-3 flex-column mt-3"> 
+                    <div className="row border-bottom bg-light pt-2 pb-2"> 
+                        <div className="col-12 col-sm-12 col-md-6 p-2">
+                            <span className="fw-bold">Name</span>
+                        </div>
+                        <div className="col-2 p-2 d-none d-md-block">
+                            <span className="fw-bold">Owner</span>
+                        </div>
+                        <div className="col-2 p-2 d-none d-md-block">
+                            <span className="fw-bold">Registered</span>
+                        </div>
+                        <div className="col-2 p-2 d-none d-md-block">
+                            <span className="fw-bold">Created</span>
+                        </div>
+                    </div>
+                
                     <DomainCardInline loading={loading} />
-                </div> 
+                
+                </div>
             </>     
-                )
+            )
         } else {
             return (
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
-                 <DomainCard loading={loading} />
+                    <DomainCard loading={loading} />
                 </div>
             )
         } 
@@ -564,7 +580,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                     <div className="alert alert-light text-center"> No Result Found</div>
                 }
                 {data && data.domains.length > 0 &&
-                <div className="d-flex gap-3 flex-column mt-3"> 
+                    <div className="d-flex gap-3 flex-column mt-3"> 
                         <div className="row border-bottom bg-light pt-2 pb-2"> 
                             <div className="col-12 col-sm-12 col-md-6 p-2">
                                 <span className="fw-bold">Name</span>
@@ -587,7 +603,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             ))}
                         </>
                     } 
-                </div>
+                    </div>
                 }
                 </>
             )
@@ -599,13 +615,13 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                 } 
                 {data && 
                 <div className="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-5 row-cols-xxxl-6">
-                        <>
-                        {data.domains.map((domain) => (
+                    <>
+                    {data.domains.map((domain) => (
                         <div className="col mb-3 p-1" key={domain.id}>
                             <DomainCard domain={domain} />
                         </div> 
-                        ))}
-                        </> 
+                    ))}
+                    </> 
                 </div>  
                 }
             </>
