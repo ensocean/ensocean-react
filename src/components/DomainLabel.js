@@ -14,7 +14,7 @@ function DomainLabel({domain, label}) {
                 
             { !isAscii(domain?.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Include non-ascii characters</Tooltip>}>
-                   <ExclamationTriangleFill className='text-warning' />
+                   <ExclamationTriangleFill className='text-warning' width={12} height={12} />
                 </OverlayTrigger>
             }
                 
@@ -22,7 +22,7 @@ function DomainLabel({domain, label}) {
 
             { !isValidName(domain?.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Malformed domain</Tooltip>}>
-                    <DashCircleFill className='text-danger'  />
+                    <DashCircleFill className='text-danger' width={12} height={12}  />
                 </OverlayTrigger>
             }   
         </> 

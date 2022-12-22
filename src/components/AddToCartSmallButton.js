@@ -32,7 +32,7 @@ function AddToCartSmallButton({domain}) {
         return (
             <>   
              {isValidName(domain.label) && isAvailable(domain.expires) &&  
-                    <button className="btn btn-default btn-sm" 
+                    <button className="btn btn-default btn-sm p-0" 
                         onClick={(e)=> { addToRegisterlist(_domain) }}>
                         <Cart width={20} height={20} />
                     </button>  
@@ -42,7 +42,7 @@ function AddToCartSmallButton({domain}) {
     } else {
         return (
             <> 
-                <button className={"btn btn-default btn-sm text-success"}
+                <button className={"btn btn-default btn-sm text-success p-0"}
                     onClick={(e)=> { removeItem(_domain.id); toast.success("Removed from cart") }}>
                     {<span><CartFill width={20} height={20} /> </span>}
                 </button> 

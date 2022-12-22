@@ -585,39 +585,14 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                     <div className="alert alert-light text-center"> No Result Found</div>
                 }
                 {data && data.domains.length > 0 &&
-                <div className="table-responsive">
-                    <table className='table table-hover'>
-                        <thead className="table-light text-start">
-                            <tr>
-                                <th className="p-3">Name</th>
-                                <th className="p-3">Expires</th> 
-                                <th className="p-3">Owner</th>
-                                <th className="p-3">Created</th>
-                                <th className="p-3">Registered</th> 
-                            </tr>
-                        </thead>
-                        <tbody className="text-start">
-                            {data &&
-                                <>
-                                    {data.domains.map((domain) => (
-                                    <tr key={domain.id}>
-                                        <td className="p-3" style={{minWidth: 380, maxWidth: 380}}>
-                                            <DomainCardInline domain={domain} />
-                                        </td> 
-                                        <td className="p-3"> 
-                                            {getExpires(domain.expires)}
-                                        </td>
-                                        <td className="p-3"> 
-                                            <OwnerLink owner={domain.owner} />
-                                        </td>
-                                        <td className="p-3">{getTimeAgo(domain.created)}</td>
-                                        <td className="p-3">{getTimeAgo(domain.registered)}</td> 
-                                    </tr>
-                                    ))}
-                                </>
-                            }
-                        </tbody>
-                    </table>
+                <div className="d-flex gap-3 flex-column mt-3">
+                    {data &&
+                        <>
+                            {data.domains.map((domain) => ( 
+                                <DomainCardInline domain={domain} showExpires={true} />
+                            ))}
+                        </>
+                    } 
                 </div>
                 }
                 </>

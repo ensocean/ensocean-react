@@ -22,7 +22,7 @@ function AddToWatchlistSmallButton({domain}) {
     if(!inWatchlist(domain.id)) {
         return (
             <>   
-                <button className={ "btn btn-sm btn-default"} 
+                <button className={ "btn btn-sm btn-default p-0"} 
                     onClick={(e)=> { addItem(domain);  toast.success("Added to favorites");   }}>
                     <Heart width={20} height={20} />
                 </button>  
@@ -31,7 +31,7 @@ function AddToWatchlistSmallButton({domain}) {
     } else {
         return (
             <> 
-                <button className={ "btn btn-sm btn-default text-danger" } 
+                <button className={ "btn btn-sm btn-default text-danger p-0" } 
                     onClick={(e)=> { removeItem(domain.id);  toast.success("Removed from favorites") }}>
                     {showRemove && <span><X width={20} height={20} /> </span>} 
                     {!showRemove && <span><HeartFill width={20} height={20} /> </span>}

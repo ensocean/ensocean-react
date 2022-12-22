@@ -11,13 +11,13 @@ function DomainLink({domain, label}) {
             to={"/"+ encodeURIComponent(domain.label)  + "."+ domain.extension }
             >
             
-            {obscureLabel(domain.label || label, 30)}.{domain.extension || "eth"}
+            {domain.label}.{domain.extension || "eth"}
         
             { ' ' }
                 
             { !isAscii(domain.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Include non-ascii characters</Tooltip>}>
-                    <ExclamationTriangleFill className='text-warning' />
+                    <ExclamationTriangleFill className='text-warning' width={12} height={12} />
                 </OverlayTrigger>
             }
                 
@@ -25,7 +25,7 @@ function DomainLink({domain, label}) {
 
             { !isValidName(domain.label || label) && 
                 <OverlayTrigger overlay={<Tooltip placement="top" className="in">Malformed domain</Tooltip>}>
-                    <DashCircleFill className='text-danger' />
+                    <DashCircleFill className='text-danger' width={12} height={12} />
                 </OverlayTrigger>
             } 
         </Link>
