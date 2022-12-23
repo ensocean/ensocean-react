@@ -6,7 +6,7 @@
     "@apollo/client": "^3.7.1",
     "@ensdomains/ens-validation": "^0.1.0",
     "@ensdomains/eth-ens-namehash": "^2.0.15",
-    "@rainbow-me/rainbowkit": "^0.8.0",
+    "@rainbow-me/rainbowkit": "^0.8.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -30,6 +30,7 @@
     "react-bootstrap-icons": "^1.10.2",
     "react-bootstrap-typeahead": "^6.0.0",
     "react-copy-to-clipboard": "^5.1.0",
+    "react-countdown-circle-timer": "^3.1.0",
     "react-csv": "^2.2.2",
     "react-delay-input": "^4.1.0",
     "react-dom": "^18.2.0",
@@ -52,8 +53,9 @@
     "react-use-renewlist": "^0.0.2-semantic-release",
     "react-use-watchlist": "^0.0.1-semantic-release",
     "tailwindcss": "^3.2.4",
-    "wagmi": "0.6.8",
+    "wagmi": "^0.9.5",
     "web-vitals": "^2.1.4",
+    "web3": "^1.8.1",
     "yarn": "^1.22.19"
   },
   "resolutions": {

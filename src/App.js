@@ -40,12 +40,13 @@ import {
   metaMaskWallet
 } from '@rainbow-me/rainbowkit/wallets';
 
-import {
-  chain,
+import { 
   configureChains,
   createClient,
   WagmiConfig
 } from 'wagmi';
+
+import { mainnet, goerli } from 'wagmi/chains'
 
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { infuraProvider } from 'wagmi/providers/infura'; 
@@ -61,7 +62,7 @@ const client = new ApolloClient({
 });
    
 const { chains, provider } = configureChains(
-  [chain[process.env.REACT_APP_SUPPORTED_NETWORK]],
+  [process.env.REACT_APP_SUPPORTED_NETWORK == "goerli" ? goerli: mainnet ],
   [
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY, priority: 0, weight: 1 }),
     infuraProvider({ apiKey: process.env.REACT_APP_INFURA_KEY, priority: 1, weight: 2 }),

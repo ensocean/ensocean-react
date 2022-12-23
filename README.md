@@ -10,6 +10,38 @@ npm install
 npm start
 ```
  
+
+ <div className="d-flex flex-column gap-4 justify-content-center align-items-center mt-3">   
+            <div className="d-flex flex-column justify-content-center align-items-center gap-4 mt-3">
+              <CountdownCircleTimer
+                isPlaying
+                duration={60} 
+                colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+                colorsTime={[7, 5, 2, 0]}
+                onComplete={(e)=> setStep(3)}
+              >
+                {({ remainingTime }) => remainingTime}
+              </CountdownCircleTimer>
+            </div>
+            <div className="d-flex flex-column justify-content-center align-items-center">
+              <h4>Wait for 1 Minute</h4>
+              <p>
+                The waiting period is required to ensure another person hasn’t tried to register the same name and protect you after your request.
+              </p>
+            </div>
+          </div>
+
+ <div className="position-relative m-4">
+          <div className="progress" style={{height: 1}}>
+            <div className="progress-bar" role="progressbar" style={{ width: (step === 2 ? "50%": (step === 3 ? "100%": ""))  }} ></div>
+          </div>
+          <span className={"position-absolute top-0 start-0 translate-middle text-white pt-2 pb-2 ps-3 pe-3 rounded-circle " + (step === 1 || step === 2 || step === 3 ? "bg-primary" : "bg-secondary") }>1</span>
+          <span className={"position-absolute top-0 start-50 translate-middle  text-white pt-2 pb-2 ps-3 pe-3  rounded-circle " + (step == 2 || step === 3 ? "bg-primary" : "bg-secondary")  }>2</span>
+          <span className={"position-absolute top-0 start-100 translate-middle  text-white pt-2 pb-2 ps-3 pe-3  rounded-circle " + (step == 3 ? "bg-primary" : "bg-secondary") }>3</span>
+        </div> 
+
+
+
 const provider = new ethers.providers.JsonRpcProvider(ETHEREUM_RPC_URL);
 const contract = new ethers.Contract(ENS_CONTROLLER_ADDRESS, EnsControllerAbi, provider);
 // contract.available(this.props.label).then((res) => {

@@ -24,7 +24,7 @@ const Expired = () => {
                 <Tabs tab={"expired"} /> 
             </div>
             <div className="container-fluid ps-3 pe-3">
-                <Filter First={100} Skip={0} Tab={"expired"} OrderBy={"expires"} OrderDirection={"desc"} Where={{
+                <Filter First={100} Skip={0} Tab={"expired"} OrderBy={"expires"} OrderDirection={"asc"} Where={{
                         label_not: null,
                         expires_lte: moment().add(-GRACE_PERIOD, "days").add(-PREMIUM_PERIOD, "days").utc().unix() 
                 }} View="gallery" />

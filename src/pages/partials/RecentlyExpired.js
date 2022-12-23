@@ -12,7 +12,7 @@ import { ArrowRepeat } from "react-bootstrap-icons";
   
 const RECENTLY_EXPIRED = gql`
 {
-  domains (first: 10, orderBy: expires, orderDirection: desc, where: {  
+  domains (first: 10, orderBy: expires, orderDirection: asc, where: {  
     label_not: null,
     expires_lte: ${getExpireCondition()}
   } ) {
@@ -95,7 +95,7 @@ const RecentExpired = () => {
                         <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
                           <div className="d-flex flex-row justify-content-between gap-2">
                             <DomainLink domain={domain} /> 
-                            <div className="d-flex flex-row gap-2">  
+                            <div className="d-flex flex-row gap-3">  
                                 <AddToCartSmallButton domain={domain} variation="light" />   
                                 <AddToWatchlistSmallButton domain={{ id: domain.id, price: 0 }} variation="light"  /> 
                             </div>

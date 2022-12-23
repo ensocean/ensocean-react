@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect }  from "react";
 import { useLocation, useNavigate} from "react-router-dom";  
 import { Helmet } from "react-helmet-async";
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getExpires, getDateString, isAvailable} from '../helpers/String';
+import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getExpires, getDateString, isAvailable, getTimeAgo} from '../helpers/String';
 import AddToCartButton from "../components/AddToCartButton";
 import ClaimNowButton from "../components/ClaimNowButton";
 import { useRegisterlist } from "react-use-registerlist";
@@ -191,7 +191,7 @@ const Find = () => {
                         {options[0].label}.{options[0].extension} is not available 😭 
                         </span>
                         <span className="text-muted fw-bold">
-                          Expires {getExpires(options[0].expires)}
+                          Expires {getTimeAgo(options[0].expires)}
                         </span>
                         <div className="text-muted fs-6 text-center">
                           This name was last registered on {getDateString(options[0].registered)}
