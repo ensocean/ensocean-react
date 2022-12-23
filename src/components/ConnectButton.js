@@ -12,6 +12,7 @@ import {
 import { toast } from 'react-toastify'; 
 import { OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { ExclamationCircle } from 'react-bootstrap-icons';
+import { useEffect } from 'react';
 
 
 window.Buffer = require("buffer").Buffer;
@@ -20,7 +21,7 @@ function ConnectButton({smallButton = false}) {
   const { isConnected } = useAccount() 
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork()
-  const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  const { data, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal(); 
   const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
 
@@ -37,10 +38,13 @@ function ConnectButton({smallButton = false}) {
   const handleSwitchChain = (e) => {
     e.preventDefault();
     switchNetwork?.(SUPPORTED_CHAIN_ID);
+  }
+
+  useEffect(()=> { 
     if(error) { 
       toast.error(error.message)
     }
-  }
+  }, [error]);
   
   if (isConnected) {
     return ( 
@@ -48,8 +52,28 @@ function ConnectButton({smallButton = false}) {
         { SUPPORTED_CHAIN_ID !== chain?.id ? 
           <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
             <button className={"btn btn-danger " + (smallButton ? "btn-sm": "") } disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
-              {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
-              {smallButton ? <ExclamationCircle /> : <span> Wrong Network</span> } 
+              {smallButton &&
+                <>
+                  {isLoading && pendingChainId === SUPPORTED_CHAIN_ID &&
+                    <Spinner animation="border" variant="white" size="sm" />
+                  } 
+
+                  {!isLoading && 
+                    <ExclamationCircle />
+                  }
+                </>
+              }
+
+              {!smallButton &&
+                <>
+                  {isLoading && pendingChainId === SUPPORTED_CHAIN_ID && 
+                    <Spinner animation="border" variant="white" size="sm" />
+                  }
+                  {!isLoading &&
+                    <span> Wrong Network</span>
+                  }
+                </>
+              } 
             </button> 
           </OverlayTrigger>
         : <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleDisconnect}>Disconnect</button>}

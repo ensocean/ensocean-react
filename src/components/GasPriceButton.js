@@ -35,12 +35,11 @@ function GasPriceButton() {
 
     return (
         <> 
-        <OverlayTrigger trigger="click" placement="left" overlay={popover}>
+        <OverlayTrigger trigger="click" rootClose placement="left" overlay={popover}>
             <Link className='text-decoration-none link-dark d-flex flex-row align-items-center gap-1 fw-bold' variant="default" width={50}>
                 <FuelPump />
-                {isLoading && <> <Spinner animation="border" variant="dark" size="sm" /> Gwei </> }
                 {error && <>!</>}
-                {!isLoading && data && <small><Numeral value={data.result.ProposeGasPrice} format={"0"} /> Gwei</small>}
+                {!isLoading && data && <small><Numeral value={data?.result?.ProposeGasPrice || 0} format={"0"} /> Gwei</small>}
             </Link>
         </OverlayTrigger> 
         </>

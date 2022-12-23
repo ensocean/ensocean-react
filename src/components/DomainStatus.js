@@ -23,7 +23,7 @@ function DomainStatus({domain, loading = false, showBadge=true, showNotAvailable
                 }
                 {showNotAvailable && isValidName(domain.label) &&  !isExpiring(domain.expires) && !isAvailable(domain.expires) && <strong className="float-end text-muted"> Not Available </strong>}
                 {showRegistered && isValidName(domain.label) && !isExpiring(domain.expires) && !isAvailable(domain.expires) && <span className="float-end text-muted">{getTimeAgo(domain.registered)}</span>}
-                {showExpires && isValidName(domain.label) && !isExpiring(domain.expires) && !isAvailable(domain.expires) && <small className="text-muted"> Expires {  getExpires(domain.expires, false) } </small>}
+                {showExpires && isValidName(domain.label) && !isExpiring(domain.expires) && !isAvailable(domain.expires) && <small className="text-muted"> Expires {  getTimeAgo(domain.expires) } </small>}
             </div>
         )
     } else {

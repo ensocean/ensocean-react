@@ -66,7 +66,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const [view, setView] = useState(_view); 
     const [csvData, setCsvData] = useState([]); 
     const [filterCount, setFilterCount] = useState(0); 
-    const [filterShow, setFilterShow] = useState(false);
+    const [filterShow, setFilterShow] = useState(true);
 
     const handleFilterClose = () => setFilterShow(false);
     const handleFilterShow = () => setFilterShow(true);
@@ -474,17 +474,13 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                             <FiletypeCsv className="text-dark" />
                         </CSVLink> 
                     </div> 
-                    <div className="paging d-flex gap-2"> 
-                        {data && data.domains.length > 0 && 
-                        <>
-                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                                {"<"} Prev
-                            </button>  
-                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                                Next {">"}
-                            </button> 
-                        </>
-                        }
+                    <div className="paging d-flex gap-2">  
+                        <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                            {"<"} Prev
+                        </button>  
+                        <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                            Next {">"}
+                        </button>  
                     </div>  
                     <div className="view-types d-flex gap-2">
                         <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>
@@ -505,16 +501,12 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                         </CSVLink> 
                     </div> 
                     <div className="paging d-flex gap-2"> 
-                        {data && data.domains.length > 0 && 
-                        <>
-                            <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
-                                {"<"} Prev
-                            </button>  
-                            <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
-                                Next {">"}
-                            </button> 
-                        </>
-                        }
+                        <button className={ data && data.domains && skip >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePagePrev}>
+                            {"<"} Prev
+                        </button>  
+                        <button className={ data && data.domains && data.domains.length >= first ? "btn btn-outline-light text-dark": "btn btn-outline-light text-dark disabled" } onClick={handlePageNext}>
+                            Next {">"}
+                        </button> 
                     </div> 
                     <div className="view-types d-flex gap-2">
                         <button type="button" className={view === "list" ? "btn btn-outline-light active": "btn btn-outline-light"} onClick={(e) => onClickView(e, "list")}>

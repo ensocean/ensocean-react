@@ -88,7 +88,7 @@ const RecentRegistered = () => {
                           <div className="flex-grow-1 d-flex flex-column justify-content-between ms-2 text-truncate flex-fill">
                             <div className="d-flex flex-row justify-content-between gap-2">
                               <DomainLink domain={domain} /> 
-                              <div className="d-flex flex-row gap-2">  
+                              <div className="d-flex flex-row gap-3">  
                                   <AddToWatchlistSmallButton domain={{ id: domain.id, price: 0 }} />
                               </div>
                             </div> 
