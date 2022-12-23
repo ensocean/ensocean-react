@@ -25,6 +25,7 @@ function ConnectButton({smallButton = false}) {
   const { openConnectModal } = useConnectModal(); 
   const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
 
+  console.log(chain)
   const handleConnect = (e) => {
     e.preventDefault();
     openConnectModal();
