@@ -1,6 +1,6 @@
 import {Helmet} from "react-helmet-async";
 import { useRegisterlist } from "react-use-registerlist";
-import { Trash, ArrowClockwise, Info } from "react-bootstrap-icons";
+import { Trash, ArrowClockwise, Info, Exclamation, ExclamationCircleFill } from "react-bootstrap-icons";
 import DomainLink from "../components/DomainLink";
 import { useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import bulkControllerAbi from "../abis/BulkEthRegistrarController.json";
@@ -116,7 +116,7 @@ const Register = () => {
             {totalUniqueItems > 0 && 
               <button className="btn btn-light ps-1" onClick={(e)=> refetch()}>
                 {!isFetching && <span><ArrowClockwise /> Refresh</span> } 
-                {isFetching && <span><Spinner animation="border" variant="white" size="sm" /> Refreshing </span>}  
+                {isFetching && <span><Spinner animation="border" variant="dark" size="sm" /> Refreshing </span>}  
               </button>
             }
             {totalUniqueItems > 0 && 
@@ -177,7 +177,7 @@ const Register = () => {
                 </div>
               </div>
               <div className="col-6 col-lg-4 p-2 d-flex flex-row justify-content-between align-items-center">
-                {isError && <span className="text-danger">{error.message}</span>}
+                {isError && <span className="text-danger"><ExclamationCircleFill /></span>}
                 {isFetching && <Spinner animation="border" variant="dark" size="sm" /> }
                 {!isError && !isFetching && <span><Numeral value={ ethers.utils.formatUnits(data.result[i].price)} format="0.00000" /> ETH</span>} 
                 <button className="btn btn-light btn-sm" onClick={(e)=> {  e.preventDefault(); removeItem(item.id) }}>
@@ -190,10 +190,11 @@ const Register = () => {
         <div className="row mt-3">
           <div className="col-12">
             {totalUniqueItems > 0 && 
-            <div className="d-flex flex-row justify-content-end">
-              {isError && <span className="text-danger">{error.message}</span>}
+            <div className="d-flex flex-row justify-content-end align-items-center">
+              <strong>Total (Inc. Fee): </strong> &nbsp;
+              {isError && <span className="text-danger"><ExclamationCircleFill /></span>}
               {isFetching && <Spinner animation="border" variant="dark" size="sm" /> }
-              {!isError && !isFetching && <span> <strong>Total (Inc. Fee): </strong> <Numeral value={ethers.utils.formatUnits(data?.totalPriceWithFee)} format="0.00000" /> ETH </span>} 
+              {!isError && !isFetching && <span> <Numeral value={ethers.utils.formatUnits(data?.totalPriceWithFee)} format="0.00000" /> ETH </span>} 
             </div>
             }
             <div className="d-flex flex-row justify-content-end align-items-center gap-3 mt-3">
@@ -276,7 +277,7 @@ function ClaimButton({query, secret, totalPriceWithFee}) {
 
   return (
     <>
-    {isConnected && !isRegisterTxSuccess &&
+    {isConnected && !isRegisterTxSuccess && !isRegisterTxError &&
       <button className="btn btn-success btn-lg" disabled={!register || isRegisterLoading || isRegisterTxLoading} onClick={handleRegister}>
           {isRegisterLoading && <Spinner animation="border" variant="white" size="sm" /> }
           {isRegisterTxLoading && <> <Spinner animation="border" variant="white" size="sm" /> Tx Waiting </> }
@@ -286,11 +287,14 @@ function ClaimButton({query, secret, totalPriceWithFee}) {
     }
 
     {isRegisterTxSuccess && 
-      <div className="flex-fill d-flex flex-row justify-content-center align-items-center alert alert-success gap-2">
+      <div className="flex-fill d-flex flex-column justify-content-center align-items-center alert alert-success gap-2">
         <strong>Success!</strong> Transaction Completed
         <a target="_blank" rel="noreferrer" href={ ETHERSCAN_ADDR +"/tx/"+ registerData?.hash } >
           View on Etherscan
         </a>
+        <p>
+          It may take a few minutes to seen your domains in your account. Please wait for a while.
+        </p>
       </div>
     }
 

@@ -24,8 +24,7 @@ function ConnectButton({smallButton = false}) {
   const { data, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal(); 
   const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
-
-  console.log(chain)
+ 
   const handleConnect = (e) => {
     e.preventDefault();
     openConnectModal();
