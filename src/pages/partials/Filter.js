@@ -586,13 +586,15 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             </div>
                         </div>  
 
-                    {data &&
-                        <>
-                            {data.domains.map((domain) => ( 
-                                <DomainCardInline domain={domain} key={domain.id} />
-                            ))}
-                        </>
-                    } 
+                        {data &&
+                            <>
+                                {data.domains.map((domain) => ( 
+                                    <div key={domain.id}>
+                                        <DomainCardInline domain={domain} />
+                                    </div>
+                                ))}
+                            </>
+                        } 
                     </div>
                 }
                 </>

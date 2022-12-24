@@ -4,9 +4,11 @@ import DomainStatus from "./DomainStatus";
 import DomainImage from "./DomainImage"; 
 import AddToCartSmallButton from "./AddToCartSmallButton";
 import AddToWatchlistSmallButton from "./AddToWatchlistSmallButton"; 
+import { useRef } from "react";
+ 
+function DomainCard({domain, loading}) { 
+    const elem = useRef();
 
-
-function DomainCard({domain, label, loading}) { 
     if(loading) {
         return (
             <>
@@ -32,7 +34,7 @@ function DomainCard({domain, label, loading}) {
         )
     } else {
         return ( 
-            <div className="card g-card border border-light bg-light shadow-sm">  
+            <div ref={elem} className="card g-card border border-light bg-light shadow-sm">  
                 <div className="card-body p-0">
                     <Link className="text-decoration-none link-dark fw-bold fs-5" title={"View "+ domain.label + "." + domain.extension +" on EnsOcean"} to={"/"+ encodeURIComponent(domain.label) + "."+ domain.extension }>
                         <div className="card border-0 text-start">
@@ -53,7 +55,7 @@ function DomainCard({domain, label, loading}) {
                         <DomainStatus domain={domain} showExpires={true} /> 
                         <div className="d-flex flex-row justify-content-end gap-2 align-items-center mt-1">
                             <AddToCartSmallButton domain={domain} /> 
-                            <AddToWatchlistSmallButton domain={domain} /> 
+                            <AddToWatchlistSmallButton domain={domain} parentElem={elem} /> 
                         </div>
                     </div>
                 </div>
