@@ -6,7 +6,8 @@ import {
     useDisconnect, 
     useAccount,    
     useNetwork,
-    useSwitchNetwork
+    useSwitchNetwork,
+    useEnsName
   } from 'wagmi';
 import { Link } from "react-router-dom";
 import Offcanvas from 'react-bootstrap/Offcanvas';
@@ -19,7 +20,7 @@ import { useRegisterlist } from "react-use-registerlist";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { toast } from "react-toastify";
 import { OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
-import { obscureAddress } from "../../helpers/String";
+import { obscureAddress, obscureEnsName } from "../../helpers/String";
 import { Bag, Wallet } from "react-bootstrap-icons";
 
 const Navbar = ({showSearch}) => {   
@@ -27,7 +28,8 @@ const Navbar = ({showSearch}) => {
     const  totalRegisterlistItems = useRegisterlist().totalUniqueItems;
     const  totalWatchlistItems = useWatchlist().totalUniqueItems;
     const { disconnect } = useDisconnect();
-    const { chain } = useNetwork()
+    const { chain } = useNetwork();
+    const { data: ensName } = useEnsName({ address })
     const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
     const { openConnectModal } = useConnectModal(); 
     const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
@@ -112,7 +114,7 @@ const Navbar = ({showSearch}) => {
                                             </OverlayTrigger>
                                         : <Link className={"text-decoration-none"} onClick={handleShow}>
                                             <Wallet /> {" "}
-                                            {obscureAddress(address)} 
+                                            {ensName ? `${obscureEnsName(ensName)}` : obscureAddress(address)}
                                           </Link>
                                         }
                                     </>

@@ -7,7 +7,7 @@ import { useWatchlist } from "react-use-watchlist";
 import { useAccount } from "wagmi"; 
 import { Trash } from "react-bootstrap-icons";
 import { Button, Modal } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Account = () => {
@@ -28,7 +28,7 @@ const Account = () => {
         })
         handleClose();
         navigate(0);
-    }
+    } 
  
     return (
       <>
@@ -74,16 +74,16 @@ const Account = () => {
             </div>
       </div>  
 
-      <Modal backdrop={true} centered show={show} onHide={handleClose}>
+        <Modal backdrop={true} centered show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Are you sure want to delete all?</Modal.Title>
+                <Modal.Title>Are you sure want to clear?</Modal.Title>
             </Modal.Header>
             <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
                 Cancel
             </Button>
-            <Button variant="primary" onClick={handleClearList}>
-               Continue
+            <Button variant="danger" onClick={handleClearList}>
+                Continue
             </Button>
             </Modal.Footer>
         </Modal>
