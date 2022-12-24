@@ -1,0 +1,25 @@
+version: '3'
+services:
+  ipfs:
+    image: ipfs/go-ipfs
+    networks:
+      - local
+    ports:
+      - '5001'
+    volumes:
+      - '~/data/ipfs:/data/ipfs'
+  nginx:
+    image: nginx:latest
+    restart: always
+    depends_on:
+      - graphnode
+    networks:
+      - local
+    ports:
+      - 80:80
+      - 443:80
+    volumes:
+      - '~/ensocean-react/build:/var/nginx/html'
+      - '~/ensocean-react/conf:/etc/nginx/conf.d'
+networks:
+  local:

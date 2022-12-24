@@ -66,7 +66,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     const [view, setView] = useState(_view); 
     const [csvData, setCsvData] = useState([]); 
     const [filterCount, setFilterCount] = useState(0); 
-    const [filterShow, setFilterShow] = useState(true);
+    const [filterShow, setFilterShow] = useState(false);
 
     const handleFilterClose = () => setFilterShow(false);
     const handleFilterShow = () => setFilterShow(true);
