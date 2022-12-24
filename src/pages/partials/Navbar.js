@@ -29,7 +29,7 @@ const Navbar = ({showSearch}) => {
     const  totalWatchlistItems = useWatchlist().totalUniqueItems;
     const { disconnect } = useDisconnect();
     const { chain } = useNetwork();
-    const { data: ensName } = useEnsName({ address })
+    const { data: ensName } = useEnsName({ address, staleTime: 2_000, cacheTime: 2_000 })
     const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
     const { openConnectModal } = useConnectModal(); 
     const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);

@@ -545,9 +545,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             <span className="fw-bold">Created</span>
                         </div>
                     </div>
-                
                     <DomainCardInline loading={loading} />
-                
                 </div>
             </>     
             )
