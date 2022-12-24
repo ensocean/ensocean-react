@@ -22,31 +22,36 @@ const AccountInfo = () => {
     const addr = useParams().address;  
     const imgRef = useRef();
 
-    const { data, isFetching } = useContractRead({
-        addressOrName: process.env.REACT_APP_REVERSE_LOOKUP_ADDRESS,
-        contractInterface: reverseLookupAbi,
+    const { data, isFetching, isFetched, error } = useContractRead({
+        address: process.env.REACT_APP_REVERSE_LOOKUP_ADDRESS,
+        abi: reverseLookupAbi,
         functionName: "getNames",
         args: [[addr]]
     });  
     
-    if(isFetching) return (
-        <div className="d-flex placeholder-glow">
-            <div className="flex-shrink-0">
-                <div className="card placeholder-glow  mb-2" style={{width:100, height:100}}>
-                    <span className="placeholder col-12 w-100 h-100 "></span>
+    if(isFetching) 
+    {
+        return (
+            <div className="d-flex placeholder-glow">
+                <div className="flex-shrink-0">
+                    <div className="card placeholder-glow  mb-2" style={{width:100, height:100}}>
+                        <span className="placeholder col-12 w-100 h-100 "></span>
+                    </div>
+                </div>
+                <div className="flex-grow-1 ms-3 text-truncate">
+                    <span className="text-truncate placeholder col-4"></span> 
+                    <div className="d-flex gap-3">
+                        <span className="placeholder col-3"></span>
+                    </div>
                 </div>
             </div>
-            <div className="flex-grow-1 ms-3 text-truncate">
-                <span className="text-truncate placeholder col-4"></span> 
-                <div className="d-flex gap-3">
-                    <span className="placeholder col-3"></span>
-                </div>
-            </div>
-        </div>
-    )
-    
-    if(!isFetching && data) {
+        )
+    } 
+ 
+ 
+    if(isFetched && data) {
         const primaryName = data[0];
+        console.log(primaryName);
         return (
             <div className="d-flex">
                 <div className="flex-shrink-0">
@@ -110,8 +115,7 @@ const AccountInfo = () => {
                 </div>
             </div>
         )
-    }
-    
+    } 
 }
 
 export default AccountInfo;
