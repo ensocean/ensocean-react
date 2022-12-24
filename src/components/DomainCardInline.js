@@ -7,8 +7,11 @@ import AddToCartSmallButton from './AddToCartSmallButton';
 import OwnerLink from './OwnerLink';
 import OwnerLinkLabel from './OwnerLinkLabel';
 import { getExpires, getTimeAgo, isAvailable, isExpired, isExpiring, isValidName } from '../helpers/String';
+import { useRef } from 'react';
    
-function DomainCardInline({domain, loading = false, showExpires = false}) { 
+function DomainCardInline({domain, loading = false}) { 
+    const elem = useRef();
+
     if(loading) {
         return (
             <>
@@ -42,7 +45,7 @@ function DomainCardInline({domain, loading = false, showExpires = false}) {
         )
     } else {
         return (
-            <div className="row border-bottom border-light pb-2"> 
+            <div ref={elem} key={domain.id} className="row border-bottom border-light pb-2"> 
                 <div className="col-12 col-sm-12 col-md-6 p-2"> 
                     <div className='d-flex flex-row gap-2'>
                         <div className="flex-shrink-0">
@@ -55,7 +58,7 @@ function DomainCardInline({domain, loading = false, showExpires = false}) {
                                 <DomainLink domain={domain} />
                                 <div className='d-flex flex-row justify-content-end me-2 gap-3'>
                                     <AddToCartSmallButton domain={domain} /> 
-                                    <AddToWatchlistSmallButton domain={domain} /> 
+                                    <AddToWatchlistSmallButton domain={domain} parentElem={elem} /> 
                                 </div>
                             </div>
                             <DomainStatus domain={domain} showExpires={true} />

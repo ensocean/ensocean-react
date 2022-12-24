@@ -76,7 +76,9 @@ function ConnectButton({smallButton = false}) {
               } 
             </button> 
           </OverlayTrigger>
-        : <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleDisconnect}>Disconnect</button>}
+        : <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleDisconnect}>
+            Disconnect
+          </button>}
       </> 
     ) 
 

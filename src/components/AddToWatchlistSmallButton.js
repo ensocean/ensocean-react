@@ -5,25 +5,35 @@ import { useWatchlist } from "react-use-watchlist";
 import { X, Heart, HeartFill } from "react-bootstrap-icons";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { toast } from "react-toastify"; 
+import { useLocation } from "react-router-dom";
  
-function AddToWatchlistSmallButton({domain}) {   
+function AddToWatchlistSmallButton({domain, parentElem}) {   
        
+    let location = useLocation(); 
     const { addItem, removeItem, inWatchlist } = useWatchlist();
-    const [showRemove, setShowRemove] = useState(false);
-     
-    const handleMouseOver = (e) => {
-        setShowRemove(true);
+      
+    const handleAdd = (e) => {
+        addItem(domain);  
+        toast.success("Added to favorites");
     }
 
-    const handleMouseOut = (e) => {
-        setShowRemove(false);
+    const handleRemove = (e) => {
+        e.preventDefault();
+        if(isInWatchlist()) 
+            parentElem.current.remove();
+        removeItem(domain.id);  
+        toast.success("Removed from favorites");
     }
-  
+
+    const isInWatchlist = () => {
+        return new URLSearchParams(location.search).get("tab") == "watchlist";
+    }
+
     if(!inWatchlist(domain.id)) {
         return (
             <>   
                 <button className={ "btn btn-sm btn-default p-0"} 
-                    onClick={(e)=> { addItem(domain);  toast.success("Added to favorites");   }}>
+                    onClick={handleAdd}>
                     <Heart width={20} height={20} />
                 </button>  
             </>
@@ -32,9 +42,8 @@ function AddToWatchlistSmallButton({domain}) {
         return (
             <> 
                 <button className={ "btn btn-sm btn-default text-danger p-0" } 
-                    onClick={(e)=> { removeItem(domain.id);  toast.success("Removed from favorites") }}>
-                    {showRemove && <span><X width={20} height={20} /> </span>} 
-                    {!showRemove && <span><HeartFill width={20} height={20} /> </span>}
+                    onClick={handleRemove}>
+                    <HeartFill width={20} height={20} />
                 </button> 
             </>
         )

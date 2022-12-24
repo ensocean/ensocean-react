@@ -591,7 +591,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                     {data &&
                         <>
                             {data.domains.map((domain) => ( 
-                                <DomainCardInline domain={domain} />
+                                <DomainCardInline domain={domain} key={domain.id} />
                             ))}
                         </>
                     } 

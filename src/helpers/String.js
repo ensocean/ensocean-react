@@ -13,6 +13,18 @@ export const obscureAddress = (address) => {
     return address.substring(0, 6) + '...' + address.substring(address.length - 4, address.length);
 }
 
+export const obscureEnsName = (name) => {
+    const arr = name.split(".");
+    const ext = arr[arr.length -1];
+    arr.pop();
+    const lbl = arr.join(".");
+    
+    if(lbl.length > 15) 
+        return `${lbl.substring(0, 4)}...${lbl.substring(lbl.length - 4, lbl.length)}.${ext}`;
+
+    return `${lbl}.${ext}`
+}
+
 export const obscureName = (name, len) => {
     if(getLength(name) > len) {
         return Array.from(name).slice(0, len / 2).join("") + "..." + Array.from(name).slice(name.length - (len / 2), name.length).join("");
