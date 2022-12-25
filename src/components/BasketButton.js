@@ -11,7 +11,7 @@ import { useAccount } from "wagmi";
 
 function BasketButton() {   
     const { isEmpty, totalUniqueItems } = useRegisterlist();
-    const { isConnected, address } = useAccount();   
+    const { isConnected } = useAccount();   
     const { openConnectModal } = useConnectModal(); 
     const navigate = useNavigate();
 

@@ -1,27 +1,17 @@
- 
-import '@rainbow-me/rainbowkit/styles.css';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-
-import { 
-  useDisconnect, 
-  useAccount,    
-  useNetwork,
-  useSwitchNetwork
-} from 'wagmi';
-  
+import { useDisconnect, useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { toast } from 'react-toastify'; 
 import { OverlayTrigger, Spinner, Tooltip } from 'react-bootstrap';
 import { ExclamationCircle } from 'react-bootstrap-icons';
 import { useEffect } from 'react';
 
-
 window.Buffer = require("buffer").Buffer;
  
-function ConnectButton({smallButton = false}) { 
+function ConnectButton({ smallButton = false }) { 
   const { isConnected } = useAccount() 
   const { disconnect } = useDisconnect();
   const { chain } = useNetwork()
-  const { data, error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+  const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
   const { openConnectModal } = useConnectModal(); 
   const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
  

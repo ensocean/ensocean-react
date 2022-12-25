@@ -28,22 +28,22 @@ const Footer = () => {
                             <ul className="list-inline list-unstyled float-lg-end float-sm-none">
                             <li className="list-inline-item"> 
                                 <a href="https://opensea.io/EnsOceanOfficial" target="_blank" rel="noreferrer" title="View EnsOcean on Opensea">
-                                    <img src={openSeaIcon} alt="" />
+                                    <img src={openSeaIcon} alt="EnsOcean Opensea" />
                                 </a>        
                             </li>
                             <li className="list-inline-item"> 
                                 <a href="https://github.com/ensocean" target="_blank" rel="noreferrer" title="View EnsOcean on Github">
-                                    <img src={githubIcon} alt=""  />
+                                    <img src={githubIcon} alt="EnsOcean Github"  />
                                 </a>
                             </li>
                             <li className="list-inline-item"> 
                                 <a href="https://twitter.com/ensocean" target="_blank" rel="noreferrer" title="Follow EnsOcean on Twitter">
-                                    <img src={twitterIcon} alt=""  />
+                                    <img src={twitterIcon} alt="EnsOcean Twitter"  />
                                 </a>
                             </li>   
                             <li className="list-inline-item"> 
                                 <a href="https://telegram.me/ensocean" target="_blank" rel="noreferrer"  title="Join EnsOcean Telegram Channel">
-                                    <img src={telegramIcon} alt=""  />
+                                    <img src={telegramIcon} alt="EnsOcean Telegram"  />
                                 </a>
                             </li> 
                             <li className="list-inline-item">

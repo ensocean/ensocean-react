@@ -3,58 +3,39 @@
 import  "bootstrap/dist/js/bootstrap.esm.min.js"; 
 import "./App.scss";
 import './App.css'; 
- 
+import 'react-toastify/dist/ReactToastify.css';
+import '@rainbow-me/rainbowkit/styles.css';
+
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { WatchlistProvider } from "react-use-watchlist";
+import { RegisterlistProvider } from "react-use-registerlist";
+import { RenewlistProvider } from "react-use-renewlist";
+import { HelmetProvider } from 'react-helmet-async';
+import { ToastContainer } from 'react-toastify'; 
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
+import { RainbowKitProvider, connectorsForWallets } from '@rainbow-me/rainbowkit';
+import { rainbowWallet, walletConnectWallet, trustWallet, coinbaseWallet, metaMaskWallet } from '@rainbow-me/rainbowkit/wallets';
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { mainnet, goerli } from 'wagmi/chains'
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { infuraProvider } from 'wagmi/providers/infura'; 
+import { GasPriceProvider } from "./context/GasPriceContext";
 import Home from "./pages/Home";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Faq from "./pages/Faq";
 import Discover from './pages/Discover'; 
 import Domain from './pages/Domain';
-import { ToastContainer } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css';
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import Account from "./pages/Account"; 
 import Find from "./pages/Find";
 import Register from "./pages/Register";
 import NotFound from "./pages/Notfound";    
 import Layouts from "./pages/layouts";    
-import { WatchlistProvider } from "react-use-watchlist";
-import { RegisterlistProvider } from "react-use-registerlist";
-import { RenewlistProvider } from "react-use-renewlist";
-import { HelmetProvider } from 'react-helmet-async';
-
-import '@rainbow-me/rainbowkit/styles.css';
-
-import { 
-  RainbowKitProvider,
-  connectorsForWallets
-} from '@rainbow-me/rainbowkit';
-
-import { 
-  rainbowWallet,
-  walletConnectWallet,
-  trustWallet,
-  coinbaseWallet,
-  metaMaskWallet
-} from '@rainbow-me/rainbowkit/wallets';
-
-import { 
-  configureChains,
-  createClient,
-  WagmiConfig
-} from 'wagmi';
-
-import { mainnet, goerli } from 'wagmi/chains'
-
-import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { infuraProvider } from 'wagmi/providers/infura'; 
 import Registered from "./pages/Registered";
 import Expired from "./pages/Expired";
 import Expiring from "./pages/Expiring";
 import Premium from "./pages/Premium";
-import { GasPriceProvider } from "./context/GasPriceContext";
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
@@ -62,7 +43,7 @@ const client = new ApolloClient({
 });
    
 const { chains, provider } = configureChains(
-  [process.env.REACT_APP_SUPPORTED_NETWORK == "goerli" ? goerli: mainnet ],
+  [process.env.REACT_APP_SUPPORTED_NETWORK === "goerli" ? goerli: mainnet ],
   [
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY, priority: 0, weight: 1 }),
     infuraProvider({ apiKey: process.env.REACT_APP_INFURA_KEY, priority: 1, weight: 2 }),

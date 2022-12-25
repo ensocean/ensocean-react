@@ -1,6 +1,6 @@
 import {Helmet} from "react-helmet-async";
 import { useRegisterlist } from "react-use-registerlist";
-import { Trash, ArrowClockwise, Info, Exclamation, ExclamationCircleFill } from "react-bootstrap-icons";
+import { Trash, ArrowClockwise, Info, ExclamationCircleFill } from "react-bootstrap-icons";
 import DomainLink from "../components/DomainLink";
 import { useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import bulkControllerAbi from "../abis/BulkEthRegistrarController.json";
@@ -11,7 +11,6 @@ import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Numeral from "react-numeral"; 
 import { v4 as uuidv4 } from 'uuid';
-import { toast } from "react-toastify";
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS;

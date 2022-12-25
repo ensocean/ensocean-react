@@ -1,6 +1,6 @@
 
 
-import { getExpires, getTimeAgo, isAvailable, isExpired, isExpiring, isPremium, isValidName } from '../helpers/String';
+import { getTimeAgo, isAvailable, isExpired, isExpiring, isPremium, isValidName } from '../helpers/String';
 
 function DomainStatus({domain, loading = false, showBadge=true, showNotAvailable=false, showRegistered=false, showExpires=false}) {  
     if(showBadge) {

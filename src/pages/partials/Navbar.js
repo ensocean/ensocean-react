@@ -2,13 +2,7 @@ import logo from "../../assets/icon.png";
 import ConnectButton from "../../components/ConnectButton";
 import AutoComplete from "../../components/AutoComplete";
 import BasketButton from "../../components/BasketButton"; 
-import { 
-    useDisconnect, 
-    useAccount,    
-    useNetwork,
-    useSwitchNetwork,
-    useEnsName
-  } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork, useEnsName } from 'wagmi';
 import { Link } from "react-router-dom";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState } from "react";
@@ -19,21 +13,21 @@ import WatchlistButton from "../../components/WatchlistButton";
 import { useRegisterlist } from "react-use-registerlist";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { toast } from "react-toastify";
-import { OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
+import { Dropdown, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { obscureAddress, obscureEnsName } from "../../helpers/String";
-import { Bag, Wallet } from "react-bootstrap-icons";
+import { Clipboard, Wallet } from "react-bootstrap-icons";
+import CopyToClipboard from "react-copy-to-clipboard";
 
-const Navbar = ({showSearch}) => {   
+const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
+
+const Navbar = () => {   
     const { isConnected, address } = useAccount();   
     const  totalRegisterlistItems = useRegisterlist().totalUniqueItems;
     const  totalWatchlistItems = useWatchlist().totalUniqueItems;
-    const { disconnect } = useDisconnect();
     const { chain } = useNetwork();
     const { data: ensName } = useEnsName({ address, staleTime: 2_000, cacheTime: 2_000 })
     const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
     const { openConnectModal } = useConnectModal(); 
-    const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
-     
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -43,12 +37,7 @@ const Navbar = ({showSearch}) => {
         e.preventDefault();
         openConnectModal();
     }
-    
-    const handleDisconnect = (e) => {
-        e.preventDefault();
-        disconnect();
-    }
-
+     
     const handleSwitchChain = (e) => {
         e.preventDefault();
         switchNetwork?.(SUPPORTED_CHAIN_ID);
@@ -136,7 +125,7 @@ const Navbar = ({showSearch}) => {
                         EnsOcean
                     </Link>
                 </Offcanvas.Header>
-                <Offcanvas.Body>
+                <Offcanvas.Body className="pt-0">
                     <AutoComplete />  
                     <ul className="list-unstyled d-flex flex-column justify-content-start align-items-start gap-3 mt-3">
                         <li>
@@ -170,8 +159,38 @@ const Navbar = ({showSearch}) => {
                                 }
                             </Link>
                         </li>
-                        <li>
-                            <ConnectButton />
+                        <li className="divider w-100 p-0 m-0" >
+                            <hr className="p-0 m-0" />
+                        </li>
+                        <li className="w-100 d-flex flex-row gap-2 align-items-center justify-content-between">
+                            {isConnected &&
+                                <>
+                                    <Dropdown>
+                                        <Dropdown.Toggle variant="default" className="p-0">
+                                            <span className="fw-bold">{ensName ? obscureEnsName(ensName): obscureAddress(address)}</span>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className="p-0">
+                                            {ensName &&
+                                            <Dropdown.Item className="d-flex flex-row gap-2 justify-content-between align-items-center p-2">
+                                                <CopyToClipboard text={ensName} onCopy={() => toast.success("Name copied") }>
+                                                    <span rule="button">
+                                                        {obscureEnsName(ensName)}
+                                                    </span>
+                                                </CopyToClipboard>
+                                            </Dropdown.Item>
+                                            }
+                                            <Dropdown.Item rule="button" className="d-flex flex-row gap-2 justify-content-between align-items-center p-2">
+                                                <CopyToClipboard text={address} onCopy={() => toast.success("Address copied") }>
+                                                    <span rule="button">
+                                                        {obscureAddress(address)}
+                                                    </span>
+                                                </CopyToClipboard>
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    <ConnectButton />
+                                </>
+                            }
                         </li>
                     </ul>
                 </Offcanvas.Body>
