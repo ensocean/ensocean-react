@@ -77,7 +77,7 @@ function ConnectButton({ smallButton = false }) {
       <> 
         <button className={"btn btn-primary " + (smallButton ? "btn-sm": "") } onClick={handleConnect}>
           {smallButton ? <span>Connect</span>: <span>Connect Wallet</span>}
-          </button>
+        </button>
       </>
     )
   } 
