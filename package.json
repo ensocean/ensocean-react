@@ -52,7 +52,6 @@
     "react-use-registerlist": "^0.0.1-semantic-release",
     "react-use-renewlist": "^0.0.2-semantic-release",
     "react-use-watchlist": "^0.0.1-semantic-release",
-    "tailwindcss": "^3.2.4",
     "wagmi": "^0.9.5",
     "web-vitals": "^2.1.4",
     "web3": "^1.8.1",

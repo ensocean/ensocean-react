@@ -22,7 +22,7 @@ const AccountInfo = () => {
     const addr = useParams().address;  
     const imgRef = useRef();
 
-    const { data, isFetching, isFetched, error } = useContractRead({
+    const { data, isFetching, isFetched } = useContractRead({
         address: process.env.REACT_APP_REVERSE_LOOKUP_ADDRESS,
         abi: reverseLookupAbi,
         functionName: "getNames",

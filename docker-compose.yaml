@@ -1,13 +1,5 @@
 version: '3'
 services:
-  ipfs:
-    image: ipfs/go-ipfs
-    networks:
-      - local
-    ports:
-      - '5001'
-    volumes:
-      - '~/data/ipfs:/data/ipfs'
   nginx:
     image: nginx:latest
     restart: always
