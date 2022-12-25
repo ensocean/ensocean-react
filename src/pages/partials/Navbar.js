@@ -125,7 +125,7 @@ const Navbar = () => {
                         EnsOcean
                     </Link>
                 </Offcanvas.Header>
-                <Offcanvas.Body>
+                <Offcanvas.Body className="pt-0">
                     <AutoComplete />  
                     <ul className="list-unstyled d-flex flex-column justify-content-start align-items-start gap-3 mt-3">
                         <li>
@@ -159,7 +159,10 @@ const Navbar = () => {
                                 }
                             </Link>
                         </li>
-                        <li className="d-flex flex-row gap-2 align-items-center justify-content-between">
+                        <li className="divider w-100 p-0 m-0" >
+                            <hr className="p-0 m-0" />
+                        </li>
+                        <li className="w-100 d-flex flex-row gap-2 align-items-center justify-content-between">
                             {isConnected &&
                                 <>
                                     <Dropdown>
