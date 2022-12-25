@@ -76,10 +76,10 @@ const Navbar = () => {
                             </li> 
                             <li>
                                 <Link onClick={ handleClose } className="nav-link fw-bold" to="/discover">Browse</Link>
-                            </li> 
+                            </li>
                         </ul> 
                     </div>
-                    <div className="d-flex flex-row justify-content-end">
+                    <div className="d-flex flex-row justify-content-end position-relative">
                         <ul className="list-unstyled d-flex flex-row justify-content-end gap-3 align-items-center m-0 fw-bold">
                             <li> 
                                 <GasPriceButton />
@@ -106,7 +106,11 @@ const Navbar = () => {
                                   <button className={"btn btn-primary"} onClick={handleConnect}>
                                     Connect Wallet
                                   </button>
-                                }
+                                } 
+
+                                <small className="position-absolute translate-middle mt-1 top-0 start-100 badge rounded-pill bg-danger">
+                                    <Numeral value={totalRegisterlistItems + totalWatchlistItems} format={"0,0"} />
+                                </small>
                             </li>
                         </ul> 
                     </div>
