@@ -39,7 +39,7 @@ const AccountInfo = () => {
             <div className="d-flex">
                 <div className="flex-shrink-0">
                     <div className="card mb-2">
-                        <AccountAvatar ensName={ensName} />
+                        <AccountAvatar ensName={ensName ? ensName : ""} />
                     </div>
                 </div>
                 <div className="flex-grow-1 ms-3">

@@ -1,8 +1,7 @@
-import logo from "../../assets/icon.png";
 import ConnectButton from "../../components/ConnectButton";
 import AutoComplete from "../../components/AutoComplete";
 import BasketButton from "../../components/BasketButton"; 
-import { useAccount, useNetwork, useSwitchNetwork, useEnsName } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork, useEnsName, useEnsAvatar } from 'wagmi';
 import { Link } from "react-router-dom";
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useState } from "react";
@@ -17,6 +16,8 @@ import { Dropdown, OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import { obscureAddress, obscureEnsName } from "../../helpers/String";
 import { Clipboard, Wallet } from "react-bootstrap-icons";
 import CopyToClipboard from "react-copy-to-clipboard";
+import Logo from "../../components/Logo";
+import avatar from "../../assets/avatar.svg";
 
 const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
 
@@ -25,7 +26,8 @@ const Navbar = () => {
     const  totalRegisterlistItems = useRegisterlist().totalUniqueItems;
     const  totalWatchlistItems = useWatchlist().totalUniqueItems;
     const { chain } = useNetwork();
-    const { data: ensName } = useEnsName({ address, staleTime: 2_000, cacheTime: 2_000 })
+    const { data: ensName } = useEnsName({ address, staleTime: 2_000, cacheTime: 2_000 });
+    const { data: ensAvatar } = useEnsAvatar({ address, staleTime: 2_000, cacheTime: 2_000 });
     const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
     const { openConnectModal } = useConnectModal(); 
     const [show, setShow] = useState(false);
@@ -49,10 +51,7 @@ const Navbar = () => {
     return (
         <> 
         <nav className="navbar navbar-expand-lg d-flex flex-row justify-content-between align-items-center gap-3">
-            <Link className="navbar-brand me-1 fw-bold fs-3" title="EnsOcean" to="/">
-                <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
-                EnsOcean
-            </Link>
+            <Logo />
             <div className="d-flex flex-row justify-content-end align-items-center gap-2 d-lg-none">         
                 <div className="d-flex flex-row gap-2">
                     <GasPriceButton />
@@ -85,12 +84,6 @@ const Navbar = () => {
                             <li> 
                                 <GasPriceButton />
                             </li>
-                            <li>
-                                <WatchlistButton />
-                            </li>
-                            <li>
-                                <BasketButton />
-                            </li>
                             <li> 
                                 {isConnected && 
                                     <>
@@ -101,13 +94,14 @@ const Navbar = () => {
                                                 <span> Wrong Network</span>
                                                 </button> 
                                             </OverlayTrigger>
-                                        : <Link className={"text-decoration-none"} onClick={handleShow}>
-                                            <Wallet /> {" "}
+                                        : <Link className={"text-decoration-none d-flex flex-row align-items-center gap-1"} onClick={handleShow}>
+                                            <img src={ensAvatar ? ensAvatar : avatar } alt={address} width={32} height={32} className="img-fluid rounded-circle" />
                                             {ensName ? `${obscureEnsName(ensName)}` : obscureAddress(address)}
                                           </Link>
                                         }
                                     </>
                                 }
+                                
                                 {!isConnected && 
                                   <button className={"btn btn-primary"} onClick={handleConnect}>
                                     Connect Wallet
@@ -120,10 +114,7 @@ const Navbar = () => {
             </div>
             <Offcanvas show={show} onHide={handleClose} placement="end" className="flex-grow-1">
                 <Offcanvas.Header closeButton>
-                    <Link className="navbar-brand me-1 fw-bold fs-3" title="EnsOcean" to="/">
-                        <img src={logo} alt="EnsOcean" className="align-text-top me-1" />
-                        EnsOcean
-                    </Link>
+                    <Logo />
                 </Offcanvas.Header>
                 <Offcanvas.Body className="pt-0">
                     <AutoComplete />  
@@ -164,33 +155,33 @@ const Navbar = () => {
                         </li>
                         <li className="w-100 d-flex flex-row gap-2 align-items-center justify-content-between">
                             {isConnected &&
-                                <>
-                                    <Dropdown>
-                                        <Dropdown.Toggle variant="default" className="p-0">
-                                            <span className="fw-bold">{ensName ? obscureEnsName(ensName): obscureAddress(address)}</span>
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu className="p-0">
-                                            {ensName &&
-                                            <Dropdown.Item className="d-flex flex-row gap-2 justify-content-between align-items-center p-2">
-                                                <CopyToClipboard text={ensName} onCopy={() => toast.success("Name copied") }>
-                                                    <span rule="button">
-                                                        {obscureEnsName(ensName)}
-                                                    </span>
-                                                </CopyToClipboard>
-                                            </Dropdown.Item>
-                                            }
-                                            <Dropdown.Item rule="button" className="d-flex flex-row gap-2 justify-content-between align-items-center p-2">
-                                                <CopyToClipboard text={address} onCopy={() => toast.success("Address copied") }>
-                                                    <span rule="button">
-                                                        {obscureAddress(address)}
-                                                    </span>
-                                                </CopyToClipboard>
-                                            </Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    <ConnectButton />
-                                </>
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="default" className="p-0">
+                                        <span className="fw-bold">{ensName ? obscureEnsName(ensName): obscureAddress(address)}</span>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="p-0">
+                                        {ensName &&
+                                        <Dropdown.Item className="p-2">
+                                            <CopyToClipboard text={ensName} onCopy={() => toast.success("Name copied") }>
+                                                <span rule="button" className="d-flex flex-row gap-2 justify-content-between align-items-center ">
+                                                    {obscureEnsName(ensName)}
+                                                    <Clipboard />
+                                                </span>
+                                            </CopyToClipboard>
+                                        </Dropdown.Item>
+                                        }
+                                        <Dropdown.Item rule="button" className="p-2">
+                                            <CopyToClipboard text={address} onCopy={() => toast.success("Address copied") }>
+                                                <span rule="button" className="d-flex flex-row gap-2 justify-content-between align-items-center ">
+                                                    {obscureAddress(address)}
+                                                    <Clipboard />
+                                                </span>
+                                            </CopyToClipboard>
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             }
+                            <ConnectButton />
                         </li>
                     </ul>
                 </Offcanvas.Body>
