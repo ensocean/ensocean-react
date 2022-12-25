@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { useEnsName } from "wagmi";
 import { Clipboard, List, Share } from "react-bootstrap-icons";
 import AccountAvatar from "../../components/AccountAvatar";
+import { Link } from "react-router-dom";
 
 const AccountInfo = () => {
     const { address } = useParams();  
@@ -46,14 +47,14 @@ const AccountInfo = () => {
                     <h1 className="text-truncate">{ensName ? obscureEnsName(ensName) : obscureAddress(address)}</h1>
                     <div className="d-flex gap-3">
                         <CopyToClipboard text={address} onCopy={() => toast.success("Address copied") }>
-                            <span rule="button">
-                                <Clipboard className="text-white" />
-                            </span>
+                            <Link>
+                                <Clipboard className="text-white" role="button" />
+                            </Link>
                         </CopyToClipboard>
                         <CopyToClipboard text={window.location.href} onCopy={() => toast.success("Link copied") }>
-                            <span rule="button">
-                                <Share className="text-white" />
-                            </span>
+                            <Link>
+                                <Share className="text-white" role="button" />
+                            </Link>
                         </CopyToClipboard>
                         <a target="_blank" rel="noreferrer" href={"https://etherscan.io/address/"+ address} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="View on etherscan.io" className='text-white'>
                             <img src={etherscanIcon} width={20} height={20} alt="" />

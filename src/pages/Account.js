@@ -36,7 +36,7 @@ const Account = () => {
           <title>{addr} - EnsOcean</title>
           <meta name="description" content={"See which ENS domains does the account ("+ addr +") have."} />
       </Helmet>
-      <div className="container-fluid bg-primary">
+      <div className="container-fluid bg-primary bg-gradient">
         <div className="container-fluid container-fluid pt-4 pb-4 text-white">
             <AccountInfo />
         </div>
