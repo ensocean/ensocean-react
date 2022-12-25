@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect }  from "react";
 import { useLocation, useNavigate} from "react-router-dom";  
 import { Helmet } from "react-helmet-async";
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getExpires, getDateString, isAvailable, getTimeAgo} from '../helpers/String';
+import { getLabelHash, getLength, isExpired, isExpiring, isPremium, isValidDomain, isValidName, normalizeName, getDateString, isAvailable, getTimeAgo} from '../helpers/String';
 import AddToCartButton from "../components/AddToCartButton";
 import ClaimNowButton from "../components/ClaimNowButton";
 import { useRegisterlist } from "react-use-registerlist";

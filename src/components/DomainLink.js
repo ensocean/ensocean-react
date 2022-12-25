@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom'; 
-import { isAscii, isValidName, obscureLabel } from '../helpers/String'; 
+import { isAscii, isValidName } from '../helpers/String'; 
 import { OverlayTrigger, Tooltip } from 'react-bootstrap'; 
 import { DashCircleFill, ExclamationTriangleFill } from 'react-bootstrap-icons';
 

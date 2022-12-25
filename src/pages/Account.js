@@ -7,12 +7,12 @@ import { useWatchlist } from "react-use-watchlist";
 import { useAccount } from "wagmi"; 
 import { Trash } from "react-bootstrap-icons";
 import { Button, Modal } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Account = () => {
     const addr = useParams().address;  
-    const { isConnected, address } = useAccount();   
+    const { isConnected } = useAccount();   
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const tab = params.get("tab");

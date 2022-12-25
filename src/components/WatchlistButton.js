@@ -2,7 +2,7 @@
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import React from "react";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { Heart, HeartFill } from "react-bootstrap-icons";
 import Numeral from "react-numeral";
 import { Link, useNavigate } from "react-router-dom";

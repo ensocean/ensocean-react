@@ -43,7 +43,7 @@ const client = new ApolloClient({
 });
    
 const { chains, provider } = configureChains(
-  [process.env.REACT_APP_SUPPORTED_NETWORK == "goerli" ? goerli: mainnet ],
+  [process.env.REACT_APP_SUPPORTED_NETWORK === "goerli" ? goerli: mainnet ],
   [
     alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY, priority: 0, weight: 1 }),
     infuraProvider({ apiKey: process.env.REACT_APP_INFURA_KEY, priority: 1, weight: 2 }),

@@ -1,6 +1,4 @@
-import { ethers } from 'ethers';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Dropdown, Overlay, OverlayTrigger, Popover, Spinner } from 'react-bootstrap';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { FuelPump } from 'react-bootstrap-icons';
 import Numeral from 'react-numeral';
 import { Link } from 'react-router-dom';

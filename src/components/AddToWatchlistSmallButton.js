@@ -1,9 +1,8 @@
 
 
-import React, {useState} from "react";
+import React from "react";
 import { useWatchlist } from "react-use-watchlist";
-import { X, Heart, HeartFill } from "react-bootstrap-icons";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Heart, HeartFill } from "react-bootstrap-icons";
 import { toast } from "react-toastify"; 
 import { useLocation } from "react-router-dom";
  
@@ -26,7 +25,7 @@ function AddToWatchlistSmallButton({domain, parentElem}) {
     }
 
     const isInWatchlist = () => {
-        return new URLSearchParams(location.search).get("tab") == "watchlist";
+        return new URLSearchParams(location.search).get("tab") === "watchlist";
     }
 
     if(!inWatchlist(domain.id)) {

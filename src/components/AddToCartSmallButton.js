@@ -1,9 +1,8 @@
 
 
-import React, {useState} from "react";
+import React from "react";
 import { useRegisterlist } from "react-use-registerlist";
-import { Check2, X, Cart4, CartFill, Cart } from "react-bootstrap-icons";
-import {  OverlayTrigger, Tooltip } from "react-bootstrap";
+import { CartFill, Cart } from "react-bootstrap-icons";
 import { toast } from "react-toastify";
 import { isAvailable, isValidName } from "../helpers/String";
 
