@@ -12,7 +12,7 @@ import { ArrowRepeat } from "react-bootstrap-icons";
   
 const RECENTLY_EXPIRED = gql`
 {
-  domains (first: 10, orderBy: expires, orderDirection: asc, where: {  
+  domains (first: 10, orderBy: expires, orderDirection: desc, where: {  
     label_not: null,
     expires_lte: ${getExpireCondition()}
   } ) {

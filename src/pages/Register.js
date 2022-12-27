@@ -5,13 +5,14 @@ import DomainLink from "../components/DomainLink";
 import { useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import bulkControllerAbi from "../abis/BulkEthRegistrarController.json";
 import { getDurationSeconds, getTimeAgo, ZERO_ADDRESS } from "../helpers/String";
-import { Button, OverlayTrigger, Popover, Spinner } from "react-bootstrap";
+import { Button, Form, OverlayTrigger, Popover, Spinner } from "react-bootstrap";
 import {DelayInput} from 'react-delay-input';
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import Numeral from "react-numeral"; 
 import { v4 as uuidv4 } from 'uuid';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import useEthPrice from "../context/EthPriceContext";
 
 const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS;
 const BULK_CONTROLLER_ADDRESS = process.env.REACT_APP_BULK_CONTROLLER_ADDRESS; 
@@ -23,10 +24,16 @@ const secret = uuidv4().replace("-", "").toString();
 
 const Register = () => {  
   const { isEmpty, totalUniqueItems, getItem, items, updateItem, removeItem, emptyRegisterlist } = useRegisterlist();
-  const [validationError, setValidationError] = useState(null);
-  const [hasError, setHasError] = useState(null);
-  const {isConnected, address } = useAccount();
-  
+  const [ validationError, setValidationError ] = useState(null);
+  const [ hasError, setHasError ] = useState(null);
+  const { isConnected, address } = useAccount();
+  const { price: ethPrice, isLoading: isPriceLoading, error: priceError } = useEthPrice();
+  const [ priceInUsd, setPriceInUsd ] = useState(false);
+ 
+  const handlePriceInUsdChange = (e) => {
+    setPriceInUsd(!priceInUsd);
+  }
+
   const query = items.map(t=> { 
     return {
       name: t.label,
@@ -111,7 +118,13 @@ const Register = () => {
           <div className="flex-shrink-0">
             <span className="badge rounded-pill text-muted">Total {totalUniqueItems} name(s) </span>
           </div> 
-          <div className="gap-3 d-flex justify-content-between ">
+          <div className="gap-3 d-flex justify-content-between align-items-center">
+            <Form.Check 
+              type="switch"
+              label="USD"
+              onChange={handlePriceInUsdChange}
+            />
+
             {totalUniqueItems > 0 && 
               <button className="btn btn-light ps-1" onClick={(e)=> refetch()}>
                 {!isFetching && <span><ArrowClockwise /> Refresh</span> } 
@@ -176,9 +189,7 @@ const Register = () => {
                 </div>
               </div>
               <div className="col-6 col-lg-4 p-2 d-flex flex-row justify-content-between align-items-center">
-                {isError && <span className="text-danger"><ExclamationCircleFill /></span>}
-                {isFetching && <Spinner animation="border" variant="dark" size="sm" /> }
-                {!isError && !isFetching && <span><Numeral value={ ethers.utils.formatUnits(data.result[i].price)} format="0.00000" /> ETH</span>} 
+                <Price data={data} isFetching={isFetching} price={data?.result[i].price} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
                 <button className="btn btn-light btn-sm" onClick={(e)=> {  e.preventDefault(); removeItem(item.id) }}>
                   <Trash />
                 </button>
@@ -191,9 +202,7 @@ const Register = () => {
             {totalUniqueItems > 0 && 
             <div className="d-flex flex-row justify-content-end align-items-center">
               <strong>Total (Inc. Fee): </strong> &nbsp;
-              {isError && <span className="text-danger"><ExclamationCircleFill /></span>}
-              {isFetching && <Spinner animation="border" variant="dark" size="sm" /> }
-              {!isError && !isFetching && <span> <Numeral value={ethers.utils.formatUnits(data?.totalPriceWithFee)} format="0.00000" /> ETH </span>} 
+              <Price data={data} isFetching={isFetching} price={data?.totalPriceWithFee} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
             </div>
             }
             <div className="d-flex flex-row justify-content-end align-items-center gap-3 mt-3">
@@ -312,5 +321,27 @@ function ClaimButton({query, secret, totalPriceWithFee}) {
   )
 }
    
+
+function Price({data, isError, isFetching, price, ethPrice, quoteSymbol, priceInUsd}) {
+   
+  if(isError) return (<span className="text-danger"><ExclamationCircleFill /></span>)
+  if(isFetching) return (<Spinner animation="border" variant="dark" size="sm" />)
+  if(!isError && !isFetching) {
+    price = Number(ethers.utils.formatUnits(price));
+    let symbol = "ETH";
+
+    if(!ethPrice)
+      ethPrice = 0;
+
+    if(priceInUsd && ethPrice) {
+      price = ethPrice * price; 
+    }
+
+    if(priceInUsd) {
+      symbol = quoteSymbol;
+    }
+    return (<span><Numeral value={ price} format="0.00000" /> {symbol}</span>)
+  }
+}
 
 export default Register; 
