@@ -2,7 +2,7 @@ import {Helmet} from "react-helmet-async";
 import { useRegisterlist } from "react-use-registerlist";
 import { Trash, ArrowClockwise, Info, ExclamationCircleFill } from "react-bootstrap-icons";
 import DomainLink from "../components/DomainLink";
-import { useAccount, useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork, useWaitForTransaction } from 'wagmi';
+import { useAccount, useBalance, useContractRead, useContractWrite, useFeeData, useNetwork, usePrepareContractWrite, useProvider, useSigner, useSwitchNetwork, useWaitForTransaction } from 'wagmi';
 import bulkControllerAbi from "../abis/BulkEthRegistrarController.json";
 import { getDurationSeconds, getTimeAgo, ZERO_ADDRESS } from "../helpers/String";
 import { Button, Form, Overlay, OverlayTrigger, Popover, Spinner, Tooltip } from "react-bootstrap";
@@ -32,7 +32,12 @@ const Register = () => {
   const [isTimerCompleted, setIsTimerCompleted] = useState(false);
   const [ hasError, setHasError ] = useState(false);
   const [ validationError, setValidationError ] = useState(null);
+  const [ estimatedGas, setEstimatedGas ] = useState(0);
   
+  const provider = useProvider()
+  const { data: signer } = useSigner();
+  const { data: feeData, isError: feeDataError, isLoading: feeDataLoading } = useFeeData();
+
   const { isEmpty, totalUniqueItems, getItem, items, updateItem, removeItem, emptyRegisterlist } = useRegisterlist();
   const { chain } = useNetwork();
   const { error: swtichNetworkError, isLoading: isChainLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
@@ -99,11 +104,12 @@ const Register = () => {
   const { config } = usePrepareContractWrite({
     address: BULK_CONTROLLER_ADDRESS,
     abi: bulkControllerAbi, 
+    chainId: SUPPORTED_CHAIN_ID,
     functionName: "bulkCommit",
     args: [ENS_CONTROLLER_ADDRESS, query, secret]
   });
 
-  const { data: commitData, error: commitError, write: commit, isLoading: isCommitLoading } = useContractWrite(config);
+  const { data: commitData, error: commitError, write: commit, isLoading: isCommitLoading,  } = useContractWrite(config);
 
   const { isLoading: isCommitTxLoading, isSuccess: isCommitTxSuccess, error: commitTxError } = useWaitForTransaction({
     hash: commitData?.hash,
@@ -112,6 +118,7 @@ const Register = () => {
   const { config: registerConfig, refetch: registerRefetch } = usePrepareContractWrite({
     address: BULK_CONTROLLER_ADDRESS,
     abi: bulkControllerAbi, 
+    chainId: SUPPORTED_CHAIN_ID,
     functionName: "bulkRegister",
     args: [ENS_CONTROLLER_ADDRESS, query, secret, {
       value: data?.totalPriceWithFee
@@ -138,6 +145,7 @@ const Register = () => {
       emptyRegisterlist();
     }, 
   });
+
   
   const handleRegister = (e)=> {  
     register();
@@ -184,7 +192,15 @@ const Register = () => {
     registerReset();
   }
 
+  const estimateGas = async () => {
+    const registerGasPrice = await provider.estimateGas(registerData?.request);
+    setEstimatedGas(registerGasPrice.mul(feeData.gasPrice));
+  }
+ 
+
   useEffect(()=> {
+
+      console.log("commit: "+ JSON.stringify(commit))
 
       data?.result.forEach(item => {
         if(!item.available) {
@@ -193,7 +209,7 @@ const Register = () => {
         }
       });
   
-  }, [data, items, isRegisterTxSuccess])
+  }, [data, items])
 
   return (
     <>  
@@ -207,45 +223,45 @@ const Register = () => {
           </div> 
       </div>
       <div className="container pt-4">
-        <div className="d-flex flex-row justify-content-between mt-3 mb-3"> 
-          <div className="flex-shrink-0">
+        <div className="d-flex flex-column flex-md-row justify-content-between mt-3 mb-3 gap-3"> 
+          <div className="flex-fill d-flex flex-row align-items-center justify-content-between gap-3">
             <span className="badge rounded-pill text-muted">Total {totalUniqueItems} name(s) </span>
+            <div className="d-flex flex-row align-items-center justify-content-end">
+              <Form.Check type="switch" label="USD" defaultChecked={priceInUsd} onChange={handlePriceInUsdChange} />
+            </div> 
           </div> 
-          <div className="gap-3 d-flex flex-row justify-content-between align-items-center">
-            {totalUniqueItems > 0 && 
-              <>
-                <Form.Check 
-                  type="switch"
-                  label="USD"
-                  onChange={handlePriceInUsdChange}
-                />  
-                <button className="btn btn-light ps-1" onClick={handleRefetch}>
-                  {!isFetching && <span><ArrowClockwise /> Refresh</span> } 
-                  {isFetching && <span><Spinner animation="border" variant="dark" size="sm" /> Refreshing </span>}  
-                </button> 
-                <button className="btn btn-light ps-1" onClick={(e)=> emptyRegisterlist()}>
-                  <Trash /> Clear Cart
-                </button>
-              </>
-            }
-          </div>  
+          <div className="d-flex flex-row align-items-center justify-content-between gap-3">
+              {totalUniqueItems > 0 && 
+                <>
+                  <button className="btn btn-outline-primary" onClick={handleRefetch}>
+                    {!isFetching && <span><ArrowClockwise /> Refresh</span> } 
+                    {isFetching && <span><Spinner animation="border" size="sm" /> Refreshing </span>}  
+                  </button> 
+                  <button className="btn btn-outline-primary" onClick={(e)=> emptyRegisterlist()}>
+                    <Trash /> Clear Cart
+                  </button>
+                </>
+              }
+          </div>
         </div> 
         <div className="container"> 
           {commitError && <div className="alert alert-danger">{commitError.message}</div>}
           {hasError && <div className="alert alert-danger">{validationError}</div>}
+         
           <div className="d-none d-lg-block">
             <div className="row border-bottom border-light bg-light pt-2 pb-2">
               <div className="col-8 col-lg-5 p-2">
                 <strong>Name</strong>
               </div>
               <div className="col-4 col-lg-3 p-2">
-                <strong>Duration</strong>
+                <strong>Price</strong>
               </div>
               <div className="col-12 col-lg-4 p-2">
-                <strong>Price</strong>
+                <strong>Duration</strong>
               </div>
             </div>
           </div>
+
           {isEmpty && 
             <div className="row border-bottom d-flex flex-column justify-content-center align-items-center gap-2 pt-3">
               <p className="text-center">
@@ -253,9 +269,10 @@ const Register = () => {
               </p>
             </div>
           }
+
           {items.map((item, i) => (  
             <div className="row border-bottom border-light" key={i}>
-              <div className="col-12 col-lg-5 text-truncate p-2 d-flex flex-row justify-content-between align-items-center">
+              <div className="col-8 col-lg-5 text-truncate p-2 d-flex flex-row justify-content-between align-items-center">
                   <DomainLink domain={item} showAvability={false} /> 
                   {!isFetching && !data?.result[i].available && 
                     <OverlayTrigger trigger="click" rootClose placement="top" overlay={
@@ -270,7 +287,7 @@ const Register = () => {
                     </OverlayTrigger>
                   }
               </div>
-              <div className="col-6 col-lg-3 p-2">
+              <div className="col-4 col-lg-3 p-2 text-end text-md-start d-flex align-items-center">
                 <div className="input-group form-group"> 
                     <DelayInput 
                       type="number" 
@@ -294,7 +311,7 @@ const Register = () => {
                     </select>
                 </div>
               </div>
-              <div className="col-6 col-lg-4 p-2 d-flex flex-row justify-content-between align-items-center">
+              <div className="col-12 col-lg-4 p-2 d-flex flex-row justify-content-between align-items-center">
                 <Price data={data} isFetching={isFetching} price={data?.result[i].price} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
                 <button className="btn btn-light btn-sm" onClick={(e)=> handleItemRemove(e, item)}>
                   <Trash />
@@ -303,19 +320,21 @@ const Register = () => {
             </div> 
           ))}  
         </div>
+
         <div className="row mt-3">
           <div className="col-12">
 
             {totalUniqueItems > 0 && 
               <div className="d-flex flex-row justify-content-end align-items-center">
+                <strong>Gas {estimatedGas}</strong>
                 <strong>Total (Inc. Fee): </strong> &nbsp;
                 <Price data={data} isFetching={isFetching} price={data?.totalPriceWithFee} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
               </div>
             }
 
             <div className="d-flex flex-row justify-content-end align-items-center gap-3 mt-3">
-                  {!isTimerCompleted && isCommitTxSuccess &&
-                    <>
+                {!isTimerCompleted && isCommitTxSuccess &&
+                  <>
                       <CountdownCircleTimer
                         size={48}
                         strokeWidth={3}
@@ -337,10 +356,10 @@ const Register = () => {
                           </Popover.Body>
                         </Popover>
                       }>
-                        <Button variant="light" size="sm"> <Info /> </Button>
-                      </OverlayTrigger>
-                    </>
-                  }
+                      <Button variant="light" size="sm"> <Info /> </Button>
+                    </OverlayTrigger>
+                  </>
+                }
 
                 {data && !isCommitTxSuccess && !isTimerCompleted && 
                   <>
@@ -361,8 +380,8 @@ const Register = () => {
                           { isCommitTxSuccess && <>Wait for 1 Minute</>}
                           { !isFetching && !isAvailableBalance() && <> Unsufficient Balance</>}
                       </button> 
-                    }
-                    </>
+                    } 
+                  </>
                 }
                    
                 {data && isCommitTxSuccess && isTimerCompleted && 
@@ -404,6 +423,7 @@ function Price({data, isError, isFetching, price, ethPrice, quoteSymbol, priceIn
   if(!isError && !isFetching) {
     price = Number(ethers.utils.formatUnits(price));
     let symbol = "ETH";
+    let format = "0.000";
 
     if(!ethPrice)
       ethPrice = 0;
@@ -414,8 +434,10 @@ function Price({data, isError, isFetching, price, ethPrice, quoteSymbol, priceIn
 
     if(priceInUsd) {
       symbol = quoteSymbol;
+      format = "0.00";
     }
-    return (<span><Numeral value={price} format="0.00000" /> {symbol}</span>)
+
+    return (<span><Numeral value={price} format={format} /> {symbol}</span>)
   }
 }
 
