@@ -8,9 +8,9 @@ import OwnerLinkLabel from './OwnerLinkLabel';
 import { getTimeAgo } from '../helpers/String';
 import { useRef } from 'react';
    
-function DomainCardInline({domain, loading}) { 
+function DomainCardInline({domain, loading, tab}) { 
     const elem = useRef();
-
+    
     if(loading) {
         return (
             <>
@@ -64,7 +64,9 @@ function DomainCardInline({domain, loading}) {
                         </div>
                     </div> 
                 </div> 
-                <div className='col-2 p-2 d-none d-md-block text-truncate'><OwnerLinkLabel owner={domain.owner} /></div>
+                <div className='col-2 p-2 d-none d-md-block text-truncate'>
+                    {tab !== "expired" && tab !== "premium" ? <OwnerLinkLabel owner={domain.owner} /> : <span></span>}
+                </div>
                 <div className='col-2 p-2 d-none d-md-block text-truncate'>{getTimeAgo(domain.registered)}</div>
                 <div className='col-2 p-2 d-none d-md-block text-truncate'>{getTimeAgo(domain.created)}</div>
             </div> 

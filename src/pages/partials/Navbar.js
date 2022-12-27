@@ -160,7 +160,8 @@ const Navbar = () => {
                         <li className="w-100 d-flex flex-row gap-2 align-items-center justify-content-between">
                             {isConnected &&
                                 <Dropdown>
-                                    <Dropdown.Toggle variant="default" className="p-0">
+                                    <Dropdown.Toggle variant="default" className="p-0 d-flex flex-row align-items-center justify-content-between gap-1">
+                                        <img src={ensAvatar ? ensAvatar : avatar } alt={address} width={32} height={32} className="img-fluid rounded-circle" />
                                         <span className="fw-bold">{ensName ? obscureEnsName(ensName): obscureAddress(address)}</span>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu className="p-0">

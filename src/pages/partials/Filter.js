@@ -8,7 +8,7 @@ import DomainCardInline from "../../components/DomainCardInline";
 import DomainCard from "../../components/DomainCard"; 
 import { DelayInput } from "react-delay-input";
 import { ArrowRepeat, ArrowUp, FiletypeCsv, FunnelFill, GridFill, ListUl, Search, SortDown, SortUp } from "react-bootstrap-icons";
-import { Offcanvas, Spinner } from "react-bootstrap";
+import { Offcanvas, Spinner, Tab } from "react-bootstrap";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const DEBOUNCE_INTERVAL = 500; 
@@ -492,7 +492,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
                     </div>
                 </div>
                 <div className="container-fluid p-1" id="#results">
-                    <FilterResults called={called} loading={loading} error={error} data={data} view={view} />
+                    <FilterResults tab={Tab} called={called} loading={loading} error={error} data={data} view={view} />
                 </div> 
                 <div className="d-flex justify-content-between"> 
                     <div className="csv-download">
@@ -523,7 +523,7 @@ const Filter = ({Tab, First, Skip, OrderBy, OrderDirection, Where, View}) => {
     );
 };
  
-const FilterResults = ( { called, loading, error, data, view}) => {
+const FilterResults = ( { called, loading, error, data, view, tab}) => {
     if(!called) return;
  
     if (loading)  {
@@ -590,7 +590,7 @@ const FilterResults = ( { called, loading, error, data, view}) => {
                             <>
                                 {data.domains.map((domain) => ( 
                                     <div key={domain.id}>
-                                        <DomainCardInline domain={domain} />
+                                        <DomainCardInline domain={domain} tab={tab} />
                                     </div>
                                 ))}
                             </>
