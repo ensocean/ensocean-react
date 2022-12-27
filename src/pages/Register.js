@@ -24,19 +24,21 @@ const ETHERSCAN_ADDR = process.env.REACT_APP_ETHERSCAN_ADDR;
 const SUPPORTED_CHAIN_ID = Number(process.env.REACT_APP_SUPPORTED_CHAIN_ID);
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-const secret = uuidv4();
+const _secret = uuidv4().toString().replace(/-/gi, '');
 
 const Register = () => {  
- 
+  const secret = _secret;
+   
   const [ priceInUsd, setPriceInUsd ] = useState(false);
   const [isTimerCompleted, setIsTimerCompleted] = useState(false);
   const [ hasError, setHasError ] = useState(false);
   const [ validationError, setValidationError ] = useState(null);
+  const [ estimateGasLoading, setEstimatedGasLoading ] = useState(true);
   const [ estimatedGas, setEstimatedGas ] = useState(0);
   
   const provider = useProvider()
   const { data: signer } = useSigner();
-  const { data: feeData, isError: feeDataError, isLoading: feeDataLoading } = useFeeData();
+  const { data: feeData, isError: isFeeDataError, isLoading: isFeeDataLoading } = useFeeData();
 
   const { isEmpty, totalUniqueItems, getItem, items, updateItem, removeItem, emptyRegisterlist } = useRegisterlist();
   const { chain } = useNetwork();
@@ -101,7 +103,7 @@ const Register = () => {
     updateItem(item.id, newItem); 
   }
  
-  const { config } = usePrepareContractWrite({
+  const { config: commitConfig } = usePrepareContractWrite({
     address: BULK_CONTROLLER_ADDRESS,
     abi: bulkControllerAbi, 
     chainId: SUPPORTED_CHAIN_ID,
@@ -109,10 +111,13 @@ const Register = () => {
     args: [ENS_CONTROLLER_ADDRESS, query, secret]
   });
 
-  const { data: commitData, error: commitError, write: commit, isLoading: isCommitLoading,  } = useContractWrite(config);
+  const { data: commitData, error: commitError, write: commit, isLoading: isCommitLoading,  } = useContractWrite(commitConfig);
 
   const { isLoading: isCommitTxLoading, isSuccess: isCommitTxSuccess, error: commitTxError } = useWaitForTransaction({
     hash: commitData?.hash,
+    onSuccess(data) {
+      localStorage.setItem("secret", secret);
+    }
   });
      
   const { config: registerConfig, refetch: registerRefetch } = usePrepareContractWrite({
@@ -130,12 +135,14 @@ const Register = () => {
   const { isLoading: isRegisterTxLoading, isSuccess: isRegisterTxSuccess, error: registerTxError, isError: isRegisterTxError } = useWaitForTransaction({
     hash: registerData?.hash,
     onError(err) {
+      localStorage.removeItem("secret");
       toast.success(`Transaction has been failed.`,
       { 
         autoClose: 5000
       })
     },
     onSuccess(data) {
+      localStorage.removeItem("secret");
       toast.success(`Transaction has been completed. `,
       { 
         autoClose: 5000
@@ -181,8 +188,9 @@ const Register = () => {
   const handleRefetch = (e) => {
     refetch(); 
     ethPriceRefetch();
-    registerRefetch();
     registerReset();
+    registerRefetch();
+    estimateGas();
   }
 
   const handleTimerCompleted = (e) => {
@@ -191,24 +199,31 @@ const Register = () => {
     registerRefetch();
     registerReset();
   }
-
-  const estimateGas = async () => {
-    const registerGasPrice = await provider.estimateGas(registerData?.request);
-    setEstimatedGas(registerGasPrice.mul(feeData.gasPrice));
-  }
  
-
-  useEffect(()=> {
-
-      console.log("commit: "+ JSON.stringify(commit))
-
-      data?.result.forEach(item => {
-        if(!item.available) {
-          setHasError(true);
-          setValidationError("One or more items already registered. Please remove them to continue.")
-        }
-      });
+  const estimateGas = async () => {
+    if(!registerConfig?.request) return;
+    if(isFeeDataLoading) return;
+    try {
+      setEstimatedGasLoading(true);
+      const registerGasPrice = await provider.estimateGas(registerConfig?.request);
+      setEstimatedGas(registerGasPrice.mul(feeData?.gasPrice).toString());
+      setEstimatedGasLoading(false);
+    } catch(e) {
+      console.error("Gas Estimation Failed: "+ e.message);
+    }
+  }
   
+  useEffect(()=> {
+    
+    estimateGas();
+
+    data?.result.forEach(item => {
+      if(!item.available) {
+        setHasError(true);
+        setValidationError("One or more items already registered. Please remove them to continue.")
+      }
+    });
+
   }, [data, items])
 
   return (
@@ -227,7 +242,7 @@ const Register = () => {
           <div className="flex-fill d-flex flex-row align-items-center justify-content-between gap-3">
             <span className="badge rounded-pill text-muted">Total {totalUniqueItems} name(s) </span>
             <div className="d-flex flex-row align-items-center justify-content-end">
-              <Form.Check type="switch" label="USD" defaultChecked={priceInUsd} onChange={handlePriceInUsdChange} />
+              <Form.Check type="switch" size="xl" label="USD" defaultChecked={priceInUsd} onChange={handlePriceInUsdChange} />
             </div> 
           </div> 
           <div className="d-flex flex-row align-items-center justify-content-between gap-3">
@@ -272,7 +287,7 @@ const Register = () => {
 
           {items.map((item, i) => (  
             <div className="row border-bottom border-light" key={i}>
-              <div className="col-8 col-lg-5 text-truncate p-2 d-flex flex-row justify-content-between align-items-center">
+              <div className="col-12 col-lg-5 text-truncate p-2 d-flex flex-row justify-content-between align-items-center">
                   <DomainLink domain={item} showAvability={false} /> 
                   {!isFetching && !data?.result[i].available && 
                     <OverlayTrigger trigger="click" rootClose placement="top" overlay={
@@ -287,7 +302,7 @@ const Register = () => {
                     </OverlayTrigger>
                   }
               </div>
-              <div className="col-4 col-lg-3 p-2 text-end text-md-start d-flex align-items-center">
+              <div className="col-6 col-lg-3 p-2 text-end text-md-start d-flex align-items-center">
                 <div className="input-group form-group"> 
                     <DelayInput 
                       type="number" 
@@ -311,7 +326,7 @@ const Register = () => {
                     </select>
                 </div>
               </div>
-              <div className="col-12 col-lg-4 p-2 d-flex flex-row justify-content-between align-items-center">
+              <div className="col-6 col-lg-4 p-2 d-flex flex-row justify-content-between align-items-center">
                 <Price data={data} isFetching={isFetching} price={data?.result[i].price} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
                 <button className="btn btn-light btn-sm" onClick={(e)=> handleItemRemove(e, item)}>
                   <Trash />
@@ -325,10 +340,16 @@ const Register = () => {
           <div className="col-12">
 
             {totalUniqueItems > 0 && 
-              <div className="d-flex flex-row justify-content-end align-items-center">
-                <strong>Gas {estimatedGas}</strong>
-                <strong>Total (Inc. Fee): </strong> &nbsp;
-                <Price data={data} isFetching={isFetching} price={data?.totalPriceWithFee} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
+              <div className="d-flex flex-column justify-content-end align-items-end">
+                {estimatedGas > 0 &&
+                <span>
+                 <strong>Estimated Gas: </strong> <Price isFetching={estimateGasLoading} price={estimatedGas} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} /> 
+                </span>
+                }
+                <span>
+                  <strong>Total (Inc. Fee): </strong> &nbsp;
+                  <Price isFetching={isFetching} price={data?.totalPriceWithFee} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
+                </span>
               </div>
             }
 
@@ -416,7 +437,7 @@ const Register = () => {
 
    
 
-function Price({data, isError, isFetching, price, ethPrice, quoteSymbol, priceInUsd}) {
+function Price({isError, isFetching, price, ethPrice, quoteSymbol, priceInUsd}) {
    
   if(isError) return (<span className="text-danger"><ExclamationCircleFill /></span>)
   if(isFetching) return (<Spinner animation="border" variant="dark" size="sm" />)
