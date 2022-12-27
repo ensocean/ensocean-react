@@ -2,7 +2,7 @@ import {Helmet} from "react-helmet-async";
 import { useRegisterlist } from "react-use-registerlist";
 import { Trash, ArrowClockwise, Info, ExclamationCircleFill } from "react-bootstrap-icons";
 import DomainLink from "../components/DomainLink";
-import { useAccount, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork, useWaitForTransaction } from 'wagmi';
+import { useAccount, useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite, useSwitchNetwork, useWaitForTransaction } from 'wagmi';
 import bulkControllerAbi from "../abis/BulkEthRegistrarController.json";
 import { getDurationSeconds, getTimeAgo, ZERO_ADDRESS } from "../helpers/String";
 import { Button, Form, Overlay, OverlayTrigger, Popover, Spinner, Tooltip } from "react-bootstrap";
@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import useEthPrice from "../context/EthPriceContext";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS;
 const BULK_CONTROLLER_ADDRESS = process.env.REACT_APP_BULK_CONTROLLER_ADDRESS; 
@@ -26,7 +27,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const secret = uuidv4();
 
 const Register = () => {  
-  
+ 
   const [ priceInUsd, setPriceInUsd ] = useState(false);
   const [isTimerCompleted, setIsTimerCompleted] = useState(false);
   const [ hasError, setHasError ] = useState(false);
@@ -38,6 +39,8 @@ const Register = () => {
  
   const { isConnected, address } = useAccount();
   const { price: ethPrice, isLoading: isPriceLoading, error: priceError, refetch: ethPriceRefetch } = useEthPrice();
+
+  const { data: balance, isError: isBalanceError, isLoading: isBalanceLoading, isFetched: isBalanceFetched, } = useBalance({ watch: true, address: address })
 
   const handlePriceInUsdChange = (e) => {
     setPriceInUsd(!priceInUsd);
@@ -54,6 +57,7 @@ const Register = () => {
   });
   
   const { data, isError, refetch, isFetching, isFetched, error } = useContractRead({
+    watch: true,
     address: BULK_CONTROLLER_ADDRESS,
     abi: bulkControllerAbi,
     functionName: "bulkRentPrice",
@@ -104,6 +108,40 @@ const Register = () => {
   const { isLoading: isCommitTxLoading, isSuccess: isCommitTxSuccess, error: commitTxError } = useWaitForTransaction({
     hash: commitData?.hash,
   });
+     
+  const { config: registerConfig, refetch: registerRefetch } = usePrepareContractWrite({
+    address: BULK_CONTROLLER_ADDRESS,
+    abi: bulkControllerAbi, 
+    functionName: "bulkRegister",
+    args: [ENS_CONTROLLER_ADDRESS, query, secret, {
+      value: data?.totalPriceWithFee
+    }]
+  })
+    
+  const { data: registerData, error: registerError, write: register, isLoading: isRegisterLoading, reset: registerReset } = useContractWrite(registerConfig);
+  
+  const { isLoading: isRegisterTxLoading, isSuccess: isRegisterTxSuccess, error: registerTxError, isError: isRegisterTxError } = useWaitForTransaction({
+    hash: registerData?.hash,
+    onError(err) {
+      toast.success(`Transaction has been failed.`,
+      { 
+        autoClose: 5000
+      })
+    },
+    onSuccess(data) {
+      toast.success(`Transaction has been completed. `,
+      { 
+        autoClose: 5000
+      });
+      setHasError(false);
+      setValidationError(null);
+      emptyRegisterlist();
+    }, 
+  });
+  
+  const handleRegister = (e)=> {  
+    register();
+  }
  
   const handleCommit = (e)=> { 
     commit(); 
@@ -124,6 +162,28 @@ const Register = () => {
     }
   }
 
+  const isAvailableBalance = ()=> {
+    if(isBalanceLoading) return false;
+    if(isBalanceError) return false; 
+    if(isFetching) return false;
+    if(isError) return false;
+    return balance?.value.gte(data?.totalPriceWithFee);
+  }
+
+  const handleRefetch = (e) => {
+    refetch(); 
+    ethPriceRefetch();
+    registerRefetch();
+    registerReset();
+  }
+
+  const handleTimerCompleted = (e) => {
+    delay(2000); 
+    setIsTimerCompleted(true);
+    registerRefetch();
+    registerReset();
+  }
+
   useEffect(()=> {
 
       data?.result.forEach(item => {
@@ -132,8 +192,8 @@ const Register = () => {
           setValidationError("One or more items already registered. Please remove them to continue.")
         }
       });
-
-  }, [data, items])
+  
+  }, [data, items, isRegisterTxSuccess])
 
   return (
     <>  
@@ -159,7 +219,7 @@ const Register = () => {
                   label="USD"
                   onChange={handlePriceInUsdChange}
                 />  
-                <button className="btn btn-light ps-1" onClick={(e)=> { refetch(); ethPriceRefetch(); } }>
+                <button className="btn btn-light ps-1" onClick={handleRefetch}>
                   {!isFetching && <span><ArrowClockwise /> Refresh</span> } 
                   {isFetching && <span><Spinner animation="border" variant="dark" size="sm" /> Refreshing </span>}  
                 </button> 
@@ -187,14 +247,16 @@ const Register = () => {
             </div>
           </div>
           {isEmpty && 
-            <div className="flex-fill">
-              Your bulk registration cart is empty.
+            <div className="row border-bottom d-flex flex-column justify-content-center align-items-center gap-2 pt-3">
+              <p className="text-center">
+              Your bulk registration cart is empty. Click <Link to="/find"> here </Link> to find your web3 name(s).
+              </p>
             </div>
           }
           {items.map((item, i) => (  
             <div className="row border-bottom border-light" key={i}>
               <div className="col-12 col-lg-5 text-truncate p-2 d-flex flex-row justify-content-between align-items-center">
-                  <DomainLink domain={item} showAvability={false} />
+                  <DomainLink domain={item} showAvability={false} /> 
                   {!isFetching && !data?.result[i].available && 
                     <OverlayTrigger trigger="click" rootClose placement="top" overlay={
                       <Popover>
@@ -261,7 +323,7 @@ const Register = () => {
                         duration={60} 
                         colors={['#239e01', '#2ece02', '#e5ed07', '#bf0505']}
                         colorsTime={[7, 5, 2, 0]}
-                        onComplete={(e)=> { delay(2000); setIsTimerCompleted(true); }}
+                        onComplete={handleTimerCompleted}
                       >
                         {({ remainingTime }) => remainingTime}
                       </CountdownCircleTimer> 
@@ -280,26 +342,50 @@ const Register = () => {
                     </>
                   }
 
-                {isConnected && SUPPORTED_CHAIN_ID !== chain?.id &&
-                    <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
-                        <button className={"btn btn-danger"} disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
-                        {isChainLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
-                        <span> Wrong Network</span>
-                        </button> 
-                    </OverlayTrigger>
-                }
+                {data && !isCommitTxSuccess && !isTimerCompleted && 
+                  <>
+                    {isConnected && SUPPORTED_CHAIN_ID !== chain?.id &&
+                        <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
+                            <button className={"btn btn-danger"} disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+                            {isChainLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
+                            <span> Wrong Network</span>
+                            </button> 
+                        </OverlayTrigger>
+                    }
 
-                {totalUniqueItems > 0 && isConnected && !isCommitTxSuccess && SUPPORTED_CHAIN_ID === chain?.id &&
-                  <button className="btn btn-primary btn-lg" disabled={!commit || isCommitLoading || isCommitTxLoading || isCommitTxSuccess || hasError || isFetching} onClick={handleCommit}>
-                      {isCommitLoading && <Spinner animation="border" variant="white" size="sm" /> }
-                      {isCommitTxLoading && <> <Spinner animation="border" variant="white" size="sm" /> Waiting for transaction...</> }
-                      { !isCommitTxSuccess && !isCommitTxLoading && <> Request to Claim </>}
-                      { isCommitTxSuccess && <>Wait for 1 Minute</>}
-                  </button> 
+                    {totalUniqueItems > 0 && isConnected && !isCommitTxSuccess && SUPPORTED_CHAIN_ID === chain?.id &&
+                      <button className="btn btn-primary btn-lg" disabled={!commit || isCommitLoading || isCommitTxLoading || hasError || isFetching || isBalanceLoading || !isAvailableBalance()} onClick={handleCommit}>
+                          { (isFetching || isCommitLoading || isCommitTxLoading || isBalanceLoading) && <Spinner animation="border" variant="white" size="sm" /> }
+                          { isCommitTxLoading && <> Waiting for transaction... </> }
+                          { !isCommitTxSuccess && !isCommitTxLoading && isAvailableBalance() && <> Request to Register </>}
+                          { isCommitTxSuccess && <>Wait for 1 Minute</>}
+                          { !isFetching && !isAvailableBalance() && <> Unsufficient Balance</>}
+                      </button> 
+                    }
+                    </>
                 }
                    
-                {data && isCommitTxSuccess && isTimerCompleted && !isFetching && 
-                  <ClaimButton query={query} secret={secret} totalPriceWithFee={data?.totalPriceWithFee} />
+                {data && isCommitTxSuccess && isTimerCompleted && 
+                  <>
+                    {isConnected && SUPPORTED_CHAIN_ID !== chain?.id &&
+                        <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
+                            <button className={"btn btn-danger"} disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
+                            {isChainLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
+                            <span> Wrong Network</span>
+                            </button> 
+                        </OverlayTrigger>
+                    }
+
+                    {totalUniqueItems > 0 && isConnected && !isRegisterTxSuccess && SUPPORTED_CHAIN_ID === chain?.id &&
+                      <button className="btn btn-success btn-lg" disabled={!register || isRegisterLoading || isRegisterTxLoading || hasError || isFetching || isBalanceLoading} onClick={handleRegister}>
+                          { (isFetching || isRegisterLoading || isRegisterTxLoading || isBalanceLoading) && <Spinner animation="border" variant="white" size="sm" /> }
+                          { isRegisterTxLoading && <> Waiting for transaction... </> }
+                          { !isRegisterTxSuccess && !isRegisterTxLoading && isAvailableBalance() &&  <> Register </>}
+                          { isRegisterTxSuccess && <>Completed</>}
+                          { !isFetching && !isAvailableBalance() && <> Unsufficient Balance</>}
+                      </button>
+                    }
+                  </>
                 }
             </div>
           </div>
@@ -309,89 +395,6 @@ const Register = () => {
   );
 };
 
-function ClaimButton({ query, secret, totalPriceWithFee }) {
-
-  const { emptyRegisterlist } = useRegisterlist();
-  const { isConnected, address } = useAccount();
-  const { chain } = useNetwork();
-  const { error: swtichNetworkError, isLoading: isChainLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
-    
-  const { config: registerConfig } = usePrepareContractWrite({
-    address: BULK_CONTROLLER_ADDRESS,
-    abi: bulkControllerAbi, 
-    functionName: "bulkRegister",
-    args: [ENS_CONTROLLER_ADDRESS, query, secret, {
-      value: totalPriceWithFee.mul(2)
-    }]
-  })
-
-  const { data: registerData, error: registerError, write: register, isLoading: isRegisterLoading } = useContractWrite(registerConfig);
-
-  const { isLoading: isRegisterTxLoading, isSuccess: isRegisterTxSuccess, error: registerTxError, isError: isRegisterTxError } = useWaitForTransaction({
-    hash: registerData?.hash,
-  });
-
-  const handleRegister = (e)=> {  
-    register();
-  }
-
-  const handleSwitchChain = (e) => {
-    e.preventDefault();
-    switchNetwork?.(SUPPORTED_CHAIN_ID);
-  }
-
-  useEffect(()=> {
-      if(isRegisterTxSuccess) {
-        emptyRegisterlist();
-      }
-  }, [isRegisterTxSuccess])
-
-  return (
-    <>
-     {isConnected && SUPPORTED_CHAIN_ID !== chain?.id &&
-        <OverlayTrigger placement="top"  overlay={<Tooltip>Wrong Network! Click to Change Network</Tooltip>} >
-            <button className={"btn btn-danger"} disabled={!switchNetwork || SUPPORTED_CHAIN_ID === chain?.id} key={SUPPORTED_CHAIN_ID} onClick={handleSwitchChain} >
-            {isChainLoading && pendingChainId === SUPPORTED_CHAIN_ID && <Spinner animation="border" variant="white" size="sm" />}
-            <span> Wrong Network</span>
-            </button> 
-        </OverlayTrigger>
-    }
-
-    {isConnected && !isRegisterTxSuccess && !isRegisterTxError && SUPPORTED_CHAIN_ID === chain?.id &&
-      <button className="btn btn-success btn-lg" disabled={!register || isRegisterLoading || isRegisterTxLoading} onClick={handleRegister}>
-          {isRegisterLoading && <Spinner animation="border" variant="white" size="sm" /> }
-          {isRegisterTxLoading && <> <Spinner animation="border" variant="white" size="sm" /> Waiting for transaction... </> }
-          {!isRegisterTxSuccess && !isRegisterTxLoading && <> Claim </>}
-          {isRegisterTxSuccess && <>Completed</>}
-      </button>
-    }
-
-    {isRegisterTxSuccess && 
-      <div className="flex-fill d-flex flex-column justify-content-center align-items-center alert alert-success gap-2">
-        <strong>Success!</strong> Transaction Completed
-        <a target="_blank" rel="noreferrer" href={ ETHERSCAN_ADDR +"/tx/"+ registerData?.hash } >
-          View on Etherscan
-        </a>
-        <p>
-          It may take a few minutes to seen your domains in your account. Please wait for a while.
-        </p>
-      </div>
-    }
-
-    {registerError && 
-      <div className="flex-fill d-flex flex-row justify-content-center align-items-center alert alert-danger gap-2">
-        <strong>Error!</strong> {registerError.message}
-      </div>
-    }
-
-    {registerTxError && 
-      <div className="flex-fill d-flex flex-row justify-content-center align-items-center alert alert-danger gap-2">
-        <strong>Error!</strong> {registerTxError.message}
-      </div>
-    }
-    </>
-  )
-}
    
 
 function Price({data, isError, isFetching, price, ethPrice, quoteSymbol, priceInUsd}) {
