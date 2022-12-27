@@ -10,29 +10,31 @@ export const EthPriceProvider = ({ children }) => {
     const [error, setError] = useState(null); 
     const [isLoading, setIsLoading] = useState(false);
      
-    useEffect(()=> {
-        setIsLoading(true);
-        
-        async function fetchData() {
-            try {
-              const res = await fetch(API_URL);
-              const data = await res.json();
-              setError(null);
-              setPrice(data.USD);
-              setIsLoading(false);
-            } catch (err) {
-              setPrice(null);
-              setError(err);
-              setIsLoading(false);
-            }
-        }
+    async function fetchData() {
+      setIsLoading(true);
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        setError(null);
+        setPrice(data.USD);
+        setIsLoading(false);
+      } catch (err) {
+        setPrice(null);
+        setError(err);
+        setIsLoading(false);
+      }
+    }
 
-        fetchData();
-
-        setInterval(fetchData, 10000);
+    async function refetch() {   
+      fetchData(); 
+    }
+    
+    useEffect(()=> { 
+      refetch();
+      setInterval(fetchData, 10000);
     }, [])
      
-    return <EthPriceContext.Provider value={{price, error, isLoading}}>{children}</EthPriceContext.Provider>
+    return <EthPriceContext.Provider value={{price, error, isLoading, refetch}}>{children}</EthPriceContext.Provider>
 
 }
 
