@@ -26,32 +26,32 @@ const Footer = () => {
                         </div> 
                         <div className="col-lg-6">
                             <ul className="list-inline list-unstyled float-lg-end float-sm-none">
-                            <li className="list-inline-item"> 
-                                <a href="https://opensea.io/EnsOceanOfficial" target="_blank" rel="noreferrer" title="View EnsOcean on Opensea">
-                                    <img src={openSeaIcon} alt="EnsOcean Opensea" />
-                                </a>        
-                            </li>
-                            <li className="list-inline-item"> 
-                                <a href="https://github.com/ensocean" target="_blank" rel="noreferrer" title="View EnsOcean on Github">
-                                    <img src={githubIcon} alt="EnsOcean Github"  />
-                                </a>
-                            </li>
-                            <li className="list-inline-item"> 
-                                <a href="https://twitter.com/ensocean" target="_blank" rel="noreferrer" title="Follow EnsOcean on Twitter">
-                                    <img src={twitterIcon} alt="EnsOcean Twitter"  />
-                                </a>
-                            </li>   
-                            <li className="list-inline-item"> 
-                                <a href="https://telegram.me/ensocean" target="_blank" rel="noreferrer"  title="Join EnsOcean Telegram Channel">
-                                    <img src={telegramIcon} alt="EnsOcean Telegram"  />
-                                </a>
-                            </li> 
-                            <li className="list-inline-item">
-                                <a href="mailto:support@ensocean.com" target="_blank"  rel="noreferrer" title="Contact Via Email" className="text-decoration-none"> 
-                                    <EnvelopeOpenFill width={30} height={30} className="text-white" />
-                                </a>
-                            </li> 
-                            </ul>
+                                <li className="list-inline-item"> 
+                                    <a href="https://opensea.io/EnsOceanOfficial" target="_blank" rel="noreferrer" title="View EnsOcean on Opensea">
+                                        <img src={openSeaIcon} alt="EnsOcean Opensea" />
+                                    </a>        
+                                </li>
+                                <li className="list-inline-item"> 
+                                    <a href="https://github.com/ensocean" target="_blank" rel="noreferrer" title="View EnsOcean on Github">
+                                        <img src={githubIcon} alt="EnsOcean Github"  />
+                                    </a>
+                                </li>
+                                <li className="list-inline-item"> 
+                                    <a href="https://twitter.com/ensocean" target="_blank" rel="noreferrer" title="Follow EnsOcean on Twitter">
+                                        <img src={twitterIcon} alt="EnsOcean Twitter"  />
+                                    </a>
+                                </li>   
+                                <li className="list-inline-item"> 
+                                    <a href="https://telegram.me/ensocean" target="_blank" rel="noreferrer"  title="Join EnsOcean Telegram Channel">
+                                        <img src={telegramIcon} alt="EnsOcean Telegram"  />
+                                    </a>
+                                </li> 
+                                <li className="list-inline-item">
+                                    <a href="mailto:support@ensocean.com" target="_blank"  rel="noreferrer" title="Contact Via Email" className="text-decoration-none"> 
+                                        <EnvelopeOpenFill width={30} height={30} className="text-white" />
+                                    </a>
+                                </li> 
+                            </ul> 
                         </div>
                     </div>
                     <hr />
@@ -61,10 +61,31 @@ const Footer = () => {
                     </div>
                     <div className="col-lg-6 col-md-6 col-sm-12">
                         <ul className="list-inline list-unstyled float-lg-end float-md-end float-sm-none">
-                        <li className="list-inline-item"><Link to="/privacy" title="Privacy Policy"><small>Privacy</small></Link></li>
-                        <li className="list-inline-item"><Link to="/terms" title="Term Of Use"><small>Terms</small></Link></li>
-                        <li className="list-inline-item"><Link to="/faq" title="Frequently Asked Questions"><small>FAQ</small></Link></li>
-                        <li className="list-inline-item"><a href="https://medium.com/the-ethereum-name-service" target="_blank" rel="noreferrer" title="Learn ENS"><small>Learn ENS</small></a></li>
+                            <li className="list-inline-item">
+                                <a target="_blank" href="https://test.ensocean.com" title="Goerli Testnet">
+                                    <small>Testnet</small>
+                                </a>
+                            </li>
+                            <li className="list-inline-item">
+                                <Link to="/privacy" title="Privacy Policy">
+                                    <small>Privacy</small>
+                                </Link>
+                            </li>
+                            <li className="list-inline-item">
+                                <Link to="/terms" title="Term Of Use">
+                                    <small>Terms</small>
+                                </Link>
+                            </li>
+                            <li className="list-inline-item">
+                                <Link to="/faq" title="Frequently Asked Questions">
+                                    <small>FAQ</small>
+                                </Link>
+                            </li>
+                            <li className="list-inline-item">
+                                <a href="https://medium.com/the-ethereum-name-service" target="_blank" rel="noreferrer" title="Learn ENS">
+                                <small>Learn ENS</small>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     </div>

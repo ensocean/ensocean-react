@@ -12,6 +12,8 @@ import OwnerLink from "../components/OwnerLink";
 import AlertDomain from "../components/AlertDomain";
 import DomainImage from "../components/DomainImage";  
 import { Clipboard, ShareFill } from "react-bootstrap-icons";
+import AddToWatchlistSmallButton from "../components/AddToWatchlistSmallButton";
+import AddToWatchlistButton from "../components/AddToWatchlistButton";
 
 const ENS_REGISTRAR_ADDRESS = process.env.REACT_APP_ENS_REGISTRAR_ADDRESS;  
 const ETHERSCAN_URL = process.env.REACT_APP_ETHERSCAN_URL;
@@ -128,6 +130,7 @@ const Domain = () => {
                                 </h1>
                             </div> 
                             <div className='d-flex align-items-center gap-3'> 
+                                <AddToWatchlistButton label={label} />
                                 <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
                                     <img src={etherScanIcon} width={32} height={32}  alt= "" />
                                 </a>
@@ -231,6 +234,7 @@ const Domain = () => {
                             </h1>
                         </div> 
                         <div className='d-flex flex-row gap-3'> 
+                            <AddToWatchlistButton domain={domain} />
                             <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
                                 <img src={etherScanIcon} width={32} height={32}  alt= "" />
                             </a>
