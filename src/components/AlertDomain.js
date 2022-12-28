@@ -29,7 +29,7 @@ function AlertDomain({domain, label}) {
             } 
             
             { isValidName(domain?.label || label) && isExpiring(domain?.expires) && 
-                <div className="alert alert-warning d-flex flex-column flex-md-row justify-content-start gap-3 align-items-center">
+                <div className="alert alert-warning d-flex flex-row flex-md-row justify-content-between gap-3 align-items-center">
                     <h4 className='mb-0'>About to Expire!</h4>
                     <div className='d-flex flex-row gap-2'>
                         <AddToWatchlistSmallButton domain={domain} /> 
