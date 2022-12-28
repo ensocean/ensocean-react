@@ -2,11 +2,13 @@ import React, { useState, useRef } from 'react';
 import { useNavigate} from "react-router-dom";  
 import { Menu, AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { useLazyQuery, gql } from "@apollo/client";
-import { getLabelHash, getLength, isValidDomain, isValidName, normalizeName } from '../helpers/String';
+import { getLabelHash, getLength, getTimeAgo, isExpired, isValidDomain, isValidName, normalizeName } from '../helpers/String';
 import AddToCartButton from './AddToCartButton';
 import ClaimNowButton from './ClaimNowButton';
 import DomainLink from './DomainLink';
 import ViewYourCartButton from './ViewYourCartButton'; 
+import AddToWatchlistSmallButton from './AddToWatchlistSmallButton'; 
+import OwnerLinkLabel from './OwnerLinkLabel'; 
 import DomainStatus from './DomainStatus';
 import { Spinner } from 'react-bootstrap';
 
@@ -29,7 +31,7 @@ const AutoComplete = () => {
             registrant: null, 
             duration: 1, 
             durationPeriod: "year", 
-            available: false, 
+            available: true, 
             price: 0, 
             valid: isValidDomain(q) 
         } ];
@@ -68,20 +70,23 @@ const AutoComplete = () => {
         if( data.domains.length > 0) { 
             options = options.map(item => { 
                 let domain = data.domains.filter(n=> n.id === item.id)[0];
+                
+                
                 if(domain) {
                     return { 
-                            id: domain.id, 
-                            label: domain.label || item.label,  
-                            extension: domain.extension, 
-                            expires: domain.expires, 
-                            available: false, 
-                            registrant: domain.registrant, 
-                            registered: domain.registered, 
-                            duration: 1, 
-                            durationPeriod: "year", 
-                            price: 0, 
-                            valid: isValidDomain(domain.label || item.label) 
-                        }
+                        id: domain.id, 
+                        label: domain.label || item.label,  
+                        extension: domain.extension, 
+                        expires: domain.expires, 
+                        available: isExpired(domain.expires), 
+                        registrant: domain.registrant, 
+                        registered: domain.registered, 
+                        owner: domain.owner,
+                        duration: 1, 
+                        durationPeriod: "year", 
+                        price: 0, 
+                        valid: isValidDomain(domain.label || item.label) 
+                    }
                 } else {
                     return { 
                         id: item.id, 
@@ -91,12 +96,14 @@ const AutoComplete = () => {
                         available: true, 
                         registrant: null, 
                         registered: null, 
+                        owner: null,
                         duration: 1, 
                         durationPeriod: "year", 
                         price: 0,
                         valid: isValidDomain(item.label)
                     }
                 }
+                
             }); 
             setOptions(options);
             setAvailable(false); 
@@ -159,20 +166,29 @@ const AutoComplete = () => {
                 <Menu {...menuProps} >
                     {domains.map((domain, index) => (
                         <div key={domain.id}>
-                        <div  className="d-flex flex-row p-0 ps-2 pe-3 pt-2 pb-2 align-items-center">
-                          <div className="flex-grow-1 d-flex flex-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
-                              <DomainLink domain={domain} />
-                              <div className='d-flex flex-row justify-content-center'>
-                                {loading && <Spinner animation="border" variant="dark" size="sm" /> }
-                                {!loading && <DomainStatus domain={domain} showBadge={true} showNotAvailable={true} />}
-                              </div>
-                          </div> 
-                        </div> 
-                        <div className="d-flex flex-row justify-content-center align-items-center gap-2">
-                            {!loading && available && <AddToCartButton domain={domain} /> }
-                            {!loading && available && <ClaimNowButton domain={domain} /> }
-                            {!loading && available && <ViewYourCartButton domain={domain} /> }
-                        </div>
+                            <div className="d-flex flex-column justify-content-between p-0 ps-2 pe-3 pt-2 pb-2">
+                                <div className="d-flex flex-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
+                                    <DomainLink domain={domain} />
+                                    <div className='d-flex flex-row justify-content-center gap-2'>
+                                        {loading && <Spinner animation="border" variant="dark" size="sm" /> }
+                                        {!loading && <DomainStatus domain={domain} showBadge={true} showNotAvailable={true} />}
+                                        {!loading && !domain.available && <><AddToWatchlistSmallButton domain={domain} /> </>}
+                                    </div> 
+                                </div> 
+                                {!loading && !domain.available &&
+                                <div className="d-flex flex-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
+                                     <DomainStatus domain={domain} showBadge={true} showNotAvailable={false} showAvailable={false} showGracePeriod={false} showPremium={false} showExpires={true} showInvalid={false} />
+                                </div>
+                                }   
+                                 
+                            </div> 
+                            {!loading && domain.available === true &&
+                            <div className="d-flex flex-row justify-content-center align-items-center gap-2">
+                                <AddToCartButton domain={domain} />
+                                <ClaimNowButton domain={domain} />
+                                <ViewYourCartButton domain={domain} />
+                            </div>
+                            }
                         </div>
                     ))}
                     {error && <span className="badge text-bg-danger">There was a problem. Please try again.</span>}

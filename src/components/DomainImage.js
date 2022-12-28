@@ -15,9 +15,9 @@ function DomainImage({domain, label}) {
                 <LazyLoadImage
                     alt={domain?.label} 
                     className="img-fluid card-img-top" 
-                    onError={(e)=> { document.getElementById(domain?.id || getTokenId(label))?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
-                    afterLoad={(e)=> { document.getElementById(domain?.id || getTokenId(label))?.remove(); }}
-                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain?.label)) }
+                    onError={(e)=> { document.getElementById(domain?.id || getTokenId(domain?.label || label ))?.remove(); e.target.src = notAvailable; e.target.alt="Not available" }}
+                    afterLoad={(e)=> { document.getElementById(domain?.id || getTokenId(domain?.label || label))?.remove(); }}
+                    src={ENS_IMAGE_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain?.label || label)) }
                 /> 
                 <img id={domain.id} src={spinner} className="img-fluid card-img-top" alt="" />
             </>);

@@ -11,7 +11,7 @@ const MAX_CART_ITEM_COUNT = Number(process.env.REACT_APP_MAX_CART_ITEM_COUNT);
 function AddToCartButton({domain, label}) {   
     let tempDomain = domain;
 
-    if(domain === undefined) { 
+    if(domain === undefined || domain === null) { 
         tempDomain = { id: getLabelHash(label), label: label, extension: "eth", price: 0, expires: null, registered: null, owner: null };
     }
 
