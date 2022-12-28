@@ -15,6 +15,7 @@ import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import useEthPrice from "../context/EthPriceContext";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 const ENS_CONTROLLER_ADDRESS = process.env.REACT_APP_ENS_CONTROLLER_ADDRESS;
 const BULK_CONTROLLER_ADDRESS = process.env.REACT_APP_BULK_CONTROLLER_ADDRESS; 
@@ -37,6 +38,7 @@ const Register = () => {
   const [ estimatedGas, setEstimatedGas ] = useState(0);
   
   const provider = useProvider()
+  const { openConnectModal } = useConnectModal(); 
   const { data: signer } = useSigner();
   const { data: feeData, isError: isFeeDataError, isLoading: isFeeDataLoading } = useFeeData();
 
@@ -52,12 +54,12 @@ const Register = () => {
   const handlePriceInUsdChange = (e) => {
     setPriceInUsd(!priceInUsd);
   }
-
+ 
   const query = items.map(t=> { 
     return {
       name: t.label,
       duration: getDurationSeconds(t.duration || 1, t.durationPeriod || "year"),
-      owner: address,
+      owner: address || ZERO_ADDRESS,
       resolver: DEFAULT_RESOLVER,
       addr: ZERO_ADDRESS
     }
@@ -115,9 +117,20 @@ const Register = () => {
 
   const { isLoading: isCommitTxLoading, isSuccess: isCommitTxSuccess, error: commitTxError } = useWaitForTransaction({
     hash: commitData?.hash,
-    onSuccess(data) {
+    onError(err) {
       localStorage.setItem("secret", secret);
-    }
+      toast.error(`Commit transaction has been failed.`,
+      { 
+        autoClose: 5000
+      })
+    },
+    onSuccess(data) {
+      localStorage.removeItem("secret");
+      toast.success(`Commit transaction has been completed. Please wait for 1 minute.`,
+      { 
+        autoClose: 5000
+      });
+    }, 
   });
      
   const { config: registerConfig, refetch: registerRefetch } = usePrepareContractWrite({
@@ -136,7 +149,7 @@ const Register = () => {
     hash: registerData?.hash,
     onError(err) {
       localStorage.removeItem("secret");
-      toast.success(`Transaction has been failed.`,
+      toast.error(`Transaction has been failed.`,
       { 
         autoClose: 5000
       })
@@ -154,6 +167,11 @@ const Register = () => {
   });
 
   
+  const handleConnect = (e) => {
+    e.preventDefault();
+    openConnectModal();
+  }
+
   const handleRegister = (e)=> {  
     register();
   }
@@ -242,7 +260,7 @@ const Register = () => {
           <div className="flex-fill d-flex flex-row align-items-center justify-content-between gap-3">
             <span className="badge rounded-pill text-muted">Total {totalUniqueItems} name(s) </span>
             <div className="d-flex flex-row align-items-center justify-content-end">
-              <Form.Check type="switch" size="xl" label="USD" defaultChecked={priceInUsd} onChange={handlePriceInUsdChange} />
+              <Form.Check type="switch" size="lg" label="USD" defaultChecked={priceInUsd} onChange={handlePriceInUsdChange} />
             </div> 
           </div> 
           <div className="d-flex flex-row align-items-center justify-content-between gap-3">
@@ -288,19 +306,26 @@ const Register = () => {
           {items.map((item, i) => (  
             <div className="row border-bottom border-light" key={i}>
               <div className="col-12 col-lg-5 text-truncate p-2 d-flex flex-row justify-content-between align-items-center">
-                  <DomainLink domain={item} showAvability={false} /> 
-                  {!isFetching && !data?.result[i].available && 
-                    <OverlayTrigger trigger="click" rootClose placement="top" overlay={
-                      <Popover>
-                        <Popover.Header as="h3">Not available</Popover.Header>
-                        <Popover.Body>
-                          Not available right now. This item has registered since you added.
-                        </Popover.Body>
-                      </Popover>
-                    }>
-                       <ExclamationCircleFill className="text-danger" /> 
-                    </OverlayTrigger>
-                  }
+                  <div className="d-flex flex-row align-items-center gap-2 text-truncate">
+                    <DomainLink domain={item} showAvability={false} /> 
+                    {!isFetching && !data?.result[i].available && 
+                        <OverlayTrigger trigger="click" rootClose placement="top" overlay={
+                          <Popover>
+                            <Popover.Header as="h3">Not available</Popover.Header>
+                            <Popover.Body>
+                              Not available right now. This item has registered since you added.
+                            </Popover.Body>
+                          </Popover>
+                        }>
+                          <ExclamationCircleFill className="text-danger" /> 
+                        </OverlayTrigger>
+                      }
+                  </div>
+                  <div className="d-flex flex-row align-items-center">
+                    <button className="btn btn-light btn-sm d-block d-lg-none" onClick={(e)=> handleItemRemove(e, item)}>
+                      <Trash />
+                    </button>
+                  </div>
               </div>
               <div className="col-6 col-lg-3 p-2 text-end text-md-start d-flex align-items-center">
                 <div className="input-group form-group"> 
@@ -326,9 +351,9 @@ const Register = () => {
                     </select>
                 </div>
               </div>
-              <div className="col-6 col-lg-4 p-2 d-flex flex-row justify-content-between align-items-center">
+              <div className="col-6 col-lg-4 p-2 d-flex flex-row justify-content-end  justify-content-lg-between align-items-center">
                 <Price data={data} isFetching={isFetching} price={data?.result[i].price} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
-                <button className="btn btn-light btn-sm" onClick={(e)=> handleItemRemove(e, item)}>
+                <button className="btn btn-light btn-sm d-none d-lg-block" onClick={(e)=> handleItemRemove(e, item)}>
                   <Trash />
                 </button>
               </div> 
@@ -348,7 +373,7 @@ const Register = () => {
                 }
                 <span>
                   <strong>Total (Inc. Fee): </strong> &nbsp;
-                  <Price isFetching={isFetching} price={data?.totalPriceWithFee} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
+                  <Price isError={isError} isFetching={isFetching} price={data?.totalPriceWithFee} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
                 </span>
               </div>
             }
@@ -401,7 +426,13 @@ const Register = () => {
                           { isCommitTxSuccess && <>Wait for 1 Minute</>}
                           { !isFetching && !isAvailableBalance() && <> Unsufficient Balance</>}
                       </button> 
-                    } 
+                    }
+
+                  {totalUniqueItems > 0 && !isConnected &&
+                      <button className="btn btn-primary btn-lg" onClick={handleConnect}>
+                         <span>Connect Wallet</span>
+                      </button> 
+                    }
                   </>
                 }
                    
@@ -442,9 +473,9 @@ function Price({isError, isFetching, price, ethPrice, quoteSymbol, priceInUsd}) 
   if(isError) return (<span className="text-danger"><ExclamationCircleFill /></span>)
   if(isFetching) return (<Spinner animation="border" variant="dark" size="sm" />)
   if(!isError && !isFetching) {
-    price = Number(ethers.utils.formatUnits(price));
+    price = Number(ethers.utils.formatUnits(price || 0));
     let symbol = "ETH";
-    let format = "0.000";
+    let format = "0.0000";
 
     if(!ethPrice)
       ethPrice = 0;
