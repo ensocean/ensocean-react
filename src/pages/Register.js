@@ -353,7 +353,7 @@ const Register = () => {
                 </div>
               </div>
               <div className="col-6 col-lg-4 p-2 d-flex flex-row justify-content-end  justify-content-lg-between align-items-center">
-                <Price data={data} isFetching={isFetching} price={data?.result[i].price} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
+                <Price data={data} isFetching={isFetching} price={data?.result[i].price.add(data?.result[i].fee)} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
                 <button className="btn btn-light btn-sm d-none d-lg-block" onClick={(e)=> handleItemRemove(e, item)}>
                   <Trash />
                 </button>
@@ -367,14 +367,10 @@ const Register = () => {
 
             {totalUniqueItems > 0 && 
               <div className="d-flex flex-column justify-content-end align-items-end">
-                {estimatedGas > 0 &&
+                
                 <span>
-                 <strong>Estimated Gas: </strong> <Price isFetching={estimateGasLoading} price={estimatedGas} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} /> 
-                </span>
-                }
-                <span>
-                  <strong>Total (Inc. Fee): </strong> &nbsp;
-                  <Price isError={isError} isFetching={isFetching} price={data?.totalPriceWithFee} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
+                  <strong>Total (Inc. Fee and Gas): </strong> &nbsp;
+                  <Price estimatedGas={estimatedGas} isError={isError} isFetching={isFetching} price={data?.totalPriceWithFee.add(estimatedGas)} ethPrice={ethPrice} quoteSymbol={"USD"} priceInUsd={priceInUsd} />
                 </span>
               </div>
             }
