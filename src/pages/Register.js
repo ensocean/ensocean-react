@@ -28,7 +28,7 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const _secret = uuidv4().toString().replace(/-/gi, '');
 
 const Register = () => {  
-  const secret = localStorage.getItem("secret") || _secret;
+  const secret = _secret;
    
   const [ priceInUsd, setPriceInUsd ] = useState(false);
   const [ isTimerCompleted, setIsTimerCompleted ] = useState(false);
