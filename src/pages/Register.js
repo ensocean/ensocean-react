@@ -1,11 +1,11 @@
 import {Helmet} from "react-helmet-async";
 import { useRegisterlist } from "react-use-registerlist";
-import { Trash, ArrowClockwise, Info, ExclamationCircleFill } from "react-bootstrap-icons";
+import { Trash, ArrowClockwise, Info, ExclamationCircleFill, Check } from "react-bootstrap-icons";
 import DomainLink from "../components/DomainLink";
 import { useAccount, useBalance, useContractRead, useContractWrite, useFeeData, useNetwork, usePrepareContractWrite, useProvider, useSigner, useSwitchNetwork, useWaitForTransaction } from 'wagmi';
 import bulkControllerAbi from "../abis/BulkEthRegistrarController.json";
 import { getDurationSeconds, getTimeAgo, ZERO_ADDRESS } from "../helpers/String";
-import { Button, Form, Overlay, OverlayTrigger, Popover, Spinner, Tooltip } from "react-bootstrap";
+import { Button, Form, Modal, Overlay, OverlayTrigger, Popover, Spinner, Tooltip } from "react-bootstrap";
 import {DelayInput} from 'react-delay-input';
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
@@ -28,18 +28,18 @@ const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const _secret = uuidv4().toString().replace(/-/gi, '');
 
 const Register = () => {  
-  const secret = _secret;
+  const secret = localStorage.getItem("secret") || _secret;
    
   const [ priceInUsd, setPriceInUsd ] = useState(false);
-  const [isTimerCompleted, setIsTimerCompleted] = useState(false);
+  const [ isTimerCompleted, setIsTimerCompleted ] = useState(false);
   const [ hasError, setHasError ] = useState(false);
   const [ validationError, setValidationError ] = useState(null);
   const [ estimateGasLoading, setEstimatedGasLoading ] = useState(true);
   const [ estimatedGas, setEstimatedGas ] = useState(0);
-  
+  const [ successModalShow, setSuccessModalShow] = useState(false);
+
   const provider = useProvider()
   const { openConnectModal } = useConnectModal(); 
-  const { data: signer } = useSigner();
   const { data: feeData, isError: isFeeDataError, isLoading: isFeeDataLoading } = useFeeData();
 
   const { isEmpty, totalUniqueItems, getItem, items, updateItem, removeItem, emptyRegisterlist } = useRegisterlist();
@@ -163,6 +163,7 @@ const Register = () => {
       setHasError(false);
       setValidationError(null);
       emptyRegisterlist();
+      setSuccessModalShow(true);
     }, 
   });
 
@@ -458,6 +459,8 @@ const Register = () => {
                     }
                   </>
                 }
+
+                <TransactionSuccess tx={registerData?.hash} show={successModalShow} onHide={() => setSuccessModalShow(false)} />
             </div>
           </div>
         </div> 
@@ -491,6 +494,29 @@ function Price({isError, isFetching, price, ethPrice, quoteSymbol, priceInUsd}) 
 
     return (<span><Numeral value={price} format={format} /> {symbol}</span>)
   }
+}
+ 
+function TransactionSuccess(props) {
+  return (
+    <Modal {...props} size="md" centered>
+      <Modal.Header closeButton>
+        <Modal.Title>
+          <Check className="text-success" /> Transaction Success
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+          Transaction has been completed. <a target={"_blank"} href={ETHERSCAN_ADDR + "/tx/"+ props.tx}> Click </a> to see view your transaction
+        </p>
+        <p>
+           EnsOcean uses subgraph to index blockchain data. So It takes a few minutes to seen your domains in account page. Please wait for a while. 
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+  );
 }
 
 export default Register; 
