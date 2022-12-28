@@ -129,14 +129,14 @@ const Domain = () => {
                                    <DomainLabel label={label} />
                                 </h1>
                             </div> 
-                            <div className='d-flex align-items-center gap-3'> 
+                            <div className='d-flex flex-row gap-3 justify-content-between align-items-center'> 
                                 <AddToWatchlistButton label={label} />
                                 <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
-                                    <img src={etherScanIcon} width={32} height={32}  alt= "" />
+                                    <img src={etherScanIcon} width={24} height={24}  alt= "" />
                                 </a>
                                 <CopyToClipboard text={window.location.href}
                                     onCopy={() => toast.success("Link Copied") }>
-                                     <ShareFill role="button" width={32} height={32} />
+                                     <ShareFill role="button" width={24} height={24} />
                                 </CopyToClipboard> 
                             </div> 
                         </div>
@@ -229,18 +229,18 @@ const Domain = () => {
                 <div className="container">
                     <div className='d-flex flex-row justify-content-between align-items-lg-center gap-3'> 
                         <div className='d-flex align-items-start text-truncate'>
-                            <h1 className='fs-2 fw-bold text-truncate pe-3'>
+                            <h1 className='fs-1 fw-bold text-truncate pe-3'>
                                 <DomainLabel domain={domain} label={label} /> 
                             </h1>
                         </div> 
-                        <div className='d-flex flex-row gap-3'> 
+                        <div className='d-flex flex-row gap-3 justify-content-between align-items-center'> 
                             <AddToWatchlistButton domain={domain} />
                             <a target="_blank" rel="noreferrer" href={ ETHERSCAN_URL.replace("{REACT_APP_ENS_REGISTRAR_ADDRESS}", ENS_REGISTRAR_ADDRESS).replace("{TOKEN_ID}", getTokenId(domain.label || label))} title="View on Etherscan" data-bs-toogle="tooltip" data-bs-title="asklfdja" className='text-white'>
-                                <img src={etherScanIcon} width={32} height={32}  alt= "" />
+                                <img src={etherScanIcon} width={24} height={24}  alt= "" />
                             </a>
                             <CopyToClipboard text={window.location.href}
                                 onCopy={ () => toast.success("Link Copied") }>
-                                <ShareFill role="button" width={32} height={32} />
+                                <ShareFill role="button" width={24} height={24} />
                             </CopyToClipboard> 
                         </div>  
                     </div>
