@@ -121,7 +121,7 @@ const Domain = () => {
                 </Helmet>  
                 <div className="container-fluid bg-primary text-white p-3 mb-4">
                     <div className="container">
-                        <div className='d-flex flex-column flex-lg-row justify-content-start align-items-lg-center gap-3'> 
+                        <div className='d-flex flex-row justify-content-between align-items-lg-center gap-3'> 
                             <div className='d-flex align-items-start text-truncate'>
                                 <h1 className='fs-1 fw-bold text-truncate pe-3'>
                                    <DomainLabel label={label} />
@@ -143,7 +143,7 @@ const Domain = () => {
                     <div className='container'>
                         <div className="row">
                             <div className="col-lg-12">
-                                <AlertDomain domain={{ label: label }} />
+                                <AlertDomain domain={null} label={label} />
                             </div>
                         </div>
                         <div className="row"> 
@@ -203,7 +203,8 @@ const Domain = () => {
             </>
         )
     } else {
-        const domain = data.domains[0];  
+        
+        const domain = data.domains[0];   
         return (
         <> 
             <Helmet> 
@@ -223,10 +224,10 @@ const Domain = () => {
             </Helmet> 
             <div className="container-fluid bg-primary text-white p-3 mb-4">
                 <div className="container">
-                    <div className='d-flex flex-column flex-lg-row justify-content-start align-items-lg-center gap-3'> 
+                    <div className='d-flex flex-row justify-content-between align-items-lg-center gap-3'> 
                         <div className='d-flex align-items-start text-truncate'>
-                            <h1 className='fs-1 fw-bold text-truncate pe-3'>
-                                <DomainLabel domain={domain} /> 
+                            <h1 className='fs-2 fw-bold text-truncate pe-3'>
+                                <DomainLabel domain={domain} label={label} /> 
                             </h1>
                         </div> 
                         <div className='d-flex flex-row gap-3'> 
@@ -245,13 +246,13 @@ const Domain = () => {
                 <div className='container'>
                     <div className="row">
                         <div className="col-lg-12">
-                            <AlertDomain domain={domain} />
+                            <AlertDomain domain={domain} label={label} />
                         </div>
                     </div>
                     <div className="row"> 
                         <div className="col-lg-4">   
                             <div className="card">
-                                <DomainImage domain={domain} />
+                                <DomainImage domain={domain} label={label} />
                             </div>
                         </div>
                         <div className='col-lg-8 mt-3 mt-lg-0'>
