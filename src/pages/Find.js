@@ -164,12 +164,12 @@ const Find = () => {
                         <span className="text-muted fs-4 fw-bold text-truncate">
                         {options[0].label}.{options[0].extension} is not available 😭 
                         </span> 
-                        <AddToWatchlistSmallButton domain={options[0]} />
                     </div> 
                     <div className="d-flex flex-row justify-content-between gap-2">
                       <span className="text-muted">
                         Expires {getTimeAgo(options[0].expires)}
                       </span>
+                      <AddToWatchlistSmallButton domain={options[0]} />
                     </div>
                   </div>
                 }
