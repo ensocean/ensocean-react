@@ -37,6 +37,7 @@ import Expired from "./pages/Expired";
 import Expiring from "./pages/Expiring";
 import Premium from "./pages/Premium";
 import { EthPriceProvider } from "./context/EthPriceContext";
+import { ThemeProvider } from "react-bootstrap";
 
 const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPH_API_URL,
@@ -72,56 +73,58 @@ const wagmiClient = createClient({
   
 export default function App () {  
   return (  
-    <HelmetProvider>
-      <GasPriceProvider>
-        <EthPriceProvider>
-          <RegisterlistProvider> 
-            <RenewlistProvider>
-              <WatchlistProvider> 
-                <WagmiConfig client={wagmiClient}>
-                  <RainbowKitProvider chains={chains}>
-                    <ApolloProvider client={client}> 
-                      <React.StrictMode>
-                        <BrowserRouter forceRefresh={true}>
-                          <Routes>  
-                            <Route path="/" element={<Layouts.Home />}>
-                              <Route index element={<Home />}  />
-                            </Route>
-                            <Route path="/" element={<Layouts.Home />}>
-                              <Route path="/:label.:extension" element={<Domain />} />
-                            </Route>
-                            <Route path="/find" element={<Layouts.Page />}>
-                              <Route path="/find" element={<Find />} />
-                            </Route>
-                            <Route path="/register" element={<Layouts.Page />}>
-                              <Route path="/register" element={<Register />} />
-                            </Route>
-                            <Route path="/" element={<Layouts.Page />}>
-                              <Route index element={<Home />} />
-                              <Route path="/privacy" element={<Privacy />} />
-                              <Route path="/terms" element={<Terms />} />
-                              <Route path="/faq" element={<Faq />} />
-                              <Route path="/discover" forceRefresh={true} element={<Discover />} />
-                              <Route path="/expired" forceRefresh={true} element={<Expired />} />
-                              <Route path="/expiring" forceRefresh={true} element={<Expiring />} />
-                              <Route path="/premium" forceRefresh={true} element={<Premium />} />
-                              <Route path="/registered" forceRefresh={true} element={<Registered />} />
-                              <Route path="/404" element={<NotFound />} /> 
-                              <Route path="/account/:address" element={<Account />} /> 
-                              <Route path="*" element={<Navigate replace={true} to="/404" />} />
-                            </Route> 
-                          </Routes>
-                        </BrowserRouter>
-                        <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
-                      </React.StrictMode>
-                    </ApolloProvider>
-                  </RainbowKitProvider>
-                </WagmiConfig>
-              </WatchlistProvider>
-            </RenewlistProvider>
-          </RegisterlistProvider> 
-        </EthPriceProvider>
-      </GasPriceProvider>
-    </HelmetProvider>
+    <ThemeProvider breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']} minBreakpoint="xxs">
+      <HelmetProvider>
+        <GasPriceProvider>
+          <EthPriceProvider>
+            <RegisterlistProvider> 
+              <RenewlistProvider>
+                <WatchlistProvider> 
+                  <WagmiConfig client={wagmiClient}>
+                    <RainbowKitProvider chains={chains}>
+                      <ApolloProvider client={client}> 
+                        <React.StrictMode>
+                          <BrowserRouter forceRefresh={true}>
+                            <Routes>  
+                              <Route path="/" element={<Layouts.Home />}>
+                                <Route index element={<Home />}  />
+                              </Route>
+                              <Route path="/" element={<Layouts.Home />}>
+                                <Route path="/:label.:extension" element={<Domain />} />
+                              </Route>
+                              <Route path="/find" element={<Layouts.Page />}>
+                                <Route path="/find" element={<Find />} />
+                              </Route>
+                              <Route path="/register" element={<Layouts.Page />}>
+                                <Route path="/register" element={<Register />} />
+                              </Route>
+                              <Route path="/" element={<Layouts.Page />}>
+                                <Route index element={<Home />} />
+                                <Route path="/privacy" element={<Privacy />} />
+                                <Route path="/terms" element={<Terms />} />
+                                <Route path="/faq" element={<Faq />} />
+                                <Route path="/discover" forceRefresh={true} element={<Discover />} />
+                                <Route path="/expired" forceRefresh={true} element={<Expired />} />
+                                <Route path="/expiring" forceRefresh={true} element={<Expiring />} />
+                                <Route path="/premium" forceRefresh={true} element={<Premium />} />
+                                <Route path="/registered" forceRefresh={true} element={<Registered />} />
+                                <Route path="/404" element={<NotFound />} /> 
+                                <Route path="/account/:address" element={<Account />} /> 
+                                <Route path="*" element={<Navigate replace={true} to="/404" />} />
+                              </Route> 
+                            </Routes>
+                          </BrowserRouter>
+                          <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={false} theme="light"></ToastContainer>
+                        </React.StrictMode>
+                      </ApolloProvider>
+                    </RainbowKitProvider>
+                  </WagmiConfig>
+                </WatchlistProvider>
+              </RenewlistProvider>
+            </RegisterlistProvider> 
+          </EthPriceProvider>
+        </GasPriceProvider>
+      </HelmetProvider>
+    </ThemeProvider>
   );
 }

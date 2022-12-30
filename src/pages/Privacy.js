@@ -1,24 +1,25 @@
+import { Col, Container, Row } from "react-bootstrap";
 import {Helmet} from "react-helmet-async";
 
 const Privacy = () => {
     return (
         <>  
         <Helmet> 
-              <title>Privacy Policy - EnsOcean</title>
-              <meta name="description" content="Privacy Policy" />
+            <title>Privacy Policy - EnsOcean</title>
+            <meta name="description" content="Privacy Policy" />
         </Helmet>
-        <div className="container-fluid bg-primary">
-            <div className="container text-center p-3 text-white">
-                <h1>Privacy</h1>
-            </div> 
-        </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12">
-                
-             </div>
-          </div>
-        </div>
+        <Container className="bg-primary" fluid>
+          <Container className="text-center text-white p-3">
+              <h1>Privacy Policy</h1>
+          </Container>
+        </Container>
+        <Container>
+          <Row>
+            <Col lg="12">
+              
+            </Col>
+          </Row>
+        </Container>
       </>
     );
 };

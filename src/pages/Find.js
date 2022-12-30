@@ -8,35 +8,10 @@ import ClaimNowButton from "../components/ClaimNowButton";
 import { useRegisterlist } from "react-use-registerlist";
 import ViewYourCartButton from "../components/ViewYourCartButton"; 
 import { Search } from "react-bootstrap-icons";
-import { Spinner } from "react-bootstrap";
+import { Col, Container, Form, InputGroup, Row, Spinner } from "react-bootstrap";
 import { DelayInput } from "react-delay-input";
-
-const GET_DOMAINS = gql`
-    query Domains( $labels: [String] ) {
-        domains ( 
-            where: {
-                id_in: $labels
-            }
-        )
-        {
-            id
-            label
-            extension
-            expires
-            registered
-            created
-            owner {
-              id
-              primaryName
-            }
-            registrant {
-              id
-              primaryName
-            }
-        }
-    }
-`;
-
+import { GET_DOMAINS } from "../graphql/Queries";
+ 
 const Find = () => { 
     const location = useLocation(); 
     const navigate = useNavigate(); 
@@ -46,9 +21,7 @@ const Find = () => {
     const [activeClass, setActiveClass] = useState("");
     const [getDomains, { data, loading, error }] = useLazyQuery(GET_DOMAINS); 
     const {  inRegisterlist } = useRegisterlist();
-     
-     
-    
+      
     const handleSubmit = async (e) => { 
       e.preventDefault();  
       if(!isValidName(input.current.value)) {
@@ -159,27 +132,27 @@ const Find = () => {
               <title>Find Your Web3 Name - EnsOcean</title>
               <meta name="description" content="Find your next Ethereum Name Service (ENS) domain easily. Catch expired domains or get suggestions to find out." />
         </Helmet>
-        <div className="container-fluid bg-primary">
-            <div className="container text-center p-3 text-white">
-                <h1>Find Your Web3 Name</h1>
-            </div> 
-        </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-12 pt-3">
-                <form onSubmit={handleSubmit}>
-                  <div className="input-group input-group-lg"> 
+        <Container className="bg-primary" fluid>
+          <Container className="text-center p-3 text-white">
+            <h1>Find Your Web3 Name</h1>
+          </Container>
+        </Container>
+        <Container>
+          <Row>
+            <Col className="pt-3">
+              <Form onSubmit={handleSubmit}>
+                <InputGroup className="input-group-lg">
                     <DelayInput minLength={3} delayTimeout={300} inputRef={input} className={"form-control " + activeClass} name="q" onChange={handleChange} value={query}   placeholder="Search for a Web3 username" />
-                    <span className="input-group-text  bg-white">
+                    <span className="input-group-text bg-white">
                       {loading && <Spinner animation="border" variant="dark" size="sm" /> }
                       {!loading && <Search />}
                     </span>
-                  </div>
-                </form>
-             </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-12 pt-3 text-center"> 
+                  </InputGroup>
+                </Form>
+            </Col>
+          </Row>
+          <Row>
+            <Col className="pt-3 text-center">
               {error && <span className="text-danger">There was an error. Please try again.</span>}
               {!query && <span className="text-muted text-center fs-6 fw-bold">Type 3 charcters or more to search.</span>}
               {!loading && query && options && options.length > 0 &&    
@@ -219,9 +192,9 @@ const Find = () => {
                 }
               </>    
               }
-            </div> 
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Container>
       </>
     );
 };

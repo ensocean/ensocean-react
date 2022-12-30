@@ -6,7 +6,7 @@ import AccountTabs from "./partials/AccountTabs";
 import { useWatchlist } from "react-use-watchlist";
 import { useAccount } from "wagmi"; 
 import { Trash } from "react-bootstrap-icons";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Container, Modal } from "react-bootstrap";
 import { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
@@ -32,30 +32,32 @@ const Account = () => {
  
     return (
       <>
-      <Helmet> 
-          <title>{addr} - EnsOcean</title>
-          <meta name="description" content={"See which ENS domains does the account ("+ addr +") have."} />
-      </Helmet>
-      <div className="container-fluid bg-primary bg-gradient">
-        <div className="container-fluid container-fluid pt-4 pb-4 text-white">
-            <AccountInfo />
-        </div>
-      </div>
-      <div className="container-fluid p-0 m-0"> 
+        <Helmet> 
+            <title>{addr} - EnsOcean</title>
+            <meta name="description" content={"See which ENS domains does the account ("+ addr +") have."} />
+        </Helmet>
+        <Container className="bg-primary bg-gradient" fluid>
+            <Container className="pt-4 pb-4 text-white" fluid>
+                <AccountInfo />
+            </Container>
+        </Container>
+        <Container className="p-0 m-0" fluid>
             {isConnected && totalUniqueItems > 0 &&
-                <div className="d-flex flex-row justify-content-end align-items-center gap-3 pt-3 pe-3">        
-                    <button className="btn btn-primary" onClick={handleShow}> <Trash /> Clear Watchlist</button>
+                <div className="d-flex flex-row justify-content-end align-items-center gap-3 pt-3 pe-3">    
+                    <Button variant="primary"  onClick={handleShow}> 
+                        <Trash /> Clear Watchlist
+                    </Button>
                 </div>
-             }
-            <div className="container-fluid p-2">
+            }
+            <Container className="p-2" fluid>
                 <AccountTabs account={addr} tab="" />
-            </div>
-            <div className="container-fluid ps-3 pe-3">
+            </Container>
+            <Container className="ps-3 pe-3" fluid>
                 {(tab === "" || tab === null) &&  
-                <Filter First={100} Skip={0} OrderBy={"registered"} OrderDirection={"desc"} Where={{
+                    <Filter First={100} Skip={0} OrderBy={"registered"} OrderDirection={"desc"} Where={{
                     label_not: null, 
                     owner: addr.toLowerCase()
-                }} />} 
+                    }} />} 
                 {tab === "watchlist" &&
                 <>
                     {isConnected  &&
@@ -71,9 +73,8 @@ const Account = () => {
                     } 
                 </> 
                 }
-            </div>
-      </div>  
-
+            </Container>
+        </Container>
         <Modal backdrop={true} centered show={show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <Modal.Title>Are you sure want to clear?</Modal.Title>
