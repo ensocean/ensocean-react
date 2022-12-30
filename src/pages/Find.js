@@ -153,13 +153,13 @@ const Find = () => {
             </Col>
           </Row>
           <Row>
-            <Col className="pt-3 text-center">
+            <Col className="pt-3">
               {error && <span className="text-danger">There was an error. Please try again.</span>}
               {!query && <span className="text-muted text-center fs-6 fw-bold">Type 3 charcters or more to search.</span>}
               {!loading && query && options && options.length > 0 &&    
               <>
                 {!isAvailable(options[0].expires) && 
-                  <div className="d-flex flex-column justify-content-between  gap-2 p-3">
+                  <div className="d-flex flex-column justify-content-center gap-2 p-2">
                     <div className="d-flex flex-row justify-content-between align-items-start gap-2">
                         <span className="text-muted fs-4 fw-bold text-truncate">
                         {options[0].label}.{options[0].extension} is not available 😭 
@@ -175,19 +175,21 @@ const Find = () => {
                 }
                 {isAvailable(options[0].expires) && 
                   <>
-                    <div className="d-flex flex-column justify-content-between  gap-2 p-2">
-                      <div className="d-flex flex-row justify-content-between align-items-center gap-2">
+                    <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-2">
+                      <div className="d-flex flex-row justify-content-center align-items-center gap-2 text-truncate">
                         <span className="text-success fs-4 fw-bold text-truncate">
                          {options[0].label}.{options[0].extension} is available 🥳
-                        </span>  
-                        <AddToWatchlistSmallButton domain={options[0]} />
+                        </span> 
                       </div>
                     </div>
-                    <div className="d-flex flex-row justify-content-center gap-3 mt-3"> 
-                        <AddToCartButton domain={options[0]} />
-                        {!inRegisterlist(options[0].id) && <ClaimNowButton domain={options[0]} />}
-                        {inRegisterlist(options[0].id) && <ViewYourCartButton domain={options[0]} />}
-                    </div> 
+                    <div className="d-flex flex-row justify-content-between align-items-center gap-2 p-2"> 
+                          <div className="d-flex flex-row gap-2">
+                            <AddToCartButton domain={options[0]} />
+                            {!inRegisterlist(options[0].id) && <ClaimNowButton domain={options[0]} />}
+                            {inRegisterlist(options[0].id) && <ViewYourCartButton domain={options[0]} />}
+                          </div>
+                          <AddToWatchlistSmallButton domain={options[0]} />
+                      </div>
                   </>
                 }
               </>    
