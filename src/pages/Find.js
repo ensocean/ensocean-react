@@ -11,6 +11,7 @@ import { Search } from "react-bootstrap-icons";
 import { Col, Container, Form, InputGroup, Row, Spinner } from "react-bootstrap";
 import { DelayInput } from "react-delay-input";
 import { GET_DOMAINS } from "../graphql/Queries";
+import AddToWatchlistSmallButton from "../components/AddToWatchlistSmallButton";
  
 const Find = () => { 
     const location = useLocation(); 
@@ -158,29 +159,28 @@ const Find = () => {
               {!loading && query && options && options.length > 0 &&    
               <>
                 {!isAvailable(options[0].expires) && 
-                  <div className="d-flex flex-column  align-items-center">
-                    <div className="d-flex flex-column justify-content-between align-items-center gap-2">
-                        <span className="text-muted fs-4 fw-bold">
+                  <div className="d-flex flex-column justify-content-between  gap-2 p-3">
+                    <div className="d-flex flex-row justify-content-between align-items-start gap-2">
+                        <span className="text-muted fs-4 fw-bold text-truncate">
                         {options[0].label}.{options[0].extension} is not available 😭 
-                        </span>
-                        <span className="text-muted fw-bold">
-                          Expires {getTimeAgo(options[0].expires)}
-                        </span>
-                        <div className="text-muted fs-6 text-center">
-                          This name was last registered on {getDateString(options[0].registered)}
-                        </div>
+                        </span> 
+                        <AddToWatchlistSmallButton domain={options[0]} />
                     </div> 
+                    <div className="d-flex flex-row justify-content-between gap-2">
+                      <span className="text-muted">
+                        Expires {getTimeAgo(options[0].expires)}
+                      </span>
+                    </div>
                   </div>
                 }
                 {isAvailable(options[0].expires) && 
                   <>
-                    <div className="d-flex flex-row align-items-center justify-content-center">
-                      <div className="d-flex flex-column justify-content-between align-items-center gap-2">
-                        <span className="text-success fs-4 fw-bold">
+                    <div className="d-flex flex-column justify-content-between  gap-2 p-2">
+                      <div className="d-flex flex-row justify-content-between align-items-center gap-2">
+                        <span className="text-success fs-4 fw-bold text-truncate">
                          {options[0].label}.{options[0].extension} is available 🥳
-                        </span> 
-                        <span className="text-muted fs-4 fw-bold"> 
-                        </span>
+                        </span>  
+                        <AddToWatchlistSmallButton domain={options[0]} />
                       </div>
                     </div>
                     <div className="d-flex flex-row justify-content-center gap-3 mt-3"> 
