@@ -26,9 +26,9 @@ const AccountInfo = () => {
                     </div>
                 </div>
                 <div className="flex-grow-1 ms-3 text-truncate">
-                    <span className="text-truncate placeholder col-4"></span> 
+                    <span className="text-truncate placeholder col-12 col-md-8"></span> 
                     <div className="d-flex gap-3">
-                        <span className="placeholder col-3"></span>
+                        <span className="placeholder col-6 col-md-4"></span>
                     </div>
                 </div>
             </div>
