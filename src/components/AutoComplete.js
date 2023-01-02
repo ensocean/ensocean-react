@@ -166,27 +166,31 @@ const AutoComplete = () => {
                 <Menu {...menuProps} >
                     {domains.map((domain, index) => (
                         <div key={domain.id}>
-                            <div className="d-flex flex-column justify-content-between p-0 ps-2 pe-3 pt-2 pb-2">
+                            <div className="d-flex flex-column justify-content-between p-0 ps-2 pe-3 pt-2 pb-2 gap-2">
                                 <div className="d-flex flex-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
                                     <DomainLink domain={domain} />
                                     <div className='d-flex flex-row justify-content-center gap-2'>
                                         {loading && <Spinner animation="border" variant="dark" size="sm" /> }
                                         {!loading && <DomainStatus domain={domain} showBadge={true} showNotAvailable={true} />}
-                                        {!loading && !domain.available && <><AddToWatchlistSmallButton domain={domain} /> </>}
+                                        
                                     </div> 
                                 </div> 
                                 {!loading && !domain.available &&
                                 <div className="d-flex flex-row justify-content-between gap-2 ms-2 text-truncate placeholder-glow">
                                      <DomainStatus domain={domain} showBadge={true} showNotAvailable={false} showAvailable={false} showGracePeriod={false} showPremium={false} showExpires={true} showInvalid={false} />
+                                     {!loading && !domain.available && <><AddToWatchlistSmallButton domain={domain} /> </>}
                                 </div>
                                 }   
                                  
                             </div> 
                             {!loading && domain.available === true &&
-                            <div className="d-flex flex-row justify-content-center align-items-center gap-2">
-                                <AddToCartButton domain={domain} />
-                                <ClaimNowButton domain={domain} />
-                                <ViewYourCartButton domain={domain} />
+                            <div className="d-flex flex-row justify-content-between align-items-center ps-3 pe-3 pt-2 pb-2 gap-2">
+                                <div className='d-flex flex-row gap-2'>
+                                    <AddToCartButton domain={domain} />
+                                    <ClaimNowButton domain={domain} />
+                                    <ViewYourCartButton domain={domain} />
+                                </div>
+                                {!loading && <><AddToWatchlistSmallButton domain={domain} /> </>}
                             </div>
                             }
                         </div>

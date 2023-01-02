@@ -18,10 +18,10 @@ const Home = () => {
             <Col className="mb-1 d-block d-lg-none" lg>
                 <AutoComplete />
             </Col>
-            <Col>
+            <Col lg>
               <RecentExpired />
             </Col>
-            <Col>
+            <Col lg>
               <RecentRegistered />
             </Col>
           </Row>
