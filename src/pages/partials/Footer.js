@@ -62,7 +62,7 @@ const Footer = () => {
                     <div className="col-lg-6 col-md-6 col-sm-12">
                         <ul className="list-inline list-unstyled float-lg-end float-md-end float-sm-none">
                             <li className="list-inline-item">
-                                <a target="_blank" href="https://test.ensocean.com" title="Goerli Testnet">
+                                <a target="_blank" href="https://test.ensocean.com" title="Sepolia Testnet">
                                     <small>Testnet</small>
                                 </a>
                             </li>

@@ -17,7 +17,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { RainbowKitProvider, connectorsForWallets } from '@rainbow-me/rainbowkit';
 import { rainbowWallet, walletConnectWallet, trustWallet, coinbaseWallet, metaMaskWallet } from '@rainbow-me/rainbowkit/wallets';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { mainnet, goerli } from 'wagmi/chains'
+import { mainnet, sepolia } from 'wagmi/chains'
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { infuraProvider } from 'wagmi/providers/infura'; 
 import { GasPriceProvider } from "./context/GasPriceContext";
@@ -45,10 +45,9 @@ const client = new ApolloClient({
 });
    
 const { chains, provider } = configureChains(
-  [process.env.REACT_APP_SUPPORTED_NETWORK === "goerli" ? goerli: mainnet ],
+  [process.env.REACT_APP_SUPPORTED_NETWORK === "sepolia" ? sepolia : mainnet ],
   [
-    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY, priority: 0, weight: 1 }),
-    infuraProvider({ apiKey: process.env.REACT_APP_INFURA_KEY, priority: 1, weight: 2 }),
+    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY, priority: 0, weight: 1 })
   ]
 );
  
