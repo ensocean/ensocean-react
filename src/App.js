@@ -19,7 +19,7 @@ import { rainbowWallet, walletConnectWallet, trustWallet, coinbaseWallet, metaMa
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { mainnet, sepolia } from 'wagmi/chains'
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { infuraProvider } from 'wagmi/providers/infura'; 
+import { publicProvider } from 'wagmi/providers/public'
 import { GasPriceProvider } from "./context/GasPriceContext";
 import Home from "./pages/Home";
 import Terms from "./pages/Terms";
@@ -47,7 +47,7 @@ const client = new ApolloClient({
 const { chains, provider } = configureChains(
   [process.env.REACT_APP_SUPPORTED_NETWORK === "sepolia" ? sepolia : mainnet ],
   [
-    alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY, priority: 0, weight: 1 })
+    [alchemyProvider({ apiKey: process.env.REACT_APP_ALCHEMY_KEY }), publicProvider()]
   ]
 );
  
